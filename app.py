@@ -13,8 +13,12 @@ from flask import Flask, abort, flash, g, jsonify, redirect, render_template, re
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "store.db")
+# Database configuration - use /tmp for Railway's ephemeral filesystem
+if os.getenv("RAILWAY_ENVIRONMENT"):
+    DB_PATH = "/tmp/store.db"
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DB_PATH = os.path.join(BASE_DIR, "store.db")
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change-me-in-production")
@@ -989,9 +993,25 @@ def set_session_policy():
     session.permanent = True
 
 
-with app.app_context():
-    init_db()
+@app.route("/health")
+def health_check():
+    """Health check endpoint for Railway monitoring."""
+    return jsonify({"status": "ok", "service": "novra"}), 200
 
+
+def initialize_database():
+    """Initialize database with error handling for production environments."""
+    try:
+        with app.app_context():
+            init_db()
+            print("✓ Database initialized successfully")
+    except Exception as e:
+        print(f"✗ Database initialization error: {e}")
+        import traceback
+        traceback.print_exc()
+
+# Initialize database on startup
+initialize_database()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
