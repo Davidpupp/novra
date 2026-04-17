@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% block title %}Checkout | {{ store_name }}{% endblock %}
+{% block content %}
+
+<!-- Progress Bar -->
+<div style="background: var(--surface); border-bottom: 1px solid var(--border); padding: var(--space-md) 0;">
+  <div class="container">
+    <div style="display: flex; align-items: center; justify-content: space-between; max-width: 600px; margin: 0 auto;">
+      <div style="display: flex; align-items: center; gap: var(--space-sm);">
+        <div style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--surface-dark); font-weight: 700;">1</div>
+        <span style="font-weight: 600; color: var(--text-primary);">Carrinho</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--accent); margin: 0 var(--space-md);"></div>
+      <div style="display: flex; align-items: center; gap: var(--space-sm);">
+        <div style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--surface-dark); font-weight: 700;">2</div>
+        <span style="font-weight: 600; color: var(--text-primary);">Checkout</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--border); margin: 0 var(--space-md);"></div>
+      <div style="display: flex; align-items: center; gap: var(--space-sm);">
+        <div style="width: 40px; height: 40px; background: var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: 700;">3</div>
+        <span style="font-weight: 500; color: var(--text-muted);">Confirmação</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="container" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+  
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: var(--space-3xl);">
+    <p class="vip-badge" style="margin-bottom: var(--space-md);">🔒 CHECKOUT SEGURO</p>
+    <h1 style="font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: var(--space-sm);">Finalizar Compra</h1>
+    <p style="color: var(--text-muted); font-size: 1.125rem;">Complete seu pedido em segundos. Pagamento protegido e entrega garantida.</p>
+  </div>
+  
+  <div style="display: grid; grid-template-columns: 1fr 400px; gap: var(--space-3xl);">
+    
+    <!-- Left: Form -->
+    <div>
+      <form method="post" id="checkoutForm">
+        
+        <!-- Contact Section -->
+        <div class="card-glass" style="padding: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-lg);">
+            <span style="font-size: 1.5rem;">📧</span>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">Contato</h3>
+          </div>
+          
+          <label style="display: block; margin-bottom: var(--space-md);">
+            <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">E-mail *</span>
+            <input type="email" name="email" value="{{ prefill.email if prefill else '' }}" required 
+                   placeholder="seu@email.com" 
+                   style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); font-size: 1rem;">
+          </label>
+          
+          <label style="display: block; margin-bottom: 0;">
+            <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">Telefone (WhatsApp) *</span>
+            <input type="tel" name="telefone" required 
+                   placeholder="(11) 99999-9999" 
+                   style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); font-size: 1rem;">
+          </label>
+        </div>
+        
+        <!-- Delivery Section -->
+        <div class="card-glass" style="padding: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-lg);">
+            <span style="font-size: 1.5rem;">🚚</span>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">Entrega</h3>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md);">
+            <label style="display: block;">
+              <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">CEP *</span>
+              <input type="text" name="cep" id="cep" required minlength="8" maxlength="9" 
+                     placeholder="00000-000" 
+                     style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); font-size: 1rem;">
+            </label>
+            <label style="display: block;">
+              <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">Estado</span>
+              <input type="text" name="estado" id="estado" readonly
+                     style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-muted); font-size: 1rem;">
+            </label>
+            <label style="display: block;">
+              <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">Cidade</span>
+              <input type="text" name="cidade" id="cidade" readonly
+                     style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-muted); font-size: 1rem;">
+            </label>
+          </div>
+          
+          <label style="display: block; margin-bottom: var(--space-md);">
+            <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">Endereço *</span>
+            <input type="text" name="endereco" id="endereco" required 
+                   placeholder="Rua, Avenida, etc." 
+                   style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); font-size: 1rem;">
+          </label>
+          
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-md); margin-bottom: var(--space-md);">
+            <label style="display: block;">
+              <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">Número *</span>
+              <input type="text" name="numero" required 
+                     placeholder="123" 
+                     style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); font-size: 1rem;">
+            </label>
+            <label style="display: block;">
+              <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">Complemento</span>
+              <input type="text" name="complemento" 
+                     placeholder="Apto, Bloco, etc." 
+                     style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); font-size: 1rem;">
+            </label>
+          </div>
+          
+          <label style="display: block; margin-bottom: 0;">
+            <span style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: 0.05em;">Bairro *</span>
+            <input type="text" name="bairro" id="bairro" required 
+                   placeholder="Seu bairro" 
+                   style="width: 100%; padding: var(--space-md); background: var(--bg-mid-light); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); font-size: 1rem;">
+          </label>
+        </div>
+        
+        <!-- Payment Section -->
+        <div class="card-glass" style="padding: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-lg);">
+            <span style="font-size: 1.5rem;">💳</span>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">Pagamento</h3>
+          </div>
+          
+          <!-- Payment Methods -->
+          <div style="display: grid; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <!-- Pix -->
+            <label class="payment-option" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); border: 2px solid var(--accent); border-radius: var(--radius-lg); cursor: pointer; background: rgba(201, 169, 98, 0.1);">
+              <input type="radio" name="pagamento" value="Pix" checked style="width: 20px; height: 20px; accent-color: var(--accent);">
+              <div style="font-size: 2rem;">⚡</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 700;">Pix</div>
+                <div style="font-size: 0.875rem; color: var(--text-muted);">Aprovação instantânea - 5% OFF</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 700; color: var(--success);">-5%</div>
+              </div>
+            </label>
+            
+            <!-- Credit Card -->
+            <label class="payment-option" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); border: 2px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.3s ease;">
+              <input type="radio" name="pagamento" value="Cartao" style="width: 20px; height: 20px; accent-color: var(--accent);">
+              <div style="font-size: 2rem;">💳</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 700;">Cartão de Crédito</div>
+                <div style="font-size: 0.875rem; color: var(--text-muted);">Em até 12x sem juros</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; color: var(--accent);">12x R$ {{ "%.2f"|format(total/12) }}</div>
+              </div>
+            </label>
+            
+            <!-- Boleto -->
+            <label class="payment-option" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); border: 2px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.3s ease;">
+              <input type="radio" name="pagamento" value="Boleto" style="width: 20px; height: 20px; accent-color: var(--accent);">
+              <div style="font-size: 2rem;">📄</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 700;">Boleto Bancário</div>
+                <div style="font-size: 0.875rem; color: var(--text-muted);">Aprovação em até 2 dias úteis</div>
+              </div>
+            </label>
+          </div>
+          
+          <!-- Security Badges -->
+          <div style="display: flex; gap: var(--space-md); justify-content: center; padding-top: var(--space-md); border-top: 1px solid var(--border);">
+            <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--text-muted);">
+              <span>🔒</span> SSL Seguro
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--text-muted);">
+              <span>✓</span> PCI Compliant
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--text-muted);">
+              <span>🛡️</span> Protegido
+            </div>
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-buy btn-magnetic pulse-glow micro-bounce" 
+                style="width: 100%; font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: var(--space-lg);">
+          ✅ FINALIZAR COMPRA COM SEGURANÇA
+        </button>
+        
+        <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted); margin-top: var(--space-md);">
+          🔒 Seus dados estão protegidos com criptografia de 256-bits
+        </p>
+      </form>
+    </div>
+    
+    <!-- Right: Order Summary -->
+    <div style="position: sticky; top: var(--space-xl);">
+      <div class="card-glass" style="padding: var(--space-xl);">
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-lg); padding-bottom: var(--space-md); border-bottom: 1px solid var(--border);">Resumo do Pedido</h3>
+        
+        <!-- Cart Items -->
+        <div style="margin-bottom: var(--space-lg);">
+          {% for item in cart_items %}
+          <div style="display: flex; gap: var(--space-md); padding: var(--space-md) 0; border-bottom: 1px solid var(--border-subtle);">
+            <div style="width: 60px; height: 60px; background: var(--bg-mid-light); border-radius: var(--radius-md); overflow: hidden;">
+              {% if item.image_url %}
+                <img src="{{ item.image_url }}" alt="{{ item.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+              {% else %}
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--text-muted);">
+                  {{ item.name[:2] }}
+                </div>
+              {% endif %}
+            </div>
+            <div style="flex: 1;">
+              <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">{{ item.name }}</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Qtd: {{ item.quantity }}</p>
+            </div>
+            <div style="text-align: right;">
+              <p style="font-weight: 600;">{{ (item.price * item.quantity)|brl }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Totals -->
+        <div style="margin-bottom: var(--space-lg);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-sm);">
+            <span style="color: var(--text-muted);">Subtotal</span>
+            <span>{{ subtotal|brl }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-sm);">
+            <span style="color: var(--text-muted);">Frete</span>
+            <span style="color: var(--success);">{{ 'Grátis' if subtotal >= 399 else freight|brl }}</span>
+          </div>
+          {% if subtotal >= 399 %}
+          <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-sm);">
+            <span style="color: var(--success);">Desconto Frete</span>
+            <span style="color: var(--success);">-R$ 19,90</span>
+          </div>
+          {% endif %}
+          <div style="display: flex; justify-content: space-between; padding-top: var(--space-md); border-top: 1px solid var(--border);">
+            <span style="font-weight: 700; font-size: 1.125rem;">Total</span>
+            <span style="font-weight: 800; font-size: 1.5rem; color: var(--accent);">{{ total|brl }}</span>
+          </div>
+          <p style="text-align: right; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+            ou 12x de R$ {{ "%.2f"|format(total/12) }}
+          </p>
+        </div>
+        
+        <!-- Free Shipping Progress -->
+        {% if subtotal < 399 %}
+        <div style="background: var(--bg-mid-light); border-radius: var(--radius-lg); padding: var(--space-md); margin-bottom: var(--space-lg);">
+          <p style="font-size: 0.875rem; margin-bottom: var(--space-sm);">
+            🚚 Faltam <strong>R$ {{ "%.2f"|format(399 - subtotal) }}</strong> para frete grátis!
+          </p>
+          <div class="free-shipping-progress">
+            <div class="progress-fill" style="width: {{ (subtotal / 399) * 100 }}%;"></div>
+          </div>
+        </div>
+        {% else %}
+        <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.1) 100%); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-lg); padding: var(--space-md); margin-bottom: var(--space-lg);">
+          <p style="font-size: 0.875rem; color: var(--success); font-weight: 600;">
+            ✅ Você ganhou frete grátis!
+          </p>
+        </div>
+        {% endif %}
+        
+        <!-- Trust Signals -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm);">
+          <div style="display: flex; align-items: center; gap: var(--space-xs); font-size: 0.75rem; color: var(--text-muted);">
+            <span>🚚</span> Entrega Rápida
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-xs); font-size: 0.75rem; color: var(--text-muted);">
+            <span>↩️</span> Troca Fácil
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-xs); font-size: 0.75rem; color: var(--text-muted);">
+            <span>🔒</span> Compra Segura
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-xs); font-size: 0.75rem; color: var(--text-muted);">
+            <span>💎</span> Qualidade Premium
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .payment-option:hover {
+    border-color: var(--accent) !important;
+    background: rgba(201, 169, 98, 0.05) !important;
+  }
+  
+  .payment-option input:checked ~ * {
+    color: var(--accent);
+  }
+  
+  @media (max-width: 968px) {
+    .checkout-layout {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+<script>
+  // Payment option selection
+  document.querySelectorAll('.payment-option').forEach(option => {
+    option.addEventListener('click', function() {
+      // Reset all options
+      document.querySelectorAll('.payment-option').forEach(opt => {
+        opt.style.borderColor = 'var(--border)';
+        opt.style.background = 'transparent';
+      });
+      // Highlight selected
+      this.style.borderColor = 'var(--accent)';
+      this.style.background = 'rgba(201, 169, 98, 0.1)';
+    });
+  });
+  
+  // CEP auto-fill simulation
+  document.getElementById('cep').addEventListener('blur', function() {
+    const cep = this.value.replace(/\D/g, '');
+    if (cep.length === 8) {
+      // Simulate API call
+      setTimeout(() => {
+        document.getElementById('estado').value = 'SP';
+        document.getElementById('cidade').value = 'São Paulo';
+        document.getElementById('bairro').value = 'Centro';
+        document.getElementById('endereco').value = 'Rua Example';
+      }, 500);
+    }
+  });
+</script>
+
+{% endblock %}
