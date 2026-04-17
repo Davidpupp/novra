@@ -109,3 +109,27 @@ Para produção sem cold start: Plano Starter ($7/mês)
 
 ## Observacao para venda real
 Para processar pagamentos reais e emitir nota fiscal, integrar gateway (ex: Stripe, Mercado Pago, Pagar.me) e antifraude antes de operar em producao.
+
+## SillientPay Integration
+
+O site está integrado com SillientPay para processamento de pagamentos (Pix, Cartão, Boleto).
+
+### Configuração
+
+Variáveis de ambiente necessárias:
+```bash
+SILLIENT_PAY_ENABLED=true
+SILLIENT_PAY_BASE_URL=https://api.sillientpay.com
+SILLIENT_PAY_API_KEY=sua-chave-api
+SILLIENT_PAY_WEBHOOK_SECRET=sua-chave-webhook
+```
+
+### Funcionalidades
+- ✅ Integração API real com SillientPay
+- ✅ Verificação de assinatura de webhook (HMAC-SHA256)
+- ✅ Atualização automática de status de pedidos
+- ✅ Suporte a produção e sandbox
+- ✅ Fallback para modo teste se API falhar
+
+### Documentação Completa
+Veja `SILLIENTPAY-SETUP.md` para instruções detalhadas de configuração, testes e troubleshooting.

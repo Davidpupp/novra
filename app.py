@@ -2,9 +2,13 @@ import os
 import secrets
 import sqlite3
 import time
+import json
+import hashlib
+import hmac
 from datetime import datetime, timedelta
 from functools import wraps
 
+import requests
 from flask import Flask, abort, flash, g, jsonify, redirect, render_template, request, send_from_directory, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -18,6 +22,7 @@ app.config["ADMIN_PATH"] = os.getenv("ADMIN_PATH", "painel-interno-velocity-2026
 app.config["SILLIENT_PAY_ENABLED"] = os.getenv("SILLIENT_PAY_ENABLED", "false").lower() == "true"
 app.config["SILLIENT_PAY_BASE_URL"] = os.getenv("SILLIENT_PAY_BASE_URL", "https://sandbox.sillientpay.example")
 app.config["SILLIENT_PAY_API_KEY"] = os.getenv("SILLIENT_PAY_API_KEY", "")
+app.config["SILLIENT_PAY_WEBHOOK_SECRET"] = os.getenv("SILLIENT_PAY_WEBHOOK_SECRET", "")
 app.config["PRODUCTS_PER_PAGE"] = 12
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=12)
 app.config["SESSION_COOKIE_HTTPONLY"] = True
@@ -332,13 +337,63 @@ def create_sillient_checkout(order_id, total_value):
             "status": "pending",
         }
 
-    # Placeholder for real Sillient Pay API call.
-    return {
-        "provider": "sillient_pay",
-        "reference": f"SILLIENT-LIVE-{order_id}",
-        "checkout_url": f"{app.config['SILLIENT_PAY_BASE_URL']}/checkout/{order_id}?amount={total_value}",
-        "status": "pending",
-    }
+    try:
+        # Real SillientPay API call
+        api_url = f"{app.config['SILLIENT_PAY_BASE_URL']}/v1/checkout"
+        headers = {
+            "Authorization": f"Bearer {app.config['SILLIENT_PAY_API_KEY']}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "order_id": str(order_id),
+            "amount": float(total_value),
+            "currency": "BRL",
+            "callback_url": url_for("payment_callback", _external=True),
+            "cancel_url": url_for("cart", _external=True),
+            "success_url": url_for("checkout_success", order_id=order_id, _external=True),
+            "metadata": {
+                "order_id": order_id,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+        }
+        
+        response = requests.post(api_url, json=payload, headers=headers, timeout=30)
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        return {
+            "provider": "sillient_pay",
+            "reference": data.get("reference", f"SILLIENT-LIVE-{order_id}"),
+            "checkout_url": data.get("checkout_url", url_for("payment_preview", order_id=order_id, _external=True)),
+            "status": "pending",
+            "checkout_id": data.get("id")
+        }
+        
+    except requests.exceptions.RequestException as e:
+        # Fallback to test mode if API fails
+        return {
+            "provider": "sillient_pay",
+            "reference": f"SILLIENT-TEST-{order_id}",
+            "checkout_url": url_for("payment_preview", order_id=order_id, _external=True),
+            "status": "pending",
+            "error": str(e)
+        }
+
+
+def verify_webhook_signature(payload, signature, secret):
+    """Verify SillientPay webhook signature for security"""
+    if not secret:
+        return False
+    
+    expected_signature = hmac.new(
+        secret.encode('utf-8'),
+        payload.encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+    
+    return hmac.compare_digest(expected_signature, signature)
 
 
 def ai_reply(message):
@@ -600,6 +655,14 @@ def payment_approve(order_id):
 @app.post("/pagamento/sillient/callback")
 def payment_callback():
     payload = request.get_json(silent=True) or {}
+    signature = request.headers.get("X-Sillient-Signature", "")
+    
+    # Verify webhook signature if secret is configured
+    if app.config["SILLIENT_PAY_WEBHOOK_SECRET"]:
+        payload_str = request.get_data(as_text=True)
+        if not verify_webhook_signature(payload_str, signature, app.config["SILLIENT_PAY_WEBHOOK_SECRET"]):
+            return jsonify({"ok": False, "error": "invalid signature"}), 401
+    
     reference = payload.get("reference")
     status = payload.get("status", "awaiting_payment")
     if not reference:
