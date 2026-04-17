@@ -58,48 +58,71 @@ def generate_product_variations():
     """Generate 1000+ product variations with professional images for massive catalog"""
     products = []
     
-    # URLs de imagens profissionais por categoria (Unsplash)
+    # URLs de imagens profissionais por categoria (Unsplash - royalty free)
+    # T-shirts/Camisetas - fotos profissionais de camisetas em fundo limpo
     tee_images = [
-        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600",
-        "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600",
-        "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600",
-        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600",
-        "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600",
-        "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600",
-        "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=600",
-        "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600",
+        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=600&fit=crop",  # white tee
+        "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&h=600&fit=crop",  # black tee
+        "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&h=600&fit=crop",  # gray tee
+        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&h=600&fit=crop",  # folded tees
+        "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&h=600&fit=crop",    # basic tee
+        "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&h=600&fit=crop",  # cotton tee
+        "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=600&h=600&fit=crop",  # oversized
+        "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600&h=600&fit=crop",  # street tee
+        "https://images.unsplash.com/photo-1627225924765-552d49cf6f4d?w=600&h=600&fit=crop",  # premium tee
+        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&h=600&fit=crop",  # essential tee
     ]
     
+    # Hoodies/Moletons - fotos de moletom profissionais
     hoodie_images = [
-        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600",
-        "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600",
-        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600",
-        "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600",
-        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600",
+        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&h=600&fit=crop",      # hoodie flat
+        "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600&h=600&fit=crop",  # gray hoodie
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&h=600&fit=crop",  # black hoodie
+        "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&h=600&fit=crop",     # sweatshirt
+        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=600&fit=crop",   # oversized hoodie
+        "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600&h=600&fit=crop",  # premium fleece
+        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&h=600&fit=crop",     # street hoodie
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&h=600&fit=crop",  # zip hoodie
     ]
     
+    # Pants/Calças - fotos de calças cargo, jogger, etc
     pants_images = [
-        "https://images.unsplash.com/photo-1542272604-787c3839105e?w=600",
-        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600",
-        "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600",
-        "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600",
+        "https://images.unsplash.com/photo-1542272604-787c3839105e?w=600&h=600&fit=crop",      # jeans/pants
+        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=600&fit=crop",  # cargo pants
+        "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600&h=600&fit=crop",  # joggers
+        "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=600&fit=crop",  # trousers
+        "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&h=600&fit=crop",  # wide leg
+        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&h=600&fit=crop",  # street pants
+        "https://images.unsplash.com/photo-1542272604-787c3839105e?w=600&h=600&fit=crop",     # black pants
+        "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600&h=600&fit=crop",  # tech pants
     ]
     
+    # Sneakers/Tênis - fotos profissionais de tênis
     sneaker_images = [
-        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
-        "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=600",
-        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600",
-        "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600",
-        "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=600",
-        "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600",
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop",      # red sneaker
+        "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=600&h=600&fit=crop",  # white sneaker
+        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&h=600&fit=crop",  # nike style
+        "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=600&fit=crop",  # running
+        "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=600&h=600&fit=crop",      # chunky
+        "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&h=600&fit=crop",     # classic
+        "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600&h=600&fit=crop",  # luxury sneaker
+        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&h=600&fit=crop",  # street sneaker
+        "https://images.unsplash.com/photo-1560769629-975e13f0c470?w=600&h=600&fit=crop",     # premium sneaker
+        "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&h=600&fit=crop",     # urban sneaker
     ]
     
+    # Accessories - bonés, bolsas, carteiras, etc
     accessory_images = [
-        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600",
-        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600",
-        "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600",
-        "https://images.unsplash.com/photo-1622434641406-a158123450f9?w=600",
-        "https://images.unsplash.com/photo-1611085583193-a87b724c82c3?w=600",
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=600&fit=crop",      # wallet
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=600&fit=crop",      # bag
+        "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600&h=600&fit=crop",      # belt
+        "https://images.unsplash.com/photo-1622434641406-a158123450f9?w=600&h=600&fit=crop",    # cap
+        "https://images.unsplash.com/photo-1611085583193-a87b724c82c3?w=600&h=600&fit=crop",  # sunglasses
+        "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=600&h=600&fit=crop",    # beanie
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=600&fit=crop",      # shoulder bag
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=600&fit=crop",      # backpack
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220b?w=600&h=600&fit=crop",  # chain
+        "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=600&fit=crop",  # sunglasses 2
     ]
     
     # CAMISETAS - 150 variações
@@ -347,12 +370,14 @@ def generate_product_variations():
                 0
             ))
     
-    # CONJUNTOS (SETS) - 30 variações
+    # CONJUNTOS (SETS) - 30 variações - fotos de looks completos
     set_images = [
-        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600",
-        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600",
-        "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600",
-        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600",
+        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=600&fit=crop",   # full outfit
+        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&h=600&fit=crop",     # hoodie outfit
+        "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600&h=600&fit=crop",  # streetwear look
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&h=600&fit=crop",  # urban outfit
+        "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&h=600&fit=crop",     # casual set
+        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=600&fit=crop",   # sport set
     ]
     
     set_styles = [
