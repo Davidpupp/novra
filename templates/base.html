@@ -18,52 +18,121 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='liquid-glass.css') }}" />
   </head>
   <body>
-    <header class="topbar">
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" style="display: none; position: fixed; inset: 0; z-index: 999;" onclick="closeMobileMenu()"></div>
+    
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu-panel" id="mobileMenuPanel" style="display: none; position: fixed; top: 0; left: 0; width: 280px; height: 100vh; z-index: 1000; padding: 2rem 1rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+        <span style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">👑 NØVRA</span>
+        <button onclick="closeMobileMenu()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">×</button>
+      </div>
+      <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <a href="{{ url_for('home') }}" class="mobile-menu-item">🏠 Home</a>
+        <a href="{{ url_for('catalog') }}" class="mobile-menu-item">✨ Novidades</a>
+        <a href="{{ url_for('catalog') }}?filtro=bestsellers" class="mobile-menu-item">🔥 Mais Vendidos</a>
+        <a href="{{ url_for('category_tenis') }}" class="mobile-menu-item">👟 Tênis</a>
+        <a href="{{ url_for('category_camisetas') }}" class="mobile-menu-item">👕 Roupas</a>
+        <a href="{{ url_for('category_acessorios') }}" class="mobile-menu-item">🧢 Acessórios</a>
+        <a href="https://wa.me/5511999999999" class="mobile-menu-item">💬 Contato</a>
+      </nav>
+    </div>
+    
+    <header class="topbar" id="topbar">
       <nav style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 var(--space-md);">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-toggle" onclick="openMobileMenu()" style="display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">
+          ☰
+        </button>
+        
         <!-- Logo -->
-        <a href="{{ url_for('home') }}" style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
+        <a href="{{ url_for('home') }}" class="logo-link" style="text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
           <span style="font-size: 1.75rem;">👑</span>
           <span>NØVRA</span>
         </a>
         
-        <!-- Main Nav -->
-        <div style="display: flex; align-items: center; gap: var(--space-xl);">
-          <a href="{{ url_for('home') }}" style="color: var(--text-primary); font-weight: 500; text-decoration: none;">Home</a>
+        <!-- Main Nav - Desktop -->
+        <div class="desktop-nav" style="display: flex; align-items: center; gap: var(--space-xl);">
+          <a href="{{ url_for('home') }}" style="color: rgba(255,255,255,0.85); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem; border-radius: var(--radius-full); transition: var(--transition-glass);">Home</a>
           <div class="mega-menu">
-            <a href="{{ url_for('catalog') }}" class="menu-trigger" style="color: var(--text-primary); font-weight: 500; text-decoration: none;">Shop</a>
+            <a href="{{ url_for('catalog') }}" class="menu-trigger" style="color: rgba(255,255,255,0.85); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem; border-radius: var(--radius-full); transition: var(--transition-glass);">Shop</a>
             <div class="mega-menu-content">
-              <a href="{{ url_for('category_camisetas') }}" style="color: var(--text-primary);">Camisetas</a>
-              <a href="{{ url_for('category_hoodies') }}" style="color: var(--text-primary);">Hoodies</a>
-              <a href="{{ url_for('category_calcas') }}" style="color: var(--text-primary);">Calças</a>
-              <a href="{{ url_for('category_tenis') }}" style="color: var(--text-primary);">Tênis</a>
-              <a href="{{ url_for('category_acessorios') }}" style="color: var(--text-primary);">Acessórios</a>
-              <a href="{{ url_for('category_drop_limitado') }}" style="color: var(--danger);">Drop Limitado</a>
+              <a href="{{ url_for('category_camisetas') }}">👕 Camisetas</a>
+              <a href="{{ url_for('category_hoodies') }}">🧥 Hoodies</a>
+              <a href="{{ url_for('category_calcas') }}">👖 Calças</a>
+              <a href="{{ url_for('category_tenis') }}">👟 Tênis</a>
+              <a href="{{ url_for('category_acessorios') }}">✨ Acessórios</a>
+              <a href="{{ url_for('category_drop_limitado') }}" style="color: var(--accent);">💎 Drop Limitado</a>
             </div>
           </div>
-          <a href="{{ url_for('customer_login') }}" style="color: var(--text-primary); font-weight: 500; text-decoration: none;">Login</a>
+          <a href="{{ url_for('customer_login') }}" style="color: rgba(255,255,255,0.85); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem; border-radius: var(--radius-full); transition: var(--transition-glass);">Login</a>
         </div>
         
         <!-- Right Side -->
-        <div style="display: flex; align-items: center; gap: var(--space-lg);">
-          <a href="{{ url_for('cart') }}" style="color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
+        <div style="display: flex; align-items: center; gap: var(--space-md);">
+          <!-- Search -->
+          <div class="search-liquid" style="max-width: 200px;">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar..." id="globalSearch" onkeyup="globalSearch(this.value)">
+          </div>
+          
+          <a href="{{ url_for('cart') }}" class="header-action" style="text-decoration: none;">
             <span>🛒</span>
-            <span>Carrinho</span>
-            {% if cart_count > 0 %}<span style="background: var(--accent); color: var(--surface-dark); padding: 0.125rem 0.5rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700;">{{ cart_count }}</span>{% endif %}
+            {% if cart_count > 0 %}<span style="background: var(--accent); color: var(--surface-dark); padding: 0.125rem 0.5rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; margin-left: 0.25rem;">{{ cart_count }}</span>{% endif %}
           </a>
+          
           {% if current_customer %}
-            <a href="{{ url_for('customer_account') }}" style="color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
+            <a href="{{ url_for('customer_account') }}" class="header-action" style="text-decoration: none;">
               <span>👤</span>
-              <span>Conta</span>
             </a>
-            <a href="{{ url_for('customer_logout') }}" style="color: var(--text-muted); text-decoration: none;">Sair</a>
           {% else %}
-            <a href="{{ url_for('customer_login') }}" class="btn btn-small" style="background: var(--accent); color: var(--surface-dark);">Entrar</a>
+            <a href="{{ url_for('customer_login') }}" class="btn-liquid btn-liquid-primary" style="text-decoration: none;">Entrar</a>
           {% endif %}
         </div>
       </nav>
     </header>
+    
+    <script>
+      // Header scroll effect
+      const topbar = document.getElementById('topbar');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          topbar.classList.add('scrolled');
+        } else {
+          topbar.classList.remove('scrolled');
+        }
+      });
+      
+      // Mobile menu
+      function openMobileMenu() {
+        document.getElementById('mobileMenuOverlay').style.display = 'block';
+        document.getElementById('mobileMenuPanel').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeMobileMenu() {
+        document.getElementById('mobileMenuOverlay').style.display = 'none';
+        document.getElementById('mobileMenuPanel').style.display = 'none';
+        document.body.style.overflow = '';
+      }
+      
+      // Global search
+      function globalSearch(query) {
+        if (query.length > 2) {
+          var catalogUrl = "{{ url_for('catalog') }}";
+          window.location.href = catalogUrl + "?q=" + encodeURIComponent(query);
+        }
+      }
+      
+      // Show mobile toggle on small screens
+      if (window.innerWidth <= 768) {
+        document.querySelector('.mobile-toggle').style.display = 'block';
+        document.querySelector('.desktop-nav').style.display = 'none';
+      }
+    </script>
 
     <div class="scroll-bg"></div>
     <main>
