@@ -1,0 +1,8 @@
+[phase.build]
+cmds = ["pip install -r requirements.txt"]
+
+[phase.setup]
+nixPkgs = ["python311"]
+
+[phase.start]
+cmds = ["gunicorn app:app --bind 0.0.0.0:${PORT:-8080} --workers 2 --threads 2 --timeout 60"]
