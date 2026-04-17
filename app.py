@@ -960,7 +960,26 @@ def checkout():
         "nome": customer["full_name"] if customer and customer["full_name"] else "",
         "email": customer["email"] if customer else "",
     }
-    return render_template("checkout.html", **details, sillient_enabled=app.config["SILLIENT_PAY_ENABLED"], prefill=prefill)
+    # Prepare cart items with images for extreme template
+    cart_items = []
+    for pid, qty in get_cart().items():
+        product = get_db().execute("SELECT * FROM products WHERE id = ?", (pid,)).fetchone()
+        if product:
+            cart_items.append({
+                'id': product['id'],
+                'name': product['name'],
+                'price': product['promo_price'] or product['price'],
+                'quantity': qty,
+                'image_url': product['image_url']
+            })
+    
+    return render_template("checkout_extreme.html", 
+                         cart_items=cart_items,
+                         subtotal=details['subtotal'],
+                         freight=details['freight'],
+                         total=details['total'],
+                         sillient_enabled=app.config["SILLIENT_PAY_ENABLED"], 
+                         prefill=prefill)
 
 
 @app.get("/pagamento/iniciar/<int:order_id>")
