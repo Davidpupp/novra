@@ -1,0 +1,120 @@
+{% extends "admin_base.html" %}
+{% block title %}Notificações WhatsApp{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>📱 Notificações WhatsApp</h1>
+  <p>Configure alertas de vendas no seu celular</p>
+</div>
+
+<div class="dashboard-card" style="max-width: 800px;">
+  <div class="card-header">
+    <h2>⚙️ Configuração de Notificações</h2>
+  </div>
+  
+  <div style="padding: var(--space-lg);">
+    <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.05) 100%); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-xl);">
+      <h4 style="color: #22c55e; margin: 0 0 var(--space-md);">✅ Sistema Ativo</h4>
+      <p style="margin: 0; color: var(--text-secondary);">Toda vez que uma venda for realizada, você receberá uma notificação no WhatsApp.</p>
+    </div>
+    
+    <h3 style="margin-bottom: var(--space-md);">📋 Como Configurar:</h3>
+    
+    <div style="display: grid; gap: var(--space-md);">
+      <div style="display: flex; align-items: flex-start; gap: var(--space-md); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+        <span style="font-size: 1.5rem;">1️⃣</span>
+        <div>
+          <strong>Acesse CallMeBot</strong>
+          <p style="margin: var(--space-xs) 0 0; color: var(--text-muted); font-size: 0.875rem;">
+            Vá para <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank" style="color: var(--accent);">callmebot.com</a> e clique em "Get API Key"
+          </p>
+        </div>
+      </div>
+      
+      <div style="display: flex; align-items: flex-start; gap: var(--space-md); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+        <span style="font-size: 1.5rem;">2️⃣</span>
+        <div>
+          <strong>Envie a mensagem no WhatsApp</strong>
+          <p style="margin: var(--space-xs) 0 0; color: var(--text-muted); font-size: 0.875rem;">
+            Abra o WhatsApp e envie "<strong>I allow callmebot to send me messages</strong>" para o número do bot
+          </p>
+        </div>
+      </div>
+      
+      <div style="display: flex; align-items: flex-start; gap: var(--space-md); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+        <span style="font-size: 1.5rem;">3️⃣</span>
+        <div>
+          <strong>Copie seu API Key</strong>
+          <p style="margin: var(--space-xs) 0 0; color: var(--text-muted); font-size: 0.875rem;">
+            O bot vai responder com seu API Key. Guarde ele!
+          </p>
+        </div>
+      </div>
+      
+      <div style="display: flex; align-items: flex-start; gap: var(--space-md); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+        <span style="font-size: 1.5rem;">4️⃣</span>
+        <div>
+          <strong>Configure no Railway</strong>
+          <p style="margin: var(--space-xs) 0 0; color: var(--text-muted); font-size: 0.875rem;">
+            Adicione as variáveis no painel do Railway (veja abaixo)
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top: var(--space-xl); padding: var(--space-lg); background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border);">
+      <h4 style="margin: 0 0 var(--space-md);">🔧 Variáveis de Ambiente (Railway)</h4>
+      <code style="display: block; background: var(--bg-mid-light); padding: var(--space-md); border-radius: var(--radius-md); font-size: 0.875rem; margin-bottom: var(--space-sm);">
+        ADMIN_WHATSAPP=5511999999999
+      </code>
+      <code style="display: block; background: var(--bg-mid-light); padding: var(--space-md); border-radius: var(--radius-md); font-size: 0.875rem;">
+        CALLMEBOT_API_KEY=1234567890
+      </code>
+      <p style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-muted);">
+        💡 Substitua pelo seu número de WhatsApp (com DDD, sem +) e seu API Key
+      </p>
+    </div>
+    
+    <div style="margin-top: var(--space-xl);">
+      <h4 style="margin-bottom: var(--space-md);">🧪 Testar Notificação</h4>
+      <button onclick="testNotification()" class="btn btn-buy">
+        📱 Enviar Mensagem de Teste
+      </button>
+      <p style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--text-muted);">
+        Você deve receber uma mensagem no WhatsApp em alguns segundos
+      </p>
+    </div>
+    
+    <div style="margin-top: var(--space-xl); padding: var(--space-lg); background: rgba(201, 169, 98, 0.1); border-radius: var(--radius-lg); border: 1px solid var(--accent);">
+      <h4 style="color: var(--accent); margin: 0 0 var(--space-md);">💡 Exemplo de Mensagem</h4>
+      <pre style="background: var(--bg-mid-light); padding: var(--space-md); border-radius: var(--radius-md); font-size: 0.875rem; margin: 0; color: var(--text-secondary);">🛒 *NOVA VENDA NØVRA!*
+
+📦 Pedido: #123
+👤 Cliente: João Silva
+💰 Total: R$299,90
+💳 Pagamento: Pix
+⏰ Status: Aguardando confirmação
+
+🎉 Parabéns! Mais uma venda realizada!</pre>
+    </div>
+  </div>
+</div>
+
+<script>
+  function testNotification() {
+    fetch('/api/test-whatsapp', { method: 'POST' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('✅ Mensagem de teste enviada! Verifique seu WhatsApp.');
+        } else {
+          alert('⚠️ ' + data.message);
+        }
+      })
+      .catch(() => {
+        alert('❌ Erro ao enviar. Verifique as configurações.');
+      });
+  }
+</script>
+
+{% endblock %}

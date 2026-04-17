@@ -567,8 +567,112 @@ def admin_required(view):
         if not session.get("is_admin"):
             return redirect(url_for("admin_login"))
         return view(*args, **kwargs)
-
     return wrapped
+
+
+def send_whatsapp_notification(order_id, customer_name, total, payment_method):
+    """
+    Send WhatsApp notification when a new order is placed.
+    Uses CallMeBot API (free) or can be configured for Twilio.
+    
+    To use:
+    1. Set ADMIN_WHATSAPP in environment variables with your number (e.g., 5511999999999)
+    2. For CallMeBot: Get API key from https://www.callmebot.com/blog/free-api-whatsapp-messages/
+    3. Set CALLMEBOT_API_KEY in environment variables
+    """
+    import urllib.request
+    import urllib.parse
+    
+    admin_whatsapp = os.getenv("ADMIN_WHATSAPP", "5511999999999")  # Your number here
+    api_key = os.getenv("CALLMEBOT_API_KEY")
+    
+    if not api_key:
+        # Use a simple webhook or print if no API key configured
+        print(f"📱 NEW ORDER: #{order_id} - {customer_name} - R${total:.2f} - {payment_method}")
+        return
+    
+    # Format message
+    message = f"""🛒 *NOVA VENDA NØVRA!*
+
+📦 Pedido: #{order_id}
+👤 Cliente: {customer_name}
+💰 Total: R${total:.2f}
+💳 Pagamento: {payment_method}
+⏰ Status: Aguardando confirmação
+
+🎉 Parabéns! Mais uma venda realizada!"""
+    
+    # CallMeBot API
+    url = f"https://api.callmebot.com/whatsapp.php"
+    params = {
+        'phone': admin_whatsapp,
+        'text': message,
+        'apikey': api_key
+    }
+    
+    try:
+        query_string = urllib.parse.urlencode(params)
+        full_url = f"{url}?{query_string}"
+        
+        req = urllib.request.Request(full_url, method='GET')
+        req.add_header('User-Agent', 'Mozilla/5.0')
+        
+        with urllib.request.urlopen(req, timeout=10) as response:
+            result = response.read().decode('utf-8')
+            print(f"✅ WhatsApp notification sent: {result}")
+            return True
+    except Exception as e:
+        print(f"❌ Failed to send WhatsApp: {e}")
+        # Still print to console so you don't miss orders
+        print(f"📱 NEW ORDER: #{order_id} - {customer_name} - R${total:.2f}")
+        return False
+
+
+def send_order_status_update(order_id, status, customer_phone):
+    """
+    Send order status update to customer via WhatsApp.
+    Can be called when order status changes.
+    """
+    import urllib.request
+    import urllib.parse
+    
+    api_key = os.getenv("CALLMEBOT_API_KEY")
+    if not api_key or not customer_phone:
+        return False
+    
+    status_messages = {
+        'paid': '✅ *Pagamento Confirmado!*',
+        'shipped': '🚚 *Pedido Enviado!*',
+        'delivered': '📦 *Pedido Entregue!*',
+        'cancelled': '❌ *Pedido Cancelado*'
+    }
+    
+    message = f"""{status_messages.get(status, '📦 *Atualização do Pedido*')}
+
+Pedido: #{order_id}
+Status: {status}
+
+Obrigado por comprar na NØVRA! 👑"""
+    
+    url = f"https://api.callmebot.com/whatsapp.php"
+    params = {
+        'phone': customer_phone.replace('+', '').replace('-', '').replace(' ', ''),
+        'text': message,
+        'apikey': api_key
+    }
+    
+    try:
+        query_string = urllib.parse.urlencode(params)
+        full_url = f"{url}?{query_string}"
+        
+        req = urllib.request.Request(full_url, method='GET')
+        req.add_header('User-Agent', 'Mozilla/5.0')
+        
+        with urllib.request.urlopen(req, timeout=10) as response:
+            return True
+    except Exception as e:
+        print(f"Failed to send status update: {e}")
+        return False
 
 
 def customer_required(view):
@@ -955,6 +1059,14 @@ def checkout():
 
         db.commit()
         save_cart({})
+        
+        # Send WhatsApp notification for new order
+        try:
+            send_whatsapp_notification(order_id, form["nome"], details["total"], payment_method)
+        except Exception as e:
+            # Log error but don't break the order flow
+            print(f"Failed to send WhatsApp notification: {e}")
+        
         return redirect(url_for("checkout_success", order_id=order_id))
 
     prefill = {
@@ -1374,6 +1486,37 @@ def admin_update_order_status(order_id):
     db.commit()
     flash("Status do pedido atualizado.", "success")
     return redirect(url_for("admin_orders"))
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/notificacoes")
+@login_required
+@admin_required
+def admin_notifications():
+    return render_template("admin_notifications.html", active_page='settings')
+
+
+@app.post("/api/test-whatsapp")
+def test_whatsapp():
+    """Test WhatsApp notification"""
+    api_key = os.getenv("CALLMEBOT_API_KEY")
+    admin_whatsapp = os.getenv("ADMIN_WHATSAPP")
+    
+    if not api_key or not admin_whatsapp:
+        return jsonify({
+            "success": False, 
+            "message": "Configure ADMIN_WHATSAPP e CALLMEBOT_API_KEY no Railway primeiro"
+        })
+    
+    try:
+        send_whatsapp_notification(
+            order_id="TESTE",
+            customer_name="Teste Sistema",
+            total=999.99,
+            payment_method="Pix"
+        )
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
 
 
 @app.post("/api/ai-assistant")
