@@ -55,68 +55,68 @@ def bulk_seed_products():
     
     # CAMISETAS
     camisetas = [
-        ("Oversized Premium Black", "oversized-premium-black", "camisetas", "Camiseta oversized em algodão premium de alta gramatura. Corte moderno, caimento estruturado e estética minimalista.", 199.90, None, "P,M,L,XL,XXL", "Preto", "NV-TEE-001-BK", "Mais Vendido", 80, 1, 0, 1),
-        ("Oversized Premium White", "oversized-premium-white", "camisetas", "Camiseta oversized branca em algodão premium. Visual clean, caimento perfeito e versatilidade absoluta.", 199.90, 179.90, "P,M,L,XL,XXL", "Branco", "NV-TEE-002-WH", "Promo", 75, 0, 1, 1),
-        ("Washed Street Tee", "washed-street-tee", "camisetas", "Camiseta com efeito envelhecido premium. Textura única, visual usado autêntico e conforto incomparável.", 179.90, None, "M,L,XL,XXL", "Cinza", "NV-TEE-003-GY", "Novo", 60, 1, 0, 0),
-        ("Minimal Logo Tee", "minimal-logo-tee", "camisetas", "Camiseta minimalista com logo discreto. Elegância na simplicidade, qualidade na costura.", 159.90, None, "P,M,L,XL", "Preto", "NV-TEE-004-BK", None, 90, 0, 0, 1),
-        ("Heavy Cotton Tee", "heavy-cotton-tee", "camisetas", "Camiseta em algodão heavy weight. Estrutura premium, durabilidade excepcional e caimento sofisticado.", 219.90, None, "M,L,XL,XXL", "Branco", "NV-TEE-005-WH", "Novo", 55, 1, 0, 0),
+        ("Oversized Premium Black", "oversized-premium-black", "camisetas", "Camiseta oversized em algodão premium de alta gramatura. Corte moderno, caimento estruturado e estética minimalista.", 199.90, None, 80, 1, "Mais Vendido", "P,M,L,XL,XXL", "Preto", "NV-TEE-001-BK", 1, 0, 1),
+        ("Oversized Premium White", "oversized-premium-white", "camisetas", "Camiseta oversized branca em algodão premium. Visual clean, caimento perfeito e versatilidade absoluta.", 199.90, 179.90, 75, 0, "Promo", "P,M,L,XL,XXL", "Branco", "NV-TEE-002-WH", 0, 1, 1),
+        ("Washed Street Tee", "washed-street-tee", "camisetas", "Camiseta com efeito envelhecido premium. Textura única, visual usado autêntico e conforto incomparável.", 179.90, None, 60, 1, "Novo", "M,L,XL,XXL", "Cinza", "NV-TEE-003-GY", 1, 0, 0),
+        ("Minimal Logo Tee", "minimal-logo-tee", "camisetas", "Camiseta minimalista com logo discreto. Elegância na simplicidade, qualidade na costura.", 159.90, None, 90, 1, None, "P,M,L,XL", "Preto", "NV-TEE-004-BK", 0, 0, 1),
+        ("Heavy Cotton Tee", "heavy-cotton-tee", "camisetas", "Camiseta em algodão heavy weight. Estrutura premium, durabilidade excepcional e caimento sofisticado.", 219.90, None, 55, 1, "Novo", "M,L,XL,XXL", "Branco", "NV-TEE-005-WH", 1, 0, 0),
     ]
     products.extend(camisetas)
     
     # HOODIES / MOLETONS
     hoodies = [
-        ("Essential Hoodie Black", "essential-hoodie-black", "hoodies", "Moletom preto essencial em fleece premium. Conforto térmico, capuz estruturado e acabamento premium.", 399.90, None, "P,M,L,XL,XXL", "Preto", "NV-HOO-001-BK", "Mais Vendido", 70, 1, 1, 1),
-        ("Essential Hoodie Grey", "essential-hoodie-grey", "hoodies", "Moletom cinza essencial em fleece premium. Versatilidade absoluta, conforto para todas as estações.", 399.90, 349.90, "P,M,L,XL,XXL", "Cinza", "NV-HOO-002-GY", "Promo", 65, 0, 1, 1),
-        ("Washed Hoodie", "washed-hoodie", "hoodies", "Moletom com efeito envelhecido premium. Visual único, textura sofisticada e autenticidade urbana.", 449.90, None, "M,L,XL,XXL", "Bege", "NV-HOO-003-GR", "Novo", 45, 1, 0, 0),
-        ("Premium Zip Hoodie", "premium-zip-hoodie", "hoodies", "Moletom com zíper premium em fleece de alta qualidade. Funcionalidade e estilo em perfeita harmonia.", 479.90, None, "M,L,XL,XXL", "Preto", "NV-HOO-004-BK", None, 50, 1, 0, 1),
-        ("Limited Drop Hoodie", "limited-drop-hoodie", "hoodies", "Moletom edição limitada. Design exclusivo, número seriado e exclusividade garantida.", 549.90, None, "L,XL,XXL", "Preto", "NV-HOO-005-BK", "Drop Limitado", 25, 1, 0, 1),
+        ("Essential Hoodie Black", "essential-hoodie-black", "hoodies", "Moletom preto essencial em fleece premium. Conforto térmico, capuz estruturado e acabamento premium.", 399.90, None, 70, 1, "Mais Vendido", "P,M,L,XL,XXL", "Preto", "NV-HOO-001-BK", 1, 1, 1),
+        ("Essential Hoodie Grey", "essential-hoodie-grey", "hoodies", "Moletom cinza essencial em fleece premium. Versatilidade absoluta, conforto para todas as estações.", 399.90, 349.90, 65, 0, "Promo", "P,M,L,XL,XXL", "Cinza", "NV-HOO-002-GY", 0, 1, 1),
+        ("Washed Hoodie", "washed-hoodie", "hoodies", "Moletom com efeito envelhecido premium. Visual único, textura sofisticada e autenticidade urbana.", 449.90, None, 45, 1, "Novo", "M,L,XL,XXL", "Bege", "NV-HOO-003-GR", 1, 0, 0),
+        ("Premium Zip Hoodie", "premium-zip-hoodie", "hoodies", "Moletom com zíper premium em fleece de alta qualidade. Funcionalidade e estilo em perfeita harmonia.", 479.90, None, 50, 1, None, "M,L,XL,XXL", "Preto", "NV-HOO-004-BK", 1, 0, 1),
+        ("Limited Drop Hoodie", "limited-drop-hoodie", "hoodies", "Moletom edição limitada. Design exclusivo, número seriado e exclusividade garantida.", 549.90, None, 25, 1, "Drop Limitado", "L,XL,XXL", "Preto", "NV-HOO-005-BK", 1, 0, 1),
     ]
     products.extend(hoodies)
     
     # CALÇAS
     calcas = [
-        ("Cargo Pants Black", "cargo-pants-black", "calcas", "Calça cargo preta em tecido premium. Múltiplos bolsos funcionais, corte moderno e durabilidade superior.", 429.90, None, "32,34,36,38,40", "Preto", "NV-PAN-001-BK", "Mais Vendido", 60, 1, 1, 1),
-        ("Cargo Pants Grey", "cargo-pants-grey", "calcas", "Calça cargo cinza em tecido premium. Estilo utilitário refinado, conforto e funcionalidade.", 429.90, 389.90, "32,34,36,38,40", "Cinza", "NV-PAN-002-GY", "Promo", 55, 0, 1, 1),
-        ("Straight Fit Pants", "straight-fit-pants", "calcas", "Calça corte reto em algodão premium. Silhueta clássica, caimento perfeito e versatilidade urbana.", 379.90, None, "30,32,34,36,38,40", "Preto", "NV-PAN-003-BK", "Novo", 50, 1, 0, 0),
-        ("Wide Pants Street", "wide-pants-street", "calcas", "Calça wide leg premium. Corte contemporâneo, volume equilibrado e estética streetwear.", 449.90, None, "30,32,34,36,38,40", "Cinza", "NV-PAN-004-GY", None, 45, 1, 0, 1),
-        ("Utility Pants", "utility-pants", "calcas", "Calça utilitária premium em tecido técnico. Resistência, conforto e múltiplos bolsos funcionais.", 399.90, None, "30,32,34,36,38,40", "Verde", "NV-PAN-005-GR", "Novo", 40, 1, 0, 0),
+        ("Cargo Pants Black", "cargo-pants-black", "calcas", "Calça cargo preta em tecido premium. Múltiplos bolsos funcionais, corte moderno e durabilidade superior.", 429.90, None, 60, 1, "Mais Vendido", "32,34,36,38,40", "Preto", "NV-PAN-001-BK", 1, 1, 1),
+        ("Cargo Pants Grey", "cargo-pants-grey", "calcas", "Calça cargo cinza em tecido premium. Estilo utilitário refinado, conforto e funcionalidade.", 429.90, 389.90, 55, 0, "Promo", "32,34,36,38,40", "Cinza", "NV-PAN-002-GY", 0, 1, 1),
+        ("Straight Fit Pants", "straight-fit-pants", "calcas", "Calça corte reto em algodão premium. Silhueta clássica, caimento perfeito e versatilidade urbana.", 379.90, None, 50, 1, "Novo", "30,32,34,36,38,40", "Preto", "NV-PAN-003-BK", 1, 0, 0),
+        ("Wide Pants Street", "wide-pants-street", "calcas", "Calça wide leg premium. Corte contemporâneo, volume equilibrado e estética streetwear.", 449.90, None, 45, 1, None, "30,32,34,36,38,40", "Cinza", "NV-PAN-004-GY", 1, 0, 1),
+        ("Utility Pants", "utility-pants", "calcas", "Calça utilitária premium em tecido técnico. Resistência, conforto e múltiplos bolsos funcionais.", 399.90, None, 40, 1, "Novo", "30,32,34,36,38,40", "Verde", "NV-PAN-005-GR", 1, 0, 0),
     ]
     products.extend(calcas)
     
     # TÊNIS
     tenis = [
-        ("Low Street White", "low-street-white", "tenis", "Tênis low street branco. Design minimalista, conforto premium e versatilidade absoluta.", 549.90, None, "38,39,40,41,42,43,44", "Branco", "NV-SNK-001-WH", "Mais Vendido", 80, 1, 1, 1),
-        ("Low Street Black", "low-street-black", "tenis", "Tênis low street preto. Visual impactante, conforto superior e estética sofisticada.", 549.90, 499.90, "38,39,40,41,42,43,44", "Preto", "NV-SNK-002-BK", "Promo", 75, 0, 1, 1),
-        ("Urban Runner", "urban-runner", "tenis", "Tênis runner urbano. Amortecimento responsivo, design contemporâneo e performance diária.", 649.90, None, "38,39,40,41,42,43,44", "Cinza", "NV-SNK-003-GY", "Novo", 55, 1, 0, 0),
-        ("Premium Chunky", "premium-chunky", "tenis", "Tênis chunky premium. Silhueta ousada, conforto máximo e presença visual inegável.", 699.90, None, "38,39,40,41,42,43,44", "Preto", "NV-SNK-004-BK", None, 45, 1, 0, 1),
-        ("Luxury Inspired Sneaker", "luxury-inspired-sneaker", "tenis", "Tênis inspirado em luxury. Acabamento premium, materiais nobres e exclusividade.", 799.90, None, "38,39,40,41,42,43,44", "Branco", "NV-SNK-005-WH", "Drop Limitado", 20, 1, 0, 1),
+        ("Low Street White", "low-street-white", "tenis", "Tênis low street branco. Design minimalista, conforto premium e versatilidade absoluta.", 549.90, None, 80, 1, "Mais Vendido", "38,39,40,41,42,43,44", "Branco", "NV-SNK-001-WH", 1, 1, 1),
+        ("Low Street Black", "low-street-black", "tenis", "Tênis low street preto. Visual impactante, conforto superior e estética sofisticada.", 549.90, 499.90, 75, 0, "Promo", "38,39,40,41,42,43,44", "Preto", "NV-SNK-002-BK", 0, 1, 1),
+        ("Urban Runner", "urban-runner", "tenis", "Tênis runner urbano. Amortecimento responsivo, design contemporâneo e performance diária.", 649.90, None, 55, 1, "Novo", "38,39,40,41,42,43,44", "Cinza", "NV-SNK-003-GY", 1, 0, 0),
+        ("Premium Chunky", "premium-chunky", "tenis", "Tênis chunky premium. Silhueta ousada, conforto máximo e presença visual inegável.", 699.90, None, 45, 1, None, "38,39,40,41,42,43,44", "Preto", "NV-SNK-004-BK", 1, 0, 1),
+        ("Luxury Inspired Sneaker", "luxury-inspired-sneaker", "tenis", "Tênis inspirado em luxury. Acabamento premium, materiais nobres e exclusividade.", 799.90, None, 20, 1, "Drop Limitado", "38,39,40,41,42,43,44", "Branco", "NV-SNK-005-WH", 1, 0, 1),
     ]
     products.extend(tenis)
     
     # BONÉS / HEADWEAR
     bones = [
-        ("Clean Cap Black", "clean-cap-black", "acessorios", "Boné clean preto. Design minimalista, ajuste perfeito e estética premium.", 99.90, None, "Único", "Preto", "NV-CAP-001-BK", "Mais Vendido", 100, 1, 1, 1),
-        ("Clean Cap White", "clean-cap-white", "acessorios", "Boné clean branco. Visual clean, versatilidade absoluta e acabamento premium.", 99.90, 89.90, "Único", "Branco", "NV-CAP-002-WH", "Promo", 90, 0, 1, 1),
-        ("Trucker Street Cap", "trucker-street-cap", "acessorios", "Boné trucker street. Malha respirável, visual autêntico e estilo urbano.", 89.90, None, "Único", "Preto", "NV-CAP-003-BK", "Novo", 80, 1, 0, 0),
-        ("Beanie Premium", "beanie-premium", "acessorios", "Gorro premium em tricot. Conforto térmico, caimento perfeito e versatilidade.", 79.90, None, "Único", "Preto", "NV-BEA-001-BK", None, 120, 1, 0, 1),
+        ("Clean Cap Black", "clean-cap-black", "acessorios", "Boné clean preto. Design minimalista, ajuste perfeito e estética premium.", 99.90, None, 100, 1, "Mais Vendido", "Único", "Preto", "NV-CAP-001-BK", 1, 1, 1),
+        ("Clean Cap White", "clean-cap-white", "acessorios", "Boné clean branco. Visual clean, versatilidade absoluta e acabamento premium.", 99.90, 89.90, 90, 0, "Promo", "Único", "Branco", "NV-CAP-002-WH", 0, 1, 1),
+        ("Trucker Street Cap", "trucker-street-cap", "acessorios", "Boné trucker street. Malha respirável, visual autêntico e estilo urbano.", 89.90, None, 80, 1, "Novo", "Único", "Preto", "NV-CAP-003-BK", 1, 0, 0),
+        ("Beanie Premium", "beanie-premium", "acessorios", "Gorro premium em tricot. Conforto térmico, caimento perfeito e versatilidade.", 79.90, None, 120, 1, None, "Único", "Preto", "NV-BEA-001-BK", 1, 0, 1),
     ]
     products.extend(bones)
     
     # BOLSAS / ACESSÓRIOS
     bolsas = [
-        ("Crossbody Bag Black", "crossbody-bag-black", "acessorios", "Bolsa transversal preta premium. Couro sintético de alta qualidade, design funcional e estética sofisticada.", 299.90, None, "Único", "Preto", "NV-BAG-001-BK", "Mais Vendido", 60, 1, 1, 1),
-        ("Shoulder Bag Utility", "shoulder-bag-utility", "acessorios", "Bolsa ombro utilitária premium. Múltiplos bolsos, design inteligente e funcionalidade urbana.", 349.90, 319.90, "Único", "Cinza", "NV-BAG-002-GY", "Promo", 55, 0, 1, 1),
-        ("Minimal Wallet", "minimal-wallet", "acessorios", "Carteira minimalista premium. Couro sintético, design compacto e acabamento sofisticado.", 149.90, None, "Único", "Preto", "NV-WAL-001-BK", "Novo", 80, 1, 0, 0),
-        ("Urban Backpack", "urban-backpack", "acessorios", "Mochila urbana premium. Compartimento notebook, múltiplos bolsos e design ergonômico.", 449.90, None, "Único", "Preto", "NV-BAC-001-BK", None, 40, 1, 0, 1),
+        ("Crossbody Bag Black", "crossbody-bag-black", "acessorios", "Bolsa transversal preta premium. Couro sintético de alta qualidade, design funcional e estética sofisticada.", 299.90, None, 60, 1, "Mais Vendido", "Único", "Preto", "NV-BAG-001-BK", 1, 1, 1),
+        ("Shoulder Bag Utility", "shoulder-bag-utility", "acessorios", "Bolsa ombro utilitária premium. Múltiplos bolsos, design inteligente e funcionalidade urbana.", 349.90, 319.90, 55, 0, "Promo", "Único", "Cinza", "NV-BAG-002-GY", 0, 1, 1),
+        ("Minimal Wallet", "minimal-wallet", "acessorios", "Carteira minimalista premium. Couro sintético, design compacto e acabamento sofisticado.", 149.90, None, 80, 1, "Novo", "Único", "Preto", "NV-WAL-001-BK", 1, 0, 0),
+        ("Urban Backpack", "urban-backpack", "acessorios", "Mochila urbana premium. Compartimento notebook, múltiplos bolsos e design ergonômico.", 449.90, None, 40, 1, None, "Único", "Preto", "NV-BAC-001-BK", 1, 0, 1),
     ]
     products.extend(bolsas)
     
     # DROP LIMITADO
     drop_limitado = [
-        ("Limited Tee 01", "limited-tee-01", "drop-limitado", "Camiseta edição limitada 01. Design exclusivo, número seriado e colecionável.", 249.90, None, "M,L,XL", "Preto", "NV-LTD-TEE-001", "Drop Limitado", 15, 1, 0, 1),
-        ("Limited Hoodie 01", "limited-hoodie-01", "drop-limitado", "Moletom edição limitada 01. Exclusividade absoluta, design único e edição restrita.", 599.90, None, "L,XL,XXL", "Preto", "NV-LTD-HOO-001", "Drop Limitado", 10, 1, 0, 1),
-        ("Limited Sneaker 01", "limited-sneaker-01", "drop-limitado", "Tênis edição limitada 01. Design exclusivo, número seriado e colecionável.", 899.90, None, "40,41,42,43,44", "Branco", "NV-LTD-SNK-001", "Drop Limitado", 8, 1, 0, 1),
-        ("Exclusive Capsule Item", "exclusive-capsule-item", "drop-limitado", "Peça exclusiva cápsula. Edição ultra limitada, design premium e raridade garantida.", 999.90, None, "L,XL", "Preto", "NV-LTD-CAP-001", "Drop Limitado", 5, 1, 0, 1),
+        ("Limited Tee 01", "limited-tee-01", "drop-limitado", "Camiseta edição limitada 01. Design exclusivo, número seriado e colecionável.", 249.90, None, 15, 1, "Drop Limitado", "M,L,XL", "Preto", "NV-LTD-TEE-001", 1, 0, 1),
+        ("Limited Hoodie 01", "limited-hoodie-01", "drop-limitado", "Moletom edição limitada 01. Exclusividade absoluta, design único e edição restrita.", 599.90, None, 10, 1, "Drop Limitado", "L,XL,XXL", "Preto", "NV-LTD-HOO-001", 1, 0, 1),
+        ("Limited Sneaker 01", "limited-sneaker-01", "drop-limitado", "Tênis edição limitada 01. Design exclusivo, número seriado e colecionável.", 899.90, None, 8, 1, "Drop Limitado", "40,41,42,43,44", "Branco", "NV-LTD-SNK-001", 1, 0, 1),
+        ("Exclusive Capsule Item", "exclusive-capsule-item", "drop-limitado", "Peça exclusiva cápsula. Edição ultra limitada, design premium e raridade garantida.", 999.90, None, 5, 1, "Drop Limitado", "L,XL", "Preto", "NV-LTD-CAP-001", 1, 0, 1),
     ]
     products.extend(drop_limitado)
     
