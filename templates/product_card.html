@@ -1,6 +1,10 @@
 <article class="card reveal-card product-card">
   <div class="thumb">
-    {{ product['name'].split(' ')[0] }}
+    {% if product['image_url'] %}
+      <img src="{{ product['image_url'] }}" alt="{{ product['name'] }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-lg);">
+    {% else %}
+      {{ product['name'].split(' ')[0] }}
+    {% endif %}
     <button class="wishlist-btn" type="button" onclick="toggleWishlist(this)">♡</button>
     
     {% if product['badge'] %}

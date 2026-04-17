@@ -55,8 +55,52 @@ def ensure_column(db, table_name, column_name, column_def):
 
 
 def generate_product_variations():
-    """Generate hundreds of product variations for massive catalog"""
+    """Generate 1000+ product variations with professional images for massive catalog"""
     products = []
+    
+    # URLs de imagens profissionais por categoria (Unsplash)
+    tee_images = [
+        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600",
+        "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600",
+        "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600",
+        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600",
+        "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600",
+        "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600",
+        "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=600",
+        "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600",
+    ]
+    
+    hoodie_images = [
+        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600",
+        "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600",
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600",
+        "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600",
+        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600",
+    ]
+    
+    pants_images = [
+        "https://images.unsplash.com/photo-1542272604-787c3839105e?w=600",
+        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600",
+        "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600",
+        "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600",
+    ]
+    
+    sneaker_images = [
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+        "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=600",
+        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600",
+        "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600",
+        "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=600",
+        "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600",
+    ]
+    
+    accessory_images = [
+        "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600",
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600",
+        "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600",
+        "https://images.unsplash.com/photo-1622434641406-a158123450f9?w=600",
+        "https://images.unsplash.com/photo-1611085583193-a87b724c82c3?w=600",
+    ]
     
     # CAMISETAS - 150 variações
     tee_colors = ["Preto", "Branco", "Cinza", "Bege", "Verde", "Azul", "Vinho", "Marrom", "Creme", "Off-White"]
@@ -79,7 +123,7 @@ def generate_product_variations():
     ]
     
     for i, (style_name, slug, desc, price, promo) in enumerate(tee_styles):
-        for color in tee_colors:
+        for j, color in enumerate(tee_colors):
             color_slug = color.lower().replace(" ", "-").replace("-", "")
             sku = f"NV-TEE-{i+1:03d}-{color[:2].upper()}"
             badge = "Mais Vendido" if i < 3 and color == "Preto" else ("Promo" if promo else ("Novo" if i > 10 else None))
@@ -88,6 +132,7 @@ def generate_product_variations():
             is_new = 1 if i > 10 else 0
             is_bestseller = 1 if i < 3 else 0
             free_ship = 1 if price > 150 else 0
+            image_url = tee_images[(i + j) % len(tee_images)]
             
             products.append((
                 f"{style_name} {color}",
@@ -102,6 +147,7 @@ def generate_product_variations():
                 "P,M,L,XL,XXL",
                 color,
                 sku,
+                image_url,
                 is_new,
                 is_bestseller,
                 free_ship
@@ -123,11 +169,12 @@ def generate_product_variations():
     ]
     
     for i, (style, slug, desc, price, promo) in enumerate(hoodie_styles):
-        for color in hoodie_colors:
+        for j, color in enumerate(hoodie_colors):
             color_slug = color.lower().replace(" ", "-").replace("-", "")
             sku = f"NV-HOO-{i+1:03d}-{color[:2].upper()}"
             badge = "Mais Vendido" if i == 0 and color == "Preto" else ("Promo" if promo and i % 2 == 0 else None)
             stock = 30 + (i * 8) % 70
+            image_url = hoodie_images[(i + j) % len(hoodie_images)]
             
             products.append((
                 f"{style} {color}",
@@ -142,6 +189,7 @@ def generate_product_variations():
                 "P,M,L,XL,XXL",
                 color,
                 sku,
+                image_url,
                 1 if i > 7 else 0,
                 1 if i < 2 else 0,
                 1
@@ -161,10 +209,11 @@ def generate_product_variations():
     ]
     
     for i, (style, slug, desc, price, promo) in enumerate(pants_styles):
-        for color in pants_colors:
+        for j, color in enumerate(pants_colors):
             color_slug = color.lower().replace(" ", "-").replace("-", "")
             sku = f"NV-PAN-{i+1:03d}-{color[:2].upper()}"
             badge = "Mais Vendido" if i == 0 and color == "Preto" else None
+            image_url = pants_images[(i + j) % len(pants_images)]
             
             products.append((
                 f"{style} {color}",
@@ -179,6 +228,7 @@ def generate_product_variations():
                 "36,38,40,42,44,46",
                 color,
                 sku,
+                image_url,
                 1 if i > 6 else 0,
                 1 if i < 2 else 0,
                 1
@@ -217,6 +267,7 @@ def generate_product_variations():
             sku = f"NV-SNK-{i+1:03d}-{j+1:02d}"
             is_ltd = 1 if "Limitado" in str(badge) or i in [2, 7] else 0
             stock = 8 if is_ltd else (15 if i < 3 else 30 + (i * j) % 50)
+            image_url = sneaker_images[(i + j) % len(sneaker_images)]
             
             products.append((
                 f"{model} {color_name}",
@@ -231,6 +282,7 @@ def generate_product_variations():
                 "37,38,39,40,41,42,43,44",
                 color_pt,
                 sku,
+                image_url,
                 1 if i > 7 else 0,
                 1 if i < 2 else 0,
                 1
@@ -270,10 +322,11 @@ def generate_product_variations():
     acc_colors = ["Preto", "Branco", "Cinza", "Bege", "Marrom", "Azul", "Verde", "Vermelho"]
     
     for i, (name, slug, desc, price, promo, cat) in enumerate(accessory_types):
-        for color in acc_colors[:5]:
+        for j, color in enumerate(acc_colors[:5]):
             color_slug = color.lower()
             sku = f"NV-ACC-{i+1:03d}-{color[:2].upper()}"
             stock = 40 + i * 10
+            image_url = accessory_images[(i + j) % len(accessory_images)]
             
             products.append((
                 f"{name} {color}",
@@ -288,12 +341,20 @@ def generate_product_variations():
                 "Único" if i < 10 else "Ajustável",
                 color,
                 sku,
+                image_url,
                 1 if i > 12 else 0,
                 1 if i < 3 else 0,
                 0
             ))
     
     # CONJUNTOS (SETS) - 30 variações
+    set_images = [
+        "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600",
+        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600",
+        "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600",
+        "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600",
+    ]
+    
     set_styles = [
         ("Conjunto Street", "set-street", "Conjunto camiseta + calça streetwear. Look completo.", 499.90, 449.90),
         ("Conjunto Sport", "set-sport", "Conjunto esportivo completo. Treino ou casual.", 599.90, 549.90),
@@ -304,9 +365,10 @@ def generate_product_variations():
     
     set_colors = ["Preto", "Cinza", "Bege", "Verde"]
     for i, (name, slug, desc, price, promo) in enumerate(set_styles):
-        for color in set_colors:
+        for j, color in enumerate(set_colors):
             color_slug = color.lower()
             sku = f"NV-SET-{i+1:03d}-{color[:2].upper()}"
+            image_url = set_images[(i + j) % len(set_images)]
             
             products.append((
                 f"{name} {color}",
@@ -321,6 +383,7 @@ def generate_product_variations():
                 "P,M,L,XL,XXL",
                 color,
                 sku,
+                image_url,
                 1 if i > 3 else 0,
                 1 if i == 0 else 0,
                 1
@@ -330,24 +393,24 @@ def generate_product_variations():
 
 
 def bulk_seed_products():
-    """Generate complete product catalog with 1000+ items"""
+    """Generate complete product catalog with 1000+ professional items with images"""
     products = generate_product_variations()
     
-    # DROP LIMITADO - Edições ultra exclusivas (30 itens)
+    # DROP LIMITADO - Edições ultra exclusivas
     limited_editions = [
-        ("Drop Tee - Autografada", "drop-autografada", "drop-limitado", "Camiseta edição limitada 001/100. Numerada, autografada.", 999.90, None, 3, 1, "🔥 Drop Limitado", "M,L,XL", "Preto", "NV-LTD-001", 1, 0, 1),
-        ("Hoodie Supreme Edition", "hoodie-supreme", "drop-limitado", "Moletom edição suprema. Bordado ouro 24k.", 2499.90, None, 2, 1, "👑 Ultra Exclusivo", "L,XL", "Preto", "NV-LTD-002", 1, 0, 1),
-        ("Tênis Colab Artist", "tenis-colab", "drop-limitado", "Tênis colab artista urbano. Arte exclusiva.", 1899.90, None, 5, 1, "🎨 Colab Especial", "38-44", "Multi", "NV-LTD-003", 1, 0, 1),
-        ("Jaqueta Premium Leather", "jaqueta-leather", "drop-limitado", "Jaqueta couro legítimo. Costura artesanal.", 3499.90, None, 1, 1, "💎 Peça Única", "L,XL", "Preto", "NV-LTD-004", 1, 0, 1),
-        ("Kit MC Gold", "kit-mc-gold", "drop-limitado", "Kit completo MC: camiseta + boné + corrente. Dourado.", 1499.90, None, 8, 1, "⚡ Escolha dos MCs", "Único", "Ouro", "NV-LTD-005", 1, 0, 1),
+        ("Drop Tee - Autografada", "drop-autografada", "drop-limitado", "Camiseta edição limitada 001/100. Numerada, autografada.", 999.90, None, 3, 1, "🔥 Drop Limitado", "M,L,XL", "Preto", "NV-LTD-001", "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600", 1, 0, 1),
+        ("Hoodie Supreme Edition", "hoodie-supreme", "drop-limitado", "Moletom edição suprema. Bordado ouro 24k.", 2499.90, None, 2, 1, "👑 Ultra Exclusivo", "L,XL", "Preto", "NV-LTD-002", "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600", 1, 0, 1),
+        ("Tênis Colab Artist", "tenis-colab", "drop-limitado", "Tênis colab artista urbano. Arte exclusiva.", 1899.90, None, 5, 1, "🎨 Colab Especial", "38-44", "Multi", "NV-LTD-003", "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600", 1, 0, 1),
+        ("Jaqueta Premium Leather", "jaqueta-leather", "drop-limitado", "Jaqueta couro legítimo. Costura artesanal.", 3499.90, None, 1, 1, "💎 Peça Única", "L,XL", "Preto", "NV-LTD-004", "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600", 1, 0, 1),
+        ("Kit MC Gold", "kit-mc-gold", "drop-limitado", "Kit completo MC: camiseta + boné + corrente. Dourado.", 1499.90, None, 8, 1, "⚡ Escolha dos MCs", "Único", "Ouro", "NV-LTD-005", "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600", 1, 0, 1),
     ]
     products.extend(limited_editions)
     
-    # COLAB ESPECIAIS (20 itens)
+    # COLAB ESPECIAIS
     collabs = [
-        ("NV x DJonga Tee", "colab-djonga", "drop-limitado", "Colab exclusiva DJonga. Letra bordada.", 399.90, 349.90, 15, 1, "🎤 Colab", "M,L,XL", "Preto", "NV-COL-001", 1, 0, 1),
-        ("NV x BK Hoodie", "colab-bk", "drop-limitado", "Colab BK. Design artwork exclusivo.", 699.90, 599.90, 12, 1, "🎤 Colab", "L,XL,XXL", "Cinza", "NV-COL-002", 1, 0, 1),
-        ("NV x Matuê Tee", "colab-matue", "drop-limitado", "Colab Matuê. Estampa 30k.", 449.90, 399.90, 20, 1, "🎤 Colab", "P,M,L,XL", "Branco", "NV-COL-003", 1, 0, 1),
+        ("NV x DJonga Tee", "colab-djonga", "drop-limitado", "Colab exclusiva DJonga. Letra bordada.", 399.90, 349.90, 15, 1, "🎤 Colab", "M,L,XL", "Preto", "NV-COL-001", "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600", 1, 0, 1),
+        ("NV x BK Hoodie", "colab-bk", "drop-limitado", "Colab BK. Design artwork exclusivo.", 699.90, 599.90, 12, 1, "🎤 Colab", "L,XL,XXL", "Cinza", "NV-COL-002", "https://images.unsplash.com/photo-1578768079052-aa76e52ff62e?w=600", 1, 0, 1),
+        ("NV x Matuê Tee", "colab-matue", "drop-limitado", "Colab Matuê. Estampa 30k.", 449.90, 399.90, 20, 1, "🎤 Colab", "P,M,L,XL", "Branco", "NV-COL-003", "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600", 1, 0, 1),
     ]
     products.extend(collabs)
     
@@ -383,6 +446,7 @@ def init_db():
             sizes TEXT,
             colors TEXT,
             sku TEXT,
+            image_url TEXT,
             is_new INTEGER NOT NULL DEFAULT 0,
             is_bestseller INTEGER NOT NULL DEFAULT 0,
             free_shipping INTEGER NOT NULL DEFAULT 0
@@ -435,6 +499,7 @@ def init_db():
     ensure_column(db, "products", "is_new", "INTEGER DEFAULT 0")
     ensure_column(db, "products", "is_bestseller", "INTEGER DEFAULT 0")
     ensure_column(db, "products", "free_shipping", "INTEGER DEFAULT 0")
+    ensure_column(db, "products", "image_url", "TEXT")
     
     db.commit()
 
@@ -453,8 +518,8 @@ def init_db():
     if new_products:
         db.executemany(
             """
-            INSERT INTO products (name, slug, category, description, price, promo_price, stock, featured, badge, sizes, colors, sku, is_new, is_bestseller, free_shipping)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO products (name, slug, category, description, price, promo_price, stock, featured, badge, sizes, colors, sku, image_url, is_new, is_bestseller, free_shipping)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             new_products,
         )
