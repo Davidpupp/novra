@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 {% block title %}{{ store_name }} | Home{% endblock %}
 {% block content %}
-<!-- Premium Hero Section -->
+<!-- LUXURY HERO SECTION - Nike/Farfetch Style -->
 <section class="hero reveal">
   <div class="hero-content">
-    <p class="tag">Coleção Exclusiva 2026</p>
-    <h1>Minimalismo branco. Atitude preta.</h1>
-    <p>Streetwear premium com design exclusivo e qualidade excepcional. Peças importadas para quem veste posicionamento.</p>
+    <p class="tag">NOVA COLEÇÃO 2026</p>
+    <h1>VESTE<br/>POSICIONAMENTO</h1>
+    <p>Streetwear premium. Design exclusivo. Qualidade que você sente.</p>
     <div class="inline-actions">
-      <a class="btn btn-large" href="{{ url_for('catalog') }}">Explorar Coleção</a>
-      <a class="chip" href="{{ url_for('customer_register') }}">Criar Conta</a>
+      <a class="btn btn-large btn-buy" href="{{ url_for('catalog') }}">COMPRAR AGORA</a>
+      <a class="btn btn-secondary" href="{{ url_for('catalog') }}">EXPLORAR</a>
     </div>
   </div>
+  <!-- Scroll indicator -->
+  <div style="position: absolute; bottom: var(--space-xl); left: 50%; transform: translateX(-50%); opacity: 0.5; animation: bounce 2s infinite;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M19 12l-7 7-7-7"/>
+    </svg>
+  </div>
 </section>
+
+<style>
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+  }
+</style>
 
 <!-- Benefits Section -->
 <section class="container reveal">
@@ -40,38 +53,38 @@
   </div>
 </section>
 
-<!-- Premium Trust Seals -->
-<section class="container reveal">
-  <div class="trust-seals">
-    <div class="trust-seal">
-      <div class="trust-seal-icon">🔒</div>
-      <p class="trust-seal-title">Compra Segura</p>
-      <p class="trust-seal-desc">SSL 256-bit</p>
+<!-- LUXURY TRUST BAR - Premium Guarantees -->
+<section class="container reveal" style="padding-top: var(--space-2xl); padding-bottom: var(--space-2xl);">
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-xl); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: var(--space-xl) 0;">
+    <div style="text-align: center; padding: var(--space-md);">
+      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">🔒</div>
+      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">COMPRA 100% SEGURA</p>
+      <p class="muted" style="font-size: 0.75rem;">SSL 256-bit</p>
     </div>
-    <div class="trust-seal">
-      <div class="trust-seal-icon">🚚</div>
-      <p class="trust-seal-title">Frete Grátis</p>
-      <p class="trust-seal-desc">Acima de R$ 399</p>
+    <div style="text-align: center; padding: var(--space-md); border-left: 1px solid var(--border);">
+      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">🚚</div>
+      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">FRETE GRÁTIS</p>
+      <p class="muted" style="font-size: 0.75rem;">Acima de R$ 399</p>
     </div>
-    <div class="trust-seal">
-      <div class="trust-seal-icon">↩️</div>
-      <p class="trust-seal-title">Troca Fácil</p>
-      <p class="trust-seal-desc">7 dias grátis</p>
+    <div style="text-align: center; padding: var(--space-md); border-left: 1px solid var(--border);">
+      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">↩️</div>
+      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">TROCA GARANTIDA</p>
+      <p class="muted" style="font-size: 0.75rem;">7 dias grátis</p>
     </div>
-    <div class="trust-seal">
-      <div class="trust-seal-icon">⭐</div>
-      <p class="trust-seal-title">5 Estrelas</p>
-      <p class="trust-seal-desc">+10k clientes</p>
+    <div style="text-align: center; padding: var(--space-md); border-left: 1px solid var(--border);">
+      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">⭐</div>
+      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">5 ESTRELAS</p>
+      <p class="muted" style="font-size: 0.75rem;">+10k clientes satisfeitos</p>
     </div>
   </div>
 </section>
 
-<!-- Featured Products -->
+<!-- LUXURY FEATURED PRODUCTS - Premium Showcase -->
 <section class="container reveal">
   <div style="text-align: center; margin-bottom: var(--space-3xl);">
-    <p class="tag">Destaques</p>
-    <h2 style="margin-bottom: var(--space-md);">Coleção Premium</h2>
-    <p class="muted" style="max-width: 600px; margin: 0 auto;">Peças selecionadas com design exclusivo e qualidade excepcional.</p>
+    <p class="tag" style="color: var(--accent); border-color: var(--border-gold);">DESTAQUES</p>
+    <h2 style="margin-bottom: var(--space-md); font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.02em;">COLEÇÃO PREMIUM</h2>
+    <p class="muted" style="max-width: 600px; margin: 0 auto; font-size: 1.125rem;">Peças selecionadas com design exclusivo e qualidade excepcional.</p>
   </div>
   <div class="product-grid">
     {% for product in featured %}
