@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}{{ store_name }} | Catálogo{% endblock %}
+{% block content %}
+<section class="container">
+  <div class="page-header">
+    <p class="tag">Catálogo</p>
+    <h1>Coleção Completa</h1>
+    <p>{{ total }} peças exclusivas disponíveis. Descubra o estilo que define quem você é.</p>
+  </div>
+  
+  <!-- Search -->
+  <form method="get" class="search-form" style="margin-bottom: var(--space-2xl);">
+    <input type="text" name="q" value="{{ search_query }}" placeholder="Buscar por produto, categoria ou estilo..." />
+    <input type="hidden" name="categoria" value="{{ current_category }}" />
+    <button class="btn" type="submit">Buscar</button>
+  </form>
+  
+  <!-- Filters -->
+  <div class="filters">
+    <a class="chip {% if current_category == 'todos' %}active{% endif %}" href="{{ url_for('catalog', categoria='todos', filtro=current_filter) }}">Todos</a>
+    <a class="chip {% if current_category == 'camisetas' %}active{% endif %}" href="{{ url_for('catalog', categoria='camisetas', filtro=current_filter) }}">Camisetas</a>
+    <a class="chip {% if current_category == 'hoodies' %}active{% endif %}" href="{{ url_for('catalog', categoria='hoodies', filtro=current_filter) }}">Hoodies</a>
+    <a class="chip {% if current_category == 'calcas' %}active{% endif %}" href="{{ url_for('catalog', categoria='calcas', filtro=current_filter) }}">Calças</a>
+    <a class="chip {% if current_category == 'tenis' %}active{% endif %}" href="{{ url_for('catalog', categoria='tenis', filtro=current_filter) }}">Tênis</a>
+    <a class="chip {% if current_category == 'acessorios' %}active{% endif %}" href="{{ url_for('catalog', categoria='acessorios', filtro=current_filter) }}">Acessórios</a>
+    <a class="chip {% if current_category == 'drop-limitado' %}active{% endif %}" href="{{ url_for('catalog', categoria='drop-limitado', filtro=current_filter) }}" style="color: var(--danger);">Drop Limitado</a>
+  </div>
+  
+  <!-- Quick Filters -->
+  <div class="filters" style="margin-bottom: var(--space-2xl);">
+    <a class="chip {% if current_filter == 'bestsellers' %}active{% endif %}" href="{{ url_for('catalog', categoria=current_category, filtro='bestsellers') }}">Mais Vendidos</a>
+    <a class="chip {% if current_filter == 'new' %}active{% endif %}" href="{{ url_for('catalog', categoria=current_category, filtro='new') }}">Novidades</a>
+    <a class="chip {% if current_filter == 'promo' %}active{% endif %}" href="{{ url_for('catalog', categoria=current_category, filtro='promo') }}" style="color: var(--danger);">Promoções</a>
+    {% if current_filter %}
+      <a class="chip" href="{{ url_for('catalog', categoria=current_category) }}">Limpar Filtro</a>
+    {% endif %}
+  </div>
+  
+  <!-- Products Grid -->
+  <div class="product-grid">
+    {% for product in products %}
+      <article class="card reveal-card">
+        <div class="thumb">
+          {{ product['name'].split(' ')[0] }}
+          <button class="wishlist-btn" type="button" onclick="toggleWishlist(this)">♡</button>
+          {% if product['free_shipping'] == 1 %}
+            <span class="free-shipping-badge">🚚 Frete Grátis</span>
+          {% endif %}
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+          <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">{{ product['category'] }}</span>
+          {% if product['badge'] %}
+            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--bg-mid-light); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);">{{ product['badge'] }}</span>
+          {% endif %}
+        </div>
+        <h3>{{ product['name'] }}</h3>
+        <p class="muted">{{ product['description'] }}</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: var(--space-md) 0;">
+          <div style="display: flex; flex-direction: column;">
+            {% if product['promo_price'] %}
+              <p class="price" style="margin: 0; color: var(--danger);">{{ product['promo_price']|brl }}</p>
+              <p style="font-size: 0.875rem; color: var(--text-muted); text-decoration: line-through; margin: 0;">{{ product['price']|brl }}</p>
+            {% else %}
+              <p class="price" style="margin: 0;">{{ product['price']|brl }}</p>
+            {% endif %}
+          </div>
+          {% if product['stock'] <= 5 and product['stock'] > 0 %}
+            <span class="scarcity-badge">Últimas {{ product['stock'] }}</span>
+          {% elif product['stock'] > 0 %}
+            <span style="font-size: 0.875rem; color: var(--text-muted);">{{ product['stock'] }} un.</span>
+          {% endif %}
+        </div>
+        <div class="inline-actions">
+          <a class="btn btn-secondary" href="{{ url_for('product_detail', slug=product['slug']) }}" style="flex: 1;">Ver Detalhes</a>
+          <form method="post" action="{{ url_for('add_to_cart', product_id=product['id']) }}" style="flex: 1;">
+            <button class="btn" type="submit" style="width: 100%;">Adicionar</button>
+          </form>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+  
+  <!-- Pagination -->
+  <div class="pagination">
+    {% if page > 1 %}
+      <a class="chip" href="{{ url_for('catalog', categoria=current_category, q=search_query, filtro=current_filter, page=page-1) }}">← Anterior</a>
+    {% endif %}
+    <span>Página {{ page }} de {{ pages }}</span>
+    {% if page < pages %}
+      <a class="chip" href="{{ url_for('catalog', categoria=current_category, q=search_query, filtro=current_filter, page=page+1) }}">Próxima →</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

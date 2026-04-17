@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Admin | {{ store_name }}{% endblock %}
+{% block content %}
+<section class="container">
+  <div class="inline-actions split">
+    <h1>Dashboard Admin</h1>
+    <a class="chip" href="{{ url_for('admin_logout') }}">Sair</a>
+  </div>
+
+  <div class="admin-grid">
+    <section class="card">
+      <h2>Novo produto</h2>
+      <form class="checkout-form" method="post" action="{{ url_for('admin_create_product') }}">
+        <label>Nome<input type="text" name="name" required /></label>
+        <label>Slug<input type="text" name="slug" required /></label>
+        <label>Categoria
+          <select name="category" required>
+            <option value="corrida">Corrida</option>
+            <option value="treino">Treino</option>
+            <option value="lifestyle">Lifestyle</option>
+          </select>
+        </label>
+        <label>Descricao<input type="text" name="description" required /></label>
+        <label>Preco<input type="number" step="0.01" min="0" name="price" required /></label>
+        <label>Estoque<input type="number" min="0" name="stock" required /></label>
+        <label><input type="checkbox" name="featured" /> Destaque na home</label>
+        <button class="btn" type="submit">Salvar produto</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Produtos cadastrados</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Nome</th><th>Categoria</th><th>Preco</th><th>Estoque</th></tr></thead>
+          <tbody>
+            {% for product in products %}
+              <tr>
+                <td>{{ product['id'] }}</td><td>{{ product['name'] }}</td><td>{{ product['category'] }}</td><td>{{ product['price']|brl }}</td><td>{{ product['stock'] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <section class="card mt">
+    <h2>Pedidos recentes</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Cliente</th><th>Total</th><th>Status</th><th>Atualizar</th></tr></thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+              <td>#{{ order['id'] }}</td>
+              <td>{{ order['customer_name'] }}</td>
+              <td>{{ order['total']|brl }}</td>
+              <td>{{ order['status'] }}</td>
+              <td>
+                <form method="post" action="{{ url_for('admin_update_order_status', order_id=order['id']) }}" class="inline-actions">
+                  <select name="status">
+                    {% for st in ['awaiting_payment','pending','paid','shipped','cancelled'] %}
+                      <option value="{{ st }}" {% if st == order['status'] %}selected{% endif %}>{{ st }}</option>
+                    {% endfor %}
+                  </select>
+                  <button class="chip" type="submit">Salvar</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
+{% endblock %}

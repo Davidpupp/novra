@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Pedido confirmado | {{ store_name }}{% endblock %}
+{% block content %}
+<section class="container">
+  <div class="summary-card">
+    <h1>Pedido confirmado</h1>
+    <p>Numero do pedido: <strong>#{{ order['id'] }}</strong></p>
+    <p>Total pago: <strong>{{ order['total']|brl }}</strong></p>
+    <p>Status inicial: <strong>{{ order['status'] }}</strong></p>
+    <a class="btn" href="{{ url_for('home') }}">Voltar para home</a>
+  </div>
+</section>
+{% endblock %}

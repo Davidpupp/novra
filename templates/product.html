@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ product['name'] }} | {{ store_name }}{% endblock %}
+{% block content %}
+<section class="container">
+  <article class="product-detail">
+    <div class="thumb">{{ product['name'].split(' ')[0] }}</div>
+    <div class="product-info">
+      <div>
+        <span style="font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);">{{ product['category'] }}</span>
+        {% if product['featured'] == 1 %}
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--bg-mid-light); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); margin-left: var(--space-sm);">Exclusivo</span>
+        {% endif %}
+      </div>
+      <h1>{{ product['name'] }}</h1>
+      <p class="price" style="font-size: 2rem; margin: var(--space-md) 0;">{{ product['price']|brl }}</p>
+      <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: var(--space-xl);">{{ product['description'] }}</p>
+      
+      <!-- Stock Indicator -->
+      <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-xl); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-md);">
+        <div style="width: 8px; height: 8px; background: {% if product['stock'] > 10 %}var(--success){% elif product['stock'] > 0 %}var(--warning){% else %}var(--danger){% endif %}; border-radius: 50%;"></div>
+        <span style="font-size: 0.875rem; font-weight: 500;">
+          {% if product['stock'] > 10 %}
+            Disponível - {{ product['stock'] }} unidades
+          {% elif product['stock'] > 0 %}
+            <span class="scarcity-badge" style="margin-left: 0; padding: 0.125rem 0.5rem;">Últimas {{ product['stock'] }} - Garanta agora</span>
+          {% else %}
+            Esgotado
+          {% endif %}
+        </span>
+      </div>
+      
+      <!-- Add to Cart Form -->
+      {% if product['stock'] > 0 %}
+        <form method="post" action="{{ url_for('add_to_cart', product_id=product['id']) }}">
+          <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <div style="flex: 0 0 auto;">
+              <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: var(--space-xs);">Quantidade</label>
+              <input type="number" min="1" max="{{ product['stock'] }}" name="quantity" value="1" style="width: 100px; text-align: center;" />
+            </div>
+            <div style="flex: 1;">
+              <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: var(--space-xs);">&nbsp;</label>
+              <button class="btn btn-large" type="submit" style="width: 100%;">Adicionar ao Carrinho</button>
+            </div>
+          </div>
+        </form>
+      {% else %}
+        <button class="btn btn-large" disabled style="width: 100%; opacity: 0.5; cursor: not-allowed;">Esgotado</button>
+      {% endif %}
+      
+      <!-- Trust Signals -->
+      <div style="margin-top: var(--space-xl); padding-top: var(--space-xl); border-top: 1px solid var(--border-subtle);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-md);">
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span style="font-size: 1.5rem;">🚚</span>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 600; margin: 0;">Frete Grátis</p>
+              <p class="muted" style="font-size: 0.75rem; margin: 0;">Acima de R$ 399</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span style="font-size: 1.5rem;">🔒</span>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 600; margin: 0;">Compra Segura</p>
+              <p class="muted" style="font-size: 0.75rem; margin: 0;">Pagamento protegido</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span style="font-size: 1.5rem;">↩️</span>
+            <div>
+              <p style="font-size: 0.875rem; font-weight: 600; margin: 0;">Troca Garantida</p>
+              <p class="muted" style="font-size: 0.75rem; margin: 0;">7 dias para devolução</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+{% endblock %}

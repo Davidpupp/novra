@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Cadastro | {{ store_name }}{% endblock %}
+{% block content %}
+<section class="container narrow">
+  <form method="post" class="checkout-form">
+    <h1>Criar conta</h1>
+    <label>Nome completo<input type="text" name="full_name" required /></label>
+    <label>E-mail<input type="email" name="email" required /></label>
+    <label>Senha<input type="password" name="password" minlength="8" required /></label>
+    <label>Confirmar senha<input type="password" name="confirm_password" minlength="8" required /></label>
+    <button class="btn" type="submit">Cadastrar</button>
+  </form>
+</section>
+{% endblock %}

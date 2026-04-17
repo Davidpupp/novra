@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Entrar | {{ store_name }}{% endblock %}
+{% block content %}
+<section class="container narrow">
+  <form method="post" class="checkout-form">
+    <h1>Entrar na conta</h1>
+    <label>E-mail<input type="email" name="email" required /></label>
+    <label>Senha<input type="password" name="password" required /></label>
+    <button class="btn" type="submit">Entrar</button>
+    <p class="muted">Ainda nao tem conta? <a href="{{ url_for('customer_register') }}">Cadastre-se</a></p>
+    <p class="muted"><a href="{{ url_for('customer_forgot_password') }}">Esqueci minha senha</a></p>
+  </form>
+</section>
+{% endblock %}

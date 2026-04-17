@@ -1,0 +1,11 @@
+{
+  "name": "NØVRA Store",
+  "short_name": "NØVRA",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "description": "Loja online da NØVRA com experiencia premium e interativa.",
+  "icons": []
+}

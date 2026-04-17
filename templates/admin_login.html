@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Admin login | {{ store_name }}{% endblock %}
+{% block content %}
+<section class="container narrow">
+  <form method="post" class="checkout-form">
+    <h1>Painel Admin</h1>
+    <label>Email<input type="email" name="email" required /></label>
+    <label>Senha<input type="password" name="password" required /></label>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+</section>
+{% endblock %}
