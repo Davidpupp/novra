@@ -403,7 +403,7 @@ def verify_webhook_signature(payload, signature, secret):
 def ai_reply(message):
     text = (message or "").strip().lower()
     if not text:
-        return "Posso te ajudar com tamanhos, estilos, preco e recomendacoes para looks urbanos e esportivos.", []
+        return "Posso te ajudar com tamanhos, estilos, preço e recomendações para looks urbanos e esportivos.", []
 
     category = None
     if any(k in text for k in ["corrida", "correr", "maratona"]):

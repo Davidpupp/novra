@@ -5,9 +5,9 @@
   <div class="summary-card">
     <h1>Checkout Sillient Pay (Sandbox)</h1>
     <p>Pedido: <strong>#{{ order['id'] }}</strong></p>
-    <p>Referencia: <strong>{{ order['payment_reference'] }}</strong></p>
+    <p>Referência: <strong>{{ order['payment_reference'] }}</strong></p>
     <p>Total: <strong>{{ order['total']|brl }}</strong></p>
-    <p class="muted">Esta pagina simula a etapa externa do gateway enquanto as credenciais reais sao configuradas.</p>
+    <p class="muted">Esta página simula a etapa externa do gateway enquanto as credenciais reais são configuradas.</p>
     <form method="post" action="{{ url_for('payment_approve', order_id=order['id']) }}">
       <button class="btn" type="submit">Simular pagamento aprovado</button>
     </form>
