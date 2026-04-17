@@ -854,7 +854,13 @@ def product_detail(slug):
     product = get_db().execute("SELECT * FROM products WHERE slug = ?", (slug,)).fetchone()
     if not product:
         return redirect(url_for("catalog"))
-    return render_template("product.html", product=product)
+    # Get related products
+    related = get_db().execute(
+        "SELECT * FROM products WHERE category = ? AND slug != ? LIMIT 4",
+        (product['category'], slug)
+    ).fetchall()
+    featured = get_db().execute("SELECT * FROM products WHERE featured = 1 LIMIT 4").fetchall()
+    return render_template("product_extreme.html", product=product, related_products=related, featured=featured)
 
 
 @app.post("/carrinho/adicionar/<int:product_id>")
