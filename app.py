@@ -781,7 +781,7 @@ def home():
     tenis_premium = db.execute("SELECT * FROM products WHERE category = 'tenis' AND price > 500 ORDER BY id DESC LIMIT 8").fetchall()
     conjuntos = db.execute("SELECT * FROM products WHERE category = 'conjuntos' ORDER BY id DESC LIMIT 6").fetchall()
     acessorios = db.execute("SELECT * FROM products WHERE category = 'acessorios' ORDER BY id DESC LIMIT 8").fetchall()
-    return render_template("home.html", 
+    return render_template("home_extreme.html", 
                          featured=featured, 
                          new_arrivals=new_arrivals, 
                          bestsellers=bestsellers, 
