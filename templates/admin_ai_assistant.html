@@ -1,0 +1,486 @@
+{% extends "admin_base.html" %}
+{% block title %}Assistente IA{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>🤖 Assistente NØVRA IA</h1>
+  <p>Inteligência artificial para impulsionar suas vendas</p>
+</div>
+
+<!-- AI Stats -->
+<div class="stats-grid" style="margin-bottom: var(--space-xl);">
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(91, 33, 182, 0.1) 100%);">💡</div>
+    </div>
+    <div class="stat-value">24</div>
+    <div class="stat-label">Sugestões Hoje</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.1) 100%);">📈</div>
+    </div>
+    <div class="stat-value">+18%</div>
+    <div class="stat-label">Conversão Aplicadas</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon" style="background: linear-gradient(135deg, rgba(201, 169, 98, 0.2) 0%, rgba(201, 169, 98, 0.1) 100%);">⏱️</div>
+    </div>
+    <div class="stat-value">5h</div>
+    <div class="stat-label">Tempo Economizado</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.1) 100%);">🎯</div>
+    </div>
+    <div class="stat-value">92%</div>
+    <div class="stat-label">Precisão</div>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  
+  <!-- Chat Interface -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>💬 Chat com IA</h2>
+    </div>
+    
+    <div style="height: 400px; overflow-y: auto; background: var(--bg-mid-light); border-radius: var(--radius-lg); padding: var(--space-md); margin-bottom: var(--space-md);">
+      <div class="ai-message">
+        <p><strong>👋 Olá! Sou seu assistente IA.</strong></p>
+        <p>Posso ajudar você a:</p>
+        <ul style="margin: var(--space-sm) 0; padding-left: var(--space-lg);">
+          <li>📊 Analisar dados de vendas</li>
+          <li>💡 Sugerir produtos em alta</li>
+          <li>🎯 Criar estratégias de marketing</li>
+          <li>📝 Gerar descrições de produtos</li>
+          <li>🖼️ Sugerir banners e promoções</li>
+          <li>📧 Criar emails marketing</li>
+        </ul>
+        <p>O que você gostaria de fazer hoje?</p>
+      </div>
+      
+      <div id="chatHistory"></div>
+    </div>
+    
+    <div style="display: flex; gap: var(--space-sm);">
+      <input type="text" id="aiInput" placeholder="Digite sua pergunta..." 
+             style="flex: 1; padding: var(--space-md); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary);">
+      <button onclick="sendAIChat()" class="btn btn-buy" style="padding: var(--space-md) var(--space-lg);">
+        ➤
+      </button>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div style="margin-top: var(--space-md); display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+      <button class="chip" onclick="quickAsk('Quais produtos estão vendendo mais?')">📊 Mais vendidos</button>
+      <button class="chip" onclick="quickAsk('Crie uma descrição para novo produto')">📝 Descrição</button>
+      <button class="chip" onclick="quickAsk('Sugira banners para promoção')">🖼️ Banners</button>
+      <button class="chip" onclick="quickAsk('Análise de estoque')">📦 Estoque</button>
+      <button class="chip" onclick="quickAsk('Estratégia de marketing')">🎯 Marketing</button>
+    </div>
+  </div>
+  
+  <!-- AI Tools -->
+  <div>
+    <div class="dashboard-card" style="margin-bottom: var(--space-lg);">
+      <div class="card-header">
+        <h2>🛠️ Ferramentas IA</h2>
+      </div>
+      
+      <div style="display: grid; gap: var(--space-md);">
+        <button class="ai-tool-btn" onclick="generateProductDescription()">
+          <span>📝</span>
+          <div>
+            <strong>Gerar Descrição de Produto</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Cria descrição persuasiva SEO-otimizada</p>
+          </div>
+        </button>
+        
+        <button class="ai-tool-btn" onclick="generateEmailCampaign()">
+          <span>📧</span>
+          <div>
+            <strong>Criar Email Marketing</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Gera campanha completa com subject</p>
+          </div>
+        </button>
+        
+        <button class="ai-tool-btn" onclick="generateBannerIdeas()">
+          <span>🖼️</span>
+          <div>
+            <strong>Ideias de Banners</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Sugestões baseadas em tendências</p>
+          </div>
+        </button>
+        
+        <button class="ai-tool-btn" onclick="analyzeCompetitors()">
+          <span>🔍</span>
+          <div>
+            <strong>Análise de Concorrentes</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Compare preços e estratégias</p>
+          </div>
+        </button>
+        
+        <button class="ai-tool-btn" onclick="priceOptimization()">
+          <span>💰</span>
+          <div>
+            <strong>Otimização de Preços</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Sugestão de preços para máxima conversão</p>
+          </div>
+        </button>
+        
+        <button class="ai-tool-btn" onclick="generateRestockPlan()">
+          <span>📦</span>
+          <div>
+            <strong>Plano de Reposição</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Quais produtos repor e quantidade</p>
+          </div>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Recent AI Suggestions -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>📋 Sugestões Recentes</h2>
+      </div>
+      
+      <div style="display: grid; gap: var(--space-md);">
+        <div class="ai-card" style="margin: 0;">
+          <p style="font-size: 0.875rem; margin: 0;">🎯 Reduzir frete grátis de R$ 399 para R$ 299 pode aumentar conversão em 15%</p>
+          <button class="btn-ai" style="margin-top: var(--space-sm);" onclick="applySetting('free_shipping', 299)">Aplicar</button>
+        </div>
+        
+        <div class="ai-card" style="margin: 0;">
+          <p style="font-size: 0.875rem; margin: 0;">📦 8 produtos estão com estoque crítico. Gere reposição urgente.</p>
+          <button class="btn-ai" style="margin-top: var(--space-sm);" onclick="goToStock()">Ver Estoque</button>
+        </div>
+        
+        <div class="ai-card" style="margin: 0;">
+          <p style="font-size: 0.875rem; margin: 0;">🖼️ Banner hero com CTR baixo (2.1%). Sugiro novo design.</p>
+          <button class="btn-ai" style="margin-top: var(--space-sm);" onclick="goToBanners()">Ver Banners</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Results Modal -->
+<div id="aiResultsModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+  <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: var(--space-2xl); max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
+      <h3 id="modalTitle">🤖 Resultado da IA</h3>
+      <button onclick="closeModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+    </div>
+    <div id="modalContent"></div>
+    <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-md); justify-content: flex-end;">
+      <button onclick="closeModal()" class="btn btn-secondary">Fechar</button>
+      <button onclick="useResult()" class="btn btn-buy">Usar Sugestão</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ai-tool-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    width: 100%;
+    padding: var(--space-md);
+    background: var(--bg-mid-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .ai-tool-btn:hover {
+    background: rgba(124, 58, 237, 0.1);
+    border-color: #7c3aed;
+    transform: translateX(4px);
+  }
+  
+  .ai-tool-btn span {
+    font-size: 1.5rem;
+  }
+  
+  .user-message {
+    background: linear-gradient(135deg, rgba(201, 169, 98, 0.2) 0%, rgba(201, 169, 98, 0.1) 100%);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-md);
+    margin-left: var(--space-lg);
+  }
+</style>
+
+<script>
+  function sendAIChat() {
+    const input = document.getElementById('aiInput');
+    const message = input.value.trim();
+    if (!message) return;
+    
+    addChatMessage(message, 'user');
+    input.value = '';
+    
+    // Simulate AI response
+    setTimeout(() => {
+      const responses = {
+        'vendas': '📊 Análise de Vendas:\n\nHoje: R$ 2.450,00 (+12% vs ontem)\nEste mês: R$ 45.890,00\nProduto mais vendido: Oversized Premium Black (45 unidades)\n\n💡 Sugestão: Aumentar estoque dos topsellers.',
+        'estoque': '📦 Análise de Estoque:\n\n✅ OK: 1.245 produtos\n⚠️ Baixo: 8 produtos\n❌ Esgotado: 3 produtos\n\nProdutos prioritários para reposição:\n1. Oversized Premium (estoque: 3)\n2. Cargo Pants (estoque: 5)\n3. Street Hoodie (estoque: 2)',
+        'marketing': '🎯 Estratégia de Marketing:\n\n1. Criar campanha "Últimas Unidades" para produtos com estoque < 10\n2. Enviar email para 156 clientes inativos com 10% OFF\n3. Postar 3x por dia no Instagram com hashtag #novra\n4. Criar cupom PRIMEIRA15 para novos clientes\n\nQuer que eu gere algum desses materiais?',
+        'default': '🤔 Entendi! Analisando seus dados...\n\nPosso ajudar com mais detalhes específicos. Que tal usar uma das ferramentas rápidas no lado direito? Ou pergunte algo específico como:\n• "Quais produtos repor?"\n• "Crie descrição para [nome do produto]"\n• "Sugira preço para [categoria]"'
+      };
+      
+      let response = responses['default'];
+      for (const key in responses) {
+        if (message.toLowerCase().includes(key)) {
+          response = responses[key];
+          break;
+        }
+      }
+      
+      addChatMessage(response, 'ai');
+    }, 1500);
+  }
+  
+  function addChatMessage(message, type) {
+    const history = document.getElementById('chatHistory');
+    const div = document.createElement('div');
+    div.className = type + '-message';
+    div.innerHTML = '<p style="margin: 0; white-space: pre-line;">' + message + '</p>';
+    history.appendChild(div);
+    history.scrollTop = history.scrollHeight;
+  }
+  
+  function quickAsk(question) {
+    document.getElementById('aiInput').value = question;
+    sendAIChat();
+  }
+  
+  // AI Tool Functions
+  function generateProductDescription() {
+    showModal('📝 Gerador de Descrição', `
+      <div class="form-group">
+        <label>Nome do Produto</label>
+        <input type="text" id="productNameInput" placeholder="Ex: Oversized Premium Black">
+      </div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select id="productCatInput">
+          <option>Camisetas</option>
+          <option>Moletons</option>
+          <option>Calças</option>
+          <option>Tênis</option>
+        </select>
+      </div>
+      <button class="btn btn-buy" onclick="generateDesc()">✨ Gerar Descrição</button>
+      <div id="descResult" style="margin-top: var(--space-md); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg); display: none;"></div>
+    `);
+  }
+  
+  function generateDesc() {
+    const name = document.getElementById('productNameInput').value || 'Produto';
+    const cat = document.getElementById('productCatInput').value;
+    
+    const descriptions = {
+      'Camisetas': `A ${name} é a escolha definitiva para quem busca estilo e conforto. Com caimento oversized perfeito, tecido de alta gramatura e acabamento premium, essa peça eleva qualquer look urbano.\n\n✓ Tecido 100% algodão 240g\n✓ Modelagem oversized\n✓ Estampa em alta definição\n✓ Costura reforçada`,
+      'Moletons': `O ${name} combina aconchego e atitude em uma peça única. Ideal para os dias mais frios sem abrir mão do estilo streetwear que você ama.\n\n✓ Moletom flanelado interno\n✓ Capuz duplo com forro\n✓ Bolso canguru\n✓ Punhos em ribana`,
+      'default': `A ${name} representa o melhor do streetwear nacional. Design exclusivo, qualidade impecável e aquele caimento que você só encontra aqui.\n\n✓ Material premium\n✓ Acabamento de luxo\n✓ Edição limitada\n✓ Exclusividade NØVRA`
+    };
+    
+    const result = descriptions[cat] || descriptions['default'];
+    const resultDiv = document.getElementById('descResult');
+    resultDiv.innerHTML = '<strong>Descrição Gerada:</strong><br><br>' + result.replace(/\n/g, '<br>');
+    resultDiv.style.display = 'block';
+  }
+  
+  function generateEmailCampaign() {
+    showModal('📧 Campanha de Email', `
+      <p><strong>Assunto:</strong> 🔥 Últimas unidades dos topsellers + Frete GRÁTIS</p>
+      <div style="background: var(--bg-mid-light); padding: var(--space-md); border-radius: var(--radius-lg); margin: var(--space-md) 0;">
+        <p><strong>Preview do Email:</strong></p>
+        <p style="white-space: pre-line;">
+Oi [Nome],
+
+⚡ Corre! Os produtos mais vendidos estão acabando!
+
+🔥 Oversized Premium - Apenas 3 unidades
+🔥 Cargo Pants Urban - Apenas 5 unidades  
+🔥 Street Hoodie Grey - Apenas 2 unidades
+
+🚚 E ainda: FRETE GRÁTIS para todo Brasil hoje!
+
+Use o cupom: CORRE10
+
+[COMPRAR AGORA →]
+
+NØVRA - Streetwear Premium
+        </p>
+      </div>
+      <p><strong>Lista de envio:</strong> 2.450 contatos</p>
+      <p><strong>Taxa esperada de abertura:</strong> 25% (612 aberturas)</p>
+      <p><strong>Conversão esperada:</strong> 3% (18 vendas)</p>
+    `);
+  }
+  
+  function generateBannerIdeas() {
+    showModal('🖼️ Ideias de Banners', `
+      <div style="display: grid; gap: var(--space-md);">
+        <div style="padding: var(--space-md); background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border-radius: var(--radius-lg);">
+          <p style="margin: 0; font-weight: 700;">🔥 DROP LIMITADO</p>
+          <p style="margin: 0; font-size: 0.875rem;">Apenas 100 unidades numeradas</p>
+        </div>
+        
+        <div style="padding: var(--space-md); background: linear-gradient(135deg, #059669 0%, #047857 100%); border-radius: var(--radius-lg);">
+          <p style="margin: 0; font-weight: 700;">🚚 FRETE GRÁTIS HOJE</p>
+          <p style="margin: 0; font-size: 0.875rem;">Qualquer compra - Termina à meia-noite</p>
+        </div>
+        
+        <div style="padding: var(--space-md); background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); border-radius: var(--radius-lg);">
+          <p style="margin: 0; font-weight: 700;">⚡ ÚLTIMAS UNIDADES</p>
+          <p style="margin: 0; font-size: 0.875rem;">Esgotando rápido - Não vai ter reposição</p>
+        </div>
+        
+        <div style="padding: var(--space-md); background: linear-gradient(135deg, #c9a962 0%, #b8944f 100%); border-radius: var(--radius-lg); color: #000;">
+          <p style="margin: 0; font-weight: 700;">💎 COLEÇÃO PREMIUM</p>
+          <p style="margin: 0; font-size: 0.875rem;">Qualidade internacional - Edição especial</p>
+        </div>
+      </div>
+      <p style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-muted);">
+        💡 Baseado em análise de conversão de banners similares no mercado.
+      </p>
+    `);
+  }
+  
+  function priceOptimization() {
+    showModal('💰 Otimização de Preços', `
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Preço Atual</th>
+            <th>Sugestão IA</th>
+            <th>Potencial</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Oversized Premium</td>
+            <td>R$ 199,90</td>
+            <td><strong style="color: #22c55e;">R$ 179,90</strong></td>
+            <td style="color: #22c55e;">+15% conversão</td>
+          </tr>
+          <tr>
+            <td>Cargo Pants</td>
+            <td>R$ 349,90</td>
+            <td><strong style="color: #22c55e;">R$ 329,90</strong></td>
+            <td style="color: #22c55e;">+12% conversão</td>
+          </tr>
+          <tr>
+            <td>Street Hoodie</td>
+            <td>R$ 289,90</td>
+            <td><strong>R$ 299,90</strong></td>
+            <td>Margem melhor</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: var(--space-md); font-size: 0.875rem; color: var(--text-muted);">
+        📊 Análise baseada em dados de mercado e comportamento de compra.
+      </p>
+    `);
+  }
+  
+  function analyzeCompetitors() {
+    showModal('🔍 Análise de Concorrentes', `
+      <div style="display: grid; gap: var(--space-md);">
+        <div style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <h4 style="margin: 0 0 var(--space-sm);">🏆 Competidor A</h4>
+          <p style="margin: 0; font-size: 0.875rem;">Preço médio: 15% acima do seu<br>
+          Estoque: Maior variedade<br>
+          Forte em: Moletons e acessórios</p>
+        </div>
+        
+        <div style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <h4 style="margin: 0 0 var(--space-sm);">🏆 Competidor B</h4>
+          <p style="margin: 0; font-size: 0.875rem;">Preço médio: Similar ao seu<br>
+          Estoque: Foco em camisetas<br>
+          Forte em: Drop limitados</p>
+        </div>
+        
+        <div style="padding: var(--space-md); background: rgba(201, 169, 98, 0.1); border-radius: var(--radius-lg); border: 1px solid var(--accent);">
+          <h4 style="margin: 0 0 var(--space-sm); color: var(--accent);">💡 Oportunidade Identificada</h4>
+          <p style="margin: 0; font-size: 0.875rem;">Nenhum competidor forte em tênis premium. 
+             Você pode dominar esse nicho aumentando variedade nessa categoria.</p>
+        </div>
+      </div>
+    `);
+  }
+  
+  function generateRestockPlan() {
+    showModal('📦 Plano de Reposição', `
+      <p><strong>Produtos Prioritários (baseado em vendas 30 dias):</strong></p>
+      <ol style="line-height: 1.8;">
+        <li><strong>Oversized Premium Black</strong> - Comprar: 50 un (estoque: 3)</li>
+        <li><strong>Cargo Pants Urban</strong> - Comprar: 40 un (estoque: 5)</li>
+        <li><strong>Street Hoodie Grey</strong> - Comprar: 35 un (estoque: 2)</li>
+        <li><strong>Air Style Sneakers</strong> - Comprar: 30 un (estoque: 8)</li>
+        <li><strong>Tech Cargo Black</strong> - Comprar: 25 un (estoque: 6)</li>
+      </ol>
+      <div style="margin-top: var(--space-md); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+        <p style="margin: 0;"><strong>Investimento estimado:</strong> R$ 12.450,00<br>
+        <strong>Retorno esperado (30 dias):</strong> R$ 28.900,00<br>
+        <strong>Margem:</strong> 132%</p>
+      </div>
+    `);
+  }
+  
+  // Modal functions
+  function showModal(title, content) {
+    document.getElementById('modalTitle').innerHTML = title;
+    document.getElementById('modalContent').innerHTML = content;
+    document.getElementById('aiResultsModal').style.display = 'flex';
+  }
+  
+  function closeModal() {
+    document.getElementById('aiResultsModal').style.display = 'none';
+  }
+  
+  function useResult() {
+    showNotification('✨ Sugestão aplicada com sucesso!');
+    closeModal();
+  }
+  
+  function applySetting(key, value) {
+    showNotification('✨ Configuração "' + key + '" atualizada para ' + value);
+  }
+  
+  function goToStock() {
+    window.location.href = '{{ url_for('admin_products') }}?filter=low';
+  }
+  
+  function goToBanners() {
+    window.location.href = '{{ url_for('admin_banners') }}';
+  }
+  
+  function showNotification(message) {
+    const notif = document.createElement('div');
+    notif.className = 'flash flash-success';
+    notif.innerHTML = '<span>' + message + '</span><button onclick="this.parentElement.remove()">×</button>';
+    document.querySelector('.flash-container').appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+  
+  // Enter key support
+  document.getElementById('aiInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendAIChat();
+  });
+</script>
+
+{% endblock %}

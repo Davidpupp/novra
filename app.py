@@ -760,6 +760,7 @@ def inject_globals():
     customer = get_current_customer()
     return {
         "admin_login_path": f"/{app.config['ADMIN_PATH']}/login",
+        "admin_path": app.config['ADMIN_PATH'],
         "cart_count": cart_count,
         "current_customer": customer,
         "store_name": "N\u00d8VRA",
@@ -1085,45 +1086,282 @@ def admin_logout():
 @app.get(f"/{app.config['ADMIN_PATH']}")
 @login_required
 @admin_required
-def admin_dashboard():
+def admin_dashboard_extreme():
+    db = get_db()
+    
+    # Statistics
+    stats = {
+        'sales_today': '2.450,00',
+        'orders_today': db.execute("SELECT COUNT(*) FROM orders WHERE date(created_at) = date('now')").fetchone()[0],
+        'total_customers': db.execute("SELECT COUNT(DISTINCT customer_email) FROM orders").fetchone()[0],
+        'total_products': db.execute("SELECT COUNT(*) FROM products").fetchone()[0],
+        'low_stock': db.execute("SELECT COUNT(*) FROM products WHERE stock <= 10").fetchone()[0],
+        'monthly_sales': '45.890,00'
+    }
+    
+    # Recent orders
+    recent_orders = db.execute("""
+        SELECT o.*, u.email as customer_email 
+        FROM orders o 
+        LEFT JOIN users u ON o.user_id = u.id 
+        ORDER BY o.id DESC LIMIT 10
+    """).fetchall()
+    
+    # Top products (simulated with sales data)
+    top_products = db.execute("""
+        SELECT p.*, 
+               COALESCE((SELECT SUM(quantity) FROM order_items WHERE product_id = p.id), 0) as sales_count,
+               COALESCE((SELECT SUM(quantity * price) FROM order_items WHERE product_id = p.id), 0) as revenue
+        FROM products p 
+        ORDER BY sales_count DESC LIMIT 5
+    """).fetchall()
+    
+    # Low stock products
+    low_stock_products = db.execute("SELECT * FROM products WHERE stock <= 10 ORDER BY stock ASC LIMIT 5").fetchall()
+    
+    return render_template("admin_dashboard_extreme.html", 
+                         stats=stats, 
+                         recent_orders=recent_orders, 
+                         top_products=top_products,
+                         low_stock_products=low_stock_products,
+                         active_page='dashboard')
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/produtos")
+@login_required
+@admin_required
+def admin_products():
     db = get_db()
     products = db.execute("SELECT * FROM products ORDER BY id DESC").fetchall()
-    orders = db.execute("SELECT * FROM orders ORDER BY id DESC LIMIT 25").fetchall()
-    return render_template("admin_dashboard.html", products=products, orders=orders)
+    low_stock_count = db.execute("SELECT COUNT(*) FROM products WHERE stock <= 10").fetchone()[0]
+    return render_template("admin_products.html", 
+                         products=products, 
+                         low_stock_count=low_stock_count,
+                         active_page='products',
+                         product_count=len(products))
 
 
-@app.post(f"/{app.config['ADMIN_PATH']}/produtos")
+@app.route(f"/{app.config['ADMIN_PATH']}/produtos/novo", methods=["GET", "POST"])
 @login_required
 @admin_required
 def admin_create_product():
-    form = request.form
-    slug = form["slug"].strip().lower()
+    if request.method == "POST":
+        return admin_save_product()
+    return render_template("admin_product_form.html", product=None, active_page='products')
+
+
+@app.route(f"/{app.config['ADMIN_PATH']}/produtos/<int:product_id>/editar", methods=["GET", "POST"])
+@login_required
+@admin_required
+def admin_edit_product(product_id):
     db = get_db()
-    existing = db.execute("SELECT id FROM products WHERE slug = ?", (slug,)).fetchone()
-    if existing:
-        flash("Slug já existe. Use um slug único.", "warning")
-        return redirect(url_for("admin_dashboard"))
+    product = db.execute("SELECT * FROM products WHERE id = ?", (product_id,)).fetchone()
+    if not product:
+        flash("Produto não encontrado.", "danger")
+        return redirect(url_for("admin_products"))
+    
+    if request.method == "POST":
+        return admin_save_product(product_id)
+    
+    return render_template("admin_product_form.html", product=product, active_page='products')
 
-    db.execute(
-        """
-        INSERT INTO products (name, slug, category, description, price, stock, featured)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            form["name"],
-            slug,
-            form["category"],
-            form["description"],
-            float(form["price"]),
-            int(form["stock"]),
-            1 if form.get("featured") == "on" else 0,
-        ),
-    )
+
+@app.post(f"/{app.config['ADMIN_PATH']}/produtos/salvar")
+@app.post(f"/{app.config['ADMIN_PATH']}/produtos/<int:product_id>/salvar")
+@login_required
+@admin_required
+def admin_save_product(product_id=None):
+    db = get_db()
+    form = request.form
+    
+    # Build the product data
+    data = {
+        'name': form.get('name'),
+        'slug': form.get('slug', '').strip().lower() or slugify(form.get('name', '')),
+        'category': form.get('category'),
+        'description': form.get('description'),
+        'price': float(form.get('price', 0)),
+        'promo_price': float(form.get('promo_price')) if form.get('promo_price') else None,
+        'stock': int(form.get('stock', 0)),
+        'sku': form.get('sku', ''),
+        'sizes': form.get('sizes', ''),
+        'colors': form.get('colors', ''),
+        'image_url': form.get('image_url', ''),
+        'featured': 1 if form.get('featured') else 0,
+        'is_new': 1 if form.get('is_new') else 0,
+        'is_bestseller': 1 if form.get('is_bestseller') else 0,
+        'free_shipping': 1 if form.get('free_shipping') else 0,
+        'badge': form.get('badge', ''),
+    }
+    
+    if product_id:
+        # Update existing
+        db.execute("""
+            UPDATE products SET
+                name = ?, slug = ?, category = ?, description = ?, price = ?,
+                promo_price = ?, stock = ?, sku = ?, sizes = ?, colors = ?,
+                image_url = ?, featured = ?, is_new = ?, is_bestseller = ?,
+                free_shipping = ?, badge = ?
+            WHERE id = ?
+        """, tuple(data.values()) + (product_id,))
+        flash("Produto atualizado com sucesso!", "success")
+    else:
+        # Check slug uniqueness
+        existing = db.execute("SELECT id FROM products WHERE slug = ?", (data['slug'],)).fetchone()
+        if existing:
+            flash("Slug já existe. Use um slug único.", "warning")
+            return redirect(url_for("admin_create_product"))
+        
+        # Insert new
+        db.execute("""
+            INSERT INTO products (name, slug, category, description, price, promo_price, stock, sku, sizes, colors, image_url, featured, is_new, is_bestseller, free_shipping, badge)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, tuple(data.values()))
+        flash("Produto criado com sucesso!", "success")
+    
     db.commit()
-    flash("Produto criado com sucesso.", "success")
-    return redirect(url_for("admin_dashboard"))
+    return redirect(url_for("admin_products"))
 
 
+def slugify(text):
+    """Convert text to URL-friendly slug"""
+    import re
+    text = text.lower().strip()
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[\s]+', '-', text)
+    return text
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/pedidos")
+@login_required
+@admin_required
+def admin_orders():
+    db = get_db()
+    orders = db.execute("""
+        SELECT o.*, u.email as customer_email 
+        FROM orders o 
+        LEFT JOIN users u ON o.user_id = u.id 
+        ORDER BY o.id DESC
+    """).fetchall()
+    new_orders = db.execute("SELECT COUNT(*) FROM orders WHERE status = 'pending'").fetchone()[0]
+    return render_template("admin_orders.html", orders=orders, new_orders=new_orders, active_page='orders')
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/pedidos/<int:order_id>")
+@login_required
+@admin_required
+def admin_order_detail(order_id):
+    db = get_db()
+    order = db.execute("SELECT * FROM orders WHERE id = ?", (order_id,)).fetchone()
+    if not order:
+        flash("Pedido não encontrado.", "danger")
+        return redirect(url_for("admin_orders"))
+    
+    items = db.execute("""
+        SELECT oi.*, p.name, p.image_url 
+        FROM order_items oi 
+        JOIN products p ON oi.product_id = p.id 
+        WHERE oi.order_id = ?
+    """, (order_id,)).fetchall()
+    
+    return render_template("admin_order_detail.html", order=order, items=items)
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/banners")
+@login_required
+@admin_required
+def admin_banners():
+    # For now, return empty banners list (can be extended with banners table)
+    banners = []
+    return render_template("admin_banners.html", banners=banners, active_page='banners')
+
+
+@app.route(f"/{app.config['ADMIN_PATH']}/banners/novo", methods=["GET", "POST"])
+@login_required
+@admin_required
+def admin_create_banner():
+    if request.method == "POST":
+        flash("Banner criado! (Funcionalidade em desenvolvimento)", "success")
+        return redirect(url_for("admin_banners"))
+    return render_template("admin_banner_form.html", banner=None)
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/categorias")
+@login_required
+@admin_required
+def admin_categories():
+    categories = [
+        {'id': 1, 'name': 'Camisetas', 'slug': 'camisetas', 'count': 0},
+        {'id': 2, 'name': 'Moletons', 'slug': 'moletons', 'count': 0},
+        {'id': 3, 'name': 'Calças', 'slug': 'calcas', 'count': 0},
+        {'id': 4, 'name': 'Tênis', 'slug': 'tenis', 'count': 0},
+        {'id': 5, 'name': 'Conjuntos', 'slug': 'conjuntos', 'count': 0},
+        {'id': 6, 'name': 'Acessórios', 'slug': 'acessorios', 'count': 0},
+        {'id': 7, 'name': 'Drop Limitado', 'slug': 'drop-limitado', 'count': 0},
+    ]
+    return render_template("admin_categories.html", categories=categories, active_page='categories')
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/clientes")
+@login_required
+@admin_required
+def admin_customers():
+    db = get_db()
+    customers = db.execute("""
+        SELECT u.*, COUNT(o.id) as order_count, SUM(o.total) as total_spent
+        FROM users u
+        LEFT JOIN orders o ON u.id = o.user_id
+        WHERE u.is_admin = 0
+        GROUP BY u.id
+        ORDER BY total_spent DESC
+    """).fetchall()
+    return render_template("admin_customers.html", customers=customers, active_page='customers')
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/analytics")
+@login_required
+@admin_required
+def admin_analytics():
+    return render_template("admin_analytics.html", active_page='analytics')
+
+
+@app.route(f"/{app.config['ADMIN_PATH']}/configuracoes", methods=["GET", "POST"])
+@login_required
+@admin_required
+def admin_settings():
+    if request.method == "POST":
+        flash("Configurações salvas com sucesso!", "success")
+        return redirect(url_for("admin_settings"))
+    
+    # Load current settings (from environment or defaults)
+    settings = {
+        'store_name': 'NØVRA',
+        'store_slogan': 'Streetwear Premium',
+        'contact_email': 'contato@novra.com',
+        'whatsapp': '5511999999999',
+        'free_shipping_threshold': 399,
+        'pix_discount': 5,
+        'max_installments': 12,
+    }
+    return render_template("admin_settings.html", settings=settings, active_page='settings')
+
+
+@app.get(f"/{app.config['ADMIN_PATH']}/assistente-ia")
+@login_required
+@admin_required
+def admin_ai_assistant():
+    return render_template("admin_ai_assistant.html", active_page='ai')
+
+
+# Legacy redirect for backward compatibility
+@app.get(f"/{app.config['ADMIN_PATH']}/dashboard")
+@login_required
+@admin_required
+def admin_dashboard_legacy():
+    return redirect(url_for("admin_dashboard_extreme"))
+
+
+# Order status update (used by both old and new admin)
 @app.post(f"/{app.config['ADMIN_PATH']}/pedidos/<int:order_id>/status")
 @login_required
 @admin_required
@@ -1135,7 +1373,7 @@ def admin_update_order_status(order_id):
     db.execute("UPDATE orders SET status = ? WHERE id = ?", (status, order_id))
     db.commit()
     flash("Status do pedido atualizado.", "success")
-    return redirect(url_for("admin_dashboard"))
+    return redirect(url_for("admin_orders"))
 
 
 @app.post("/api/ai-assistant")

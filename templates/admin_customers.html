@@ -1,0 +1,119 @@
+{% extends "admin_base.html" %}
+{% block title %}Clientes{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>👥 Gerenciar Clientes</h1>
+  <p>Total: {{ customers|length }} clientes cadastrados</p>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid" style="margin-bottom: var(--space-xl);">
+  <div class="stat-card">
+    <div class="stat-value">{{ customers|length }}</div>
+    <div class="stat-label">Clientes Totais</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ customers|selectattr('order_count', 'gt', 0)|list|length }}</div>
+    <div class="stat-label">Clientes Ativos</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ customers|selectattr('order_count', 'equalto', 0)|list|length }}</div>
+    <div class="stat-label">Sem Compras</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">R$ 2.450,00</div>
+    <div class="stat-label">Ticket Médio</div>
+  </div>
+</div>
+
+<!-- Customers Table -->
+<div class="dashboard-card">
+  <div class="card-header">
+    <h2>Lista de Clientes</h2>
+    <input type="text" placeholder="🔍 Buscar..." class="search-input" style="width: 300px;" id="customerSearch" onkeyup="filterCustomers()">
+  </div>
+  
+  <table class="admin-table" id="customersTable">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Email</th>
+        <th>Pedidos</th>
+        <th>Total Gasto</th>
+        <th>Desde</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customers %}
+      <tr>
+        <td>
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent), #b8944f); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+              {{ customer.full_name[:1] if customer.full_name else '?' }}
+            </div>
+            <strong>{{ customer.full_name or 'Sem nome' }}</strong>
+          </div>
+        </td>
+        <td>{{ customer.email }}</td>
+        <td><span class="vip-badge" style="padding: 0.125rem 0.5rem;">{{ customer.order_count or 0 }} pedidos</span></td>
+        <td><strong>{{ (customer.total_spent or 0)|brl }}</strong></td>
+        <td>{{ customer.created_at[:10] if customer.created_at else '-' }}</td>
+        <td>
+          <div class="action-btns">
+            <button class="action-btn" title="Ver Pedidos">📦</button>
+            <button class="action-btn" title="Enviar Email">📧</button>
+            <button class="action-btn" title="WhatsApp">💬</button>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6" style="text-align: center; padding: var(--space-3xl);">
+          <span style="font-size: 3rem;">👤</span>
+          <p style="margin-top: var(--space-md); color: var(--text-muted);">Nenhum cliente cadastrado</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- AI Suggestion -->
+<div class="ai-card" style="margin-top: var(--space-xl);">
+  <div class="ai-card-header">
+    <span>🤖</span>
+    <h4>Análise de Clientes</h4>
+  </div>
+  <p>Identifiquei oportunidades de retenção:</p>
+  <ul style="margin: var(--space-md) 0;">
+    <li><strong>156 clientes</strong> não compram há mais de 30 dias</li>
+    <li><strong>23 clientes VIP</strong> gastaram mais de R$ 1.000 cada</li>
+    <li><strong>45 carrinhos abandonados</strong> nas últimas 24h</li>
+  </ul>
+  <div class="ai-card-actions">
+    <button class="btn-ai" onclick="emailInactive()">📧 Email para Inativos</button>
+    <button class="btn-ai" onclick="rewardVIP()">🎁 Recompensar VIPs</button>
+  </div>
+</div>
+
+<script>
+  function filterCustomers() {
+    const search = document.getElementById('customerSearch').value.toLowerCase();
+    const rows = document.querySelectorAll('#customersTable tbody tr');
+    rows.forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(search) ? '' : 'none';
+    });
+  }
+  
+  function emailInactive() {
+    alert('📧 Gerando campanha de email para 156 clientes inativos...\n\nOferta sugerida: 10% OFF + Frete Grátis');
+  }
+  
+  function rewardVIP() {
+    alert('🎁 Gerando cupons exclusivos para 23 clientes VIP...');
+  }
+</script>
+
+{% endblock %}

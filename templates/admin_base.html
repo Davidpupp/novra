@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Admin{% endblock %} | NØVRA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin_styles.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+</head>
+<body class="admin-body">
+  
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">👑</span>
+        <span class="logo-text">NØVRA</span>
+      </div>
+      <p class="admin-badge">ADMIN</p>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('admin_dashboard_extreme') }}" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Dashboard</span>
+      </a>
+      
+      <a href="{{ url_for('admin_products') }}" class="nav-item {% if active_page == 'products' %}active{% endif %}">
+        <span class="nav-icon">📦</span>
+        <span class="nav-text">Produtos</span>
+        <span class="nav-badge" id="productCount">{{ product_count or 0 }}</span>
+      </a>
+      
+      <a href="{{ url_for('admin_orders') }}" class="nav-item {% if active_page == 'orders' %}active{% endif %}">
+        <span class="nav-icon">🛒</span>
+        <span class="nav-text">Pedidos</span>
+        <span class="nav-badge badge-new" id="orderCount">{{ new_orders or 0 }}</span>
+      </a>
+      
+      <a href="{{ url_for('admin_banners') }}" class="nav-item {% if active_page == 'banners' %}active{% endif %}">
+        <span class="nav-icon">🖼️</span>
+        <span class="nav-text">Banners</span>
+      </a>
+      
+      <a href="{{ url_for('admin_categories') }}" class="nav-item {% if active_page == 'categories' %}active{% endif %}">
+        <span class="nav-icon">🏷️</span>
+        <span class="nav-text">Categorias</span>
+      </a>
+      
+      <a href="{{ url_for('admin_customers') }}" class="nav-item {% if active_page == 'customers' %}active{% endif %}">
+        <span class="nav-icon">👥</span>
+        <span class="nav-text">Clientes</span>
+      </a>
+      
+      <a href="{{ url_for('admin_analytics') }}" class="nav-item {% if active_page == 'analytics' %}active{% endif %}">
+        <span class="nav-icon">📈</span>
+        <span class="nav-text">Analytics</span>
+      </a>
+      
+      <a href="{{ url_for('admin_settings') }}" class="nav-item {% if active_page == 'settings' %}active{% endif %}">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-text">Configurações</span>
+      </a>
+      
+      <a href="{{ url_for('admin_ai_assistant') }}" class="nav-item {% if active_page == 'ai' %}active{% endif %}">
+        <span class="nav-icon">🤖</span>
+        <span class="nav-text">Assistente IA</span>
+        <span class="nav-badge badge-ai">NOVO</span>
+      </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div class="admin-user">
+        <div class="user-avatar">👤</div>
+        <div class="user-info">
+          <p class="user-name">{{ session.user_email or 'Admin' }}</p>
+          <p class="user-role">Administrador</p>
+        </div>
+      </div>
+      <a href="{{ url_for('admin_logout') }}" class="logout-btn">
+        <span>🚪</span> Sair
+      </a>
+    </div>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Top Bar -->
+    <header class="admin-header">
+      <div class="header-search">
+        <input type="text" placeholder="Pesquisar produtos, pedidos..." id="globalSearch" />
+        <button class="search-btn">🔍</button>
+      </div>
+      
+      <div class="header-actions">
+        <a href="{{ url_for('home') }}" target="_blank" class="header-btn tooltip" data-tooltip="Ver Loja">
+          <span>🌐</span>
+        </a>
+        <button class="header-btn tooltip" data-tooltip="Notificações" id="notifBtn">
+          <span>🔔</span>
+          <span class="notif-badge" id="notifBadge">3</span>
+        </button>
+        <button class="header-btn tooltip" data-tooltip="Ajuda" id="helpBtn">
+          <span>❓</span>
+        </button>
+      </div>
+    </header>
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">
+              <span>{{ message }}</span>
+              <button onclick="this.parentElement.remove()">×</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    
+    <!-- Page Content -->
+    <div class="admin-content">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+  
+  <!-- Quick Actions FAB -->
+  <div class="fab-container">
+    <button class="fab-main" id="fabMain">+</button>
+    <div class="fab-menu" id="fabMenu">
+      <a href="{{ url_for('admin_create_product') }}" class="fab-item tooltip" data-tooltip="Novo Produto">
+        <span>📦</span>
+      </a>
+      <a href="{{ url_for('admin_create_banner') }}" class="fab-item tooltip" data-tooltip="Novo Banner">
+        <span>🖼️</span>
+      </a>
+      <a href="{{ url_for('admin_ai_assistant') }}" class="fab-item tooltip" data-tooltip="Assistente IA">
+        <span>🤖</span>
+      </a>
+    </div>
+  </div>
+  
+  <!-- AI Chat Widget -->
+  <div class="ai-chat-widget" id="aiChatWidget">
+    <div class="ai-chat-header">
+      <span>🤖</span>
+      <span>Assistente NØVRA</span>
+      <button onclick="toggleAIChat()">×</button>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+      <div class="ai-message">
+        <p>Olá! Sou seu assistente IA. Posso ajudar com:</p>
+        <ul>
+          <li>📊 Análise de vendas</li>
+          <li>💡 Sugestões de produtos</li>
+          <li>🎯 Estratégias de marketing</li>
+          <li>🔧 Configurações do site</li>
+        </ul>
+        <p>O que você precisa hoje?</p>
+      </div>
+    </div>
+    <div class="ai-chat-input">
+      <input type="text" placeholder="Digite sua pergunta..." id="aiChatInput" />
+      <button onclick="sendAIMessage()">➤</button>
+    </div>
+  </div>
+  
+  <script>
+    // FAB Toggle
+    document.getElementById('fabMain').addEventListener('click', function() {
+      document.getElementById('fabMenu').classList.toggle('show');
+    });
+    
+    // AI Chat Toggle
+    function toggleAIChat() {
+      document.getElementById('aiChatWidget').classList.toggle('show');
+    }
+    
+    // Quick AI button
+    document.getElementById('helpBtn').addEventListener('click', function() {
+      toggleAIChat();
+    });
+    
+    // Send AI Message
+    function sendAIMessage() {
+      const input = document.getElementById('aiChatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      // Add user message
+      const chatBody = document.getElementById('aiChatBody');
+      chatBody.innerHTML += `<div class="user-message"><p>${message}</p></div>`;
+      input.value = '';
+      chatBody.scrollTop = chatBody.scrollHeight;
+      
+      // Simulate AI response
+      setTimeout(() => {
+        chatBody.innerHTML += `
+          <div class="ai-message">
+            <p>💡 <strong>Sugestão da IA:</strong></p>
+            <p>Com base nos seus dados, recomendo focar em:</p>
+            <ul>
+              <li>Promover seus produtos mais vendidos</li>
+              <li>Criar um banner para o drop limitado</li>
+              <li>Enviar email marketing para clientes inativos</li>
+            </ul>
+            <p>Quer que eu gere algum conteúdo específico?</p>
+          </div>
+        `;
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 1500);
+    }
+    
+    // Enter key for AI chat
+    document.getElementById('aiChatInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendAIMessage();
+    });
+    
+    // Auto-hide flash messages
+    setTimeout(() => {
+      document.querySelectorAll('.flash').forEach(f => f.remove());
+    }, 5000);
+  </script>
+  
+  {% block scripts %}{% endblock %}
+</body>
+</html>

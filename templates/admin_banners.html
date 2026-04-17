@@ -1,0 +1,257 @@
+{% extends "admin_base.html" %}
+{% block title %}Banners{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>🖼️ Gerenciar Banners</h1>
+  <p>Controle os banners da home e páginas internas</p>
+</div>
+
+<!-- Banner Stats -->
+<div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: var(--space-xl);">
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.1) 100%);">🎯</div>
+    </div>
+    <div class="stat-value">{{ banners|length }}</div>
+    <div class="stat-label">Banners Ativos</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.1) 100%);">👁️</div>
+    </div>
+    <div class="stat-value">12.5K</div>
+    <div class="stat-label">Impressões Hoje</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon" style="background: linear-gradient(135deg, rgba(201, 169, 98, 0.2) 0%, rgba(201, 169, 98, 0.1) 100%);">🖱️</div>
+    </div>
+    <div class="stat-value">3.2%</div>
+    <div class="stat-label">CTR Médio</div>
+  </div>
+</div>
+
+<!-- Banner Positions -->
+<div class="tabs">
+  <button class="tab active" onclick="showPosition('hero')">🏠 Hero (Principal)</button>
+  <button class="tab" onclick="showPosition('promo')">🎁 Promocionais</button>
+  <button class="tab" onclick="showPosition('category')">🏷️ Categorias</button>
+  <button class="tab" onclick="showPosition('popup')">💬 Popups</button>
+</div>
+
+<!-- Hero Banner Section -->
+<div id="position-hero" class="position-content" style="display: block;">
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Banner Principal (Hero)</h2>
+      <a href="{{ url_for('admin_create_banner') }}?position=hero" class="btn btn-buy">➕ Novo Banner</a>
+    </div>
+    
+    <p style="color: var(--text-muted); margin-bottom: var(--space-lg);">
+      Este é o banner mais importante do site. Aparece em full screen na home.
+    </p>
+    
+    {% for banner in banners if banner.position == 'hero' %}
+    <div style="border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; margin-bottom: var(--space-lg);">
+      <!-- Preview -->
+      <div style="height: 300px; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); display: flex; align-items: center; justify-content: center; position: relative;">
+        {% if banner.image_url %}
+          <img src="{{ banner.image_url }}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;">
+        {% endif %}
+        <div style="position: absolute; text-align: center; z-index: 2;">
+          <span class="vip-badge" style="margin-bottom: var(--space-md);">{{ banner.tag }}</span>
+          <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: var(--space-sm);">{{ banner.title }}</h3>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">{{ banner.subtitle }}</p>
+          <span class="btn btn-buy">{{ banner.button_text }}</span>
+        </div>
+      </div>
+      
+      <!-- Controls -->
+      <div style="padding: var(--space-md); background: var(--surface); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong>{{ banner.name }}</strong>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+            CTR: {{ banner.ctr }}% | Cliques: {{ banner.clicks }} | 
+            {% if banner.active %}<span style="color: #22c55e;">● Ativo</span>{% else %}<span style="color: var(--text-muted);">● Inativo</span>{% endif %}
+          </p>
+        </div>
+        <div class="action-btns">
+          <a href="{{ url_for('admin_edit_banner', banner_id=banner.id) }}" class="action-btn" title="Editar">✏️</a>
+          <button class="action-btn" title="{{ 'Desativar' if banner.active else 'Ativar' }}" onclick="toggleBanner({{ banner.id }})">
+            {{ '🚫' if banner.active else '✅' }}
+          </button>
+          <button class="action-btn delete" title="Excluir" onclick="deleteBanner({{ banner.id }})">🗑️</button>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: var(--space-3xl); background: var(--surface); border-radius: var(--radius-xl); border: 2px dashed var(--border);">
+      <span style="font-size: 4rem;">🖼️</span>
+      <p style="margin-top: var(--space-md); color: var(--text-muted);">Nenhum banner hero configurado</p>
+      <a href="{{ url_for('admin_create_banner') }}?position=hero" class="btn btn-buy" style="margin-top: var(--space-lg);">Criar Banner Hero</a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Promo Banners -->
+<div id="position-promo" class="position-content" style="display: none;">
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Banners Promocionais</h2>
+      <a href="{{ url_for('admin_create_banner') }}?position=promo" class="btn btn-buy">➕ Novo</a>
+    </div>
+    
+    <div style="display: grid; gap: var(--space-lg);">
+      {% for banner in banners if banner.position == 'promo' %}
+      <div style="border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;">
+        <div style="height: 150px; background: {{ banner.bg_color or 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)' }}; display: flex; align-items: center; padding: var(--space-xl); gap: var(--space-xl);">
+          <div style="flex: 1;">
+            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8;">{{ banner.tag }}</span>
+            <h4 style="font-size: 1.5rem; font-weight: 700; margin: var(--space-sm) 0;">{{ banner.title }}</h4>
+            <p style="opacity: 0.9;">{{ banner.subtitle }}</p>
+          </div>
+          <span class="btn" style="background: white; color: #000;">{{ banner.button_text }}</span>
+        </div>
+        <div style="padding: var(--space-md); background: var(--surface); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.875rem;">{{ banner.name }}</span>
+          <div class="action-bts">
+            <a href="{{ url_for('admin_edit_banner', banner_id=banner.id) }}" class="action-btn">✏️</a>
+            <button class="action-btn delete" onclick="deleteBanner({{ banner.id }})">🗑️</button>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div style="text-align: center; padding: var(--space-2xl); color: var(--text-muted);">
+        <p>Nenhum banner promocional</p>
+        <a href="{{ url_for('admin_create_banner') }}?position=promo" class="btn btn-secondary" style="margin-top: var(--space-md);">Criar Primeiro Banner</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Category Banners -->
+<div id="position-category" class="position-content" style="display: none;">
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Banners de Categoria</h2>
+      <a href="{{ url_for('admin_create_banner') }}?position=category" class="btn btn-buy">➕ Novo</a>
+    </div>
+    <p style="color: var(--text-muted);">Configure banners para cada categoria da loja</p>
+  </div>
+</div>
+
+<!-- Popup Banners -->
+<div id="position-popup" class="position-content" style="display: none;">
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Popups e Modais</h2>
+      <a href="{{ url_for('admin_create_banner') }}?position=popup" class="btn btn-buy">➕ Novo</a>
+    </div>
+    
+    <!-- Newsletter Popup Preview -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg);">
+      <div>
+        <h4 style="margin-bottom: var(--space-md);">💎 Newsletter VIP</h4>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: var(--space-xl); max-width: 400px;">
+          <p class="vip-badge" style="margin-bottom: var(--space-md);">💎 LISTA VIP</p>
+          <h3 style="margin-bottom: var(--space-sm);">Seja o Primeiro a Saber</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--space-lg);">Receba drops limitados e promoções exclusivas.</p>
+          <input type="email" placeholder="Seu e-mail" style="width: 100%; margin-bottom: var(--space-sm;)">
+          <button class="btn btn-buy" style="width: 100%;">ENTRAR NA LISTA</button>
+        </div>
+        <div style="margin-top: var(--space-md);">
+          <label class="form-check">
+            <input type="checkbox" checked> Ativo
+          </label>
+          <label class="form-check" style="margin-left: var(--space-lg);">
+            <input type="checkbox" checked> Mostrar após 5s
+          </label>
+        </div>
+      </div>
+      
+      <div>
+        <h4 style="margin-bottom: var(--space-md);">🎁 Cupom Primeira Compra</h4>
+        <div style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); border-radius: var(--radius-xl); padding: var(--space-xl); max-width: 400px; text-align: center;">
+          <span style="font-size: 3rem;">🎁</span>
+          <h3 style="margin: var(--space-md) 0;">10% OFF na Primeira Compra!</h3>
+          <p style="opacity: 0.9; margin-bottom: var(--space-lg);">Use o cupom <strong>PRIMEIRA10</strong></p>
+          <button class="btn" style="background: white; color: #7c3aed; font-weight: 700;">QUERO MEU CUPOM</button>
+        </div>
+        <div style="margin-top: var(--space-md);">
+          <label class="form-check">
+            <input type="checkbox"> Ativo
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI Suggestions -->
+<div class="ai-card" style="margin-top: var(--space-xl);">
+  <div class="ai-card-header">
+    <span>🤖</span>
+    <h4>Sugestões de Banners</h4>
+  </div>
+  <p>Analisando seus dados, identifiquei oportunidades para melhorar a conversão:</p>
+  <ul style="margin: var(--space-md) 0; padding-left: var(--space-lg);">
+    <li>Seu banner hero tem CTR de 2.1% (abaixo da média de 3.5%)</li>
+    <li>Sugiro testar um novo headline focado em "Drop Limitado"</li>
+    <li>Adicione um banner de escassez para produtos com estoque baixo</li>
+  </ul>
+  <div class="ai-card-actions">
+    <button class="btn-ai" onclick="generateBannerIdeas()">💡 Gerar Ideias de Banners</button>
+    <button class="btn-ai" onclick="aBTestBanners()">🧪 Configurar Teste A/B</button>
+  </div>
+</div>
+
+<script>
+  function showPosition(position) {
+    document.querySelectorAll('.position-content').forEach(el => {
+      el.style.display = 'none';
+    });
+    document.getElementById('position-' + position).style.display = 'block';
+    
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
+  }
+  
+  function toggleBanner(id) {
+    fetch(`/{{ admin_path }}/banners/${id}/toggle`, { method: 'POST' })
+      .then(() => location.reload());
+  }
+  
+  function deleteBanner(id) {
+    if (confirm('Tem certeza que deseja excluir este banner?')) {
+      fetch(`/{{ admin_path }}/banners/${id}/excluir`, { method: 'POST' })
+        .then(() => location.reload());
+    }
+  }
+  
+  function generateBannerIdeas() {
+    alert('🤖 IA Gerando Ideias...\n\n' +
+          'Banner 1: "🔥 DROP LIMITADO - Apenas 100 unidades"\n' +
+          'Banner 2: "🚚 FRETE GRÁTIS HOJE - Aproveite!"\n' +
+          'Banner 3: "💎 COLEÇÃO PREMIUM - Qualidade Internacional"\n' +
+          'Banner 4: "⚡ ÚLTIMAS UNIDADES - Esgota Rápido"\n\n' +
+          'Quer que eu crie algum desses banners automaticamente?');
+  }
+  
+  function aBTestBanners() {
+    alert('🧪 Configuração de Teste A/B:\n\n' +
+          'Variação A: Banner atual (controle)\n' +
+          'Variação B: Novo headline\n\n' +
+          'Duração: 7 dias\n' +
+          'Tráfego: 50/50\n\n' +
+          'Iniciar teste?');
+  }
+</script>
+
+{% endblock %}

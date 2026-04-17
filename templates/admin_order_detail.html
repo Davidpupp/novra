@@ -1,0 +1,172 @@
+{% extends "admin_base.html" %}
+{% block title %}Pedido #{{ order.id }}{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h1>Pedido #{{ order.id }}</h1>
+      <p>Realizado em {{ order.created_at[:10] if order.created_at else '-' }} às {{ order.created_at[11:16] if order.created_at else '-' }}</p>
+    </div>
+    <div style="display: flex; gap: var(--space-md);">
+      <a href="{{ url_for('admin_orders') }}" class="btn btn-secondary">← Voltar</a>
+      <button class="btn btn-buy" onclick="printOrder()">🖨️ Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl);">
+  
+  <!-- Left Column -->
+  <div>
+    <!-- Status Card -->
+    <div class="dashboard-card" style="margin-bottom: var(--space-lg);">
+      <div class="card-header">
+        <h2>Status do Pedido</h2>
+      </div>
+      <div style="display: flex; gap: var(--space-md); align-items: center;">
+        <form method="post" action="{{ url_for('admin_update_order_status', order_id=order.id) }}" style="display: flex; gap: var(--space-md); flex: 1;">
+          <select name="status" class="filter-select" style="flex: 1; padding: var(--space-md);">
+            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>⏳ Pendente</option>
+            <option value="awaiting_payment" {% if order.status == 'awaiting_payment' %}selected{% endif %}>💳 Aguardando Pagamento</option>
+            <option value="paid" {% if order.status == 'paid' %}selected{% endif %}>✅ Pago</option>
+            <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>🚚 Enviado</option>
+            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>📦 Entregue</option>
+            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>❌ Cancelado</option>
+          </select>
+          <button type="submit" class="btn btn-buy">Atualizar Status</button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Items -->
+    <div class="dashboard-card" style="margin-bottom: var(--space-lg);">
+      <div class="card-header">
+        <h2>📦 Itens do Pedido</h2>
+      </div>
+      
+      <div style="display: grid; gap: var(--space-md);">
+        {% for item in items %}
+        <div style="display: flex; gap: var(--space-md); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <div style="width: 80px; height: 80px; background: var(--surface); border-radius: var(--radius-md); overflow: hidden;">
+            {% if item.image_url %}
+              <img src="{{ item.image_url }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+              <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">📦</div>
+            {% endif %}
+          </div>
+          <div style="flex: 1;">
+            <h4 style="margin: 0;">{{ item.name }}</h4>
+            <p style="margin: var(--space-xs) 0; color: var(--text-muted); font-size: 0.875rem;">
+              Qtd: {{ item.quantity }} × {{ item.price|brl }}
+            </p>
+            <p style="margin: 0; font-weight: 600;">{{ (item.price * item.quantity)|brl }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <!-- Timeline -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>📋 Timeline do Pedido</h2>
+      </div>
+      <div style="padding-left: var(--space-md);">
+        <div style="border-left: 2px solid var(--accent); padding-left: var(--space-lg);">
+          <div style="margin-bottom: var(--space-lg);">
+            <p style="font-weight: 600; margin: 0;">🛒 Pedido Realizado</p>
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">{{ order.created_at[:10] }} {{ order.created_at[11:16] }}</p>
+          </div>
+          <div style="margin-bottom: var(--space-lg);">
+            <p style="font-weight: 600; margin: 0;">💳 Pagamento {% if order.status in ['paid', 'shipped'] %}✅ Confirmado{% else %}⏳ Pendente{% endif %}</p>
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">{{ order.payment_method }}</p>
+          </div>
+          {% if order.status in ['shipped', 'delivered'] %}
+          <div style="margin-bottom: var(--space-lg);">
+            <p style="font-weight: 600; margin: 0;">🚚 Pedido Enviado</p>
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">Em trânsito</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Right Column -->
+  <div>
+    <!-- Customer Info -->
+    <div class="dashboard-card" style="margin-bottom: var(--space-lg);">
+      <div class="card-header">
+        <h2>👤 Cliente</h2>
+      </div>
+      <div>
+        <p style="font-weight: 600; margin-bottom: var(--space-xs);">{{ order.customer_name or 'Cliente' }}</p>
+        <p style="color: var(--text-muted); margin-bottom: var(--space-sm);">{{ order.customer_email }}</p>
+        <p style="font-size: 0.875rem;">📱 {{ order.customer_phone or 'Não informado' }}</p>
+        <div style="margin-top: var(--space-md);">
+          <button class="btn btn-secondary" style="width: 100%;" onclick="contactCustomer()">💬 Enviar Mensagem</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Shipping Address -->
+    <div class="dashboard-card" style="margin-bottom: var(--space-lg);">
+      <div class="card-header">
+        <h2>📍 Endereço de Entrega</h2>
+      </div>
+      <div>
+        <p style="margin-bottom: var(--space-xs);">{{ order.address or 'Endereço não informado' }}</p>
+        <p style="color: var(--text-muted);">CEP: {{ order.cep or '-' }}</p>
+      </div>
+    </div>
+    
+    <!-- Order Summary -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>💰 Resumo Financeiro</h2>
+      </div>
+      <div style="display: grid; gap: var(--space-sm);">
+        <div style="display: flex; justify-content: space-between;">
+          <span>Subtotal</span>
+          <span>{{ order.subtotal|brl }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>Frete</span>
+          <span {% if order.freight == 0 %}style="color: #22c55e;"{% endif %}>
+            {% if order.freight == 0 %}Grátis{% else %}{{ order.freight|brl }}{% endif %}
+          </span>
+        </div>
+        {% if order.discount %}
+        <div style="display: flex; justify-content: space-between; color: #22c55e;">
+          <span>Desconto</span>
+          <span>-{{ order.discount|brl }}</span>
+        </div>
+        {% endif %}
+        <div style="display: flex; justify-content: space-between; padding-top: var(--space-sm); border-top: 1px solid var(--border);">
+          <span style="font-weight: 600;">Total</span>
+          <span style="font-size: 1.25rem; font-weight: 800; color: var(--accent);">{{ order.total|brl }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function contactCustomer() {
+    alert('💬 Abrindo WhatsApp para contato com cliente...');
+  }
+  
+  function printOrder() {
+    window.print();
+  }
+</script>
+
+<style>
+  @media print {
+    .admin-sidebar, .admin-header, .btn { display: none !important; }
+    .admin-main { margin-left: 0 !important; }
+  }
+</style>
+
+{% endblock %}

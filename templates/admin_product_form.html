@@ -1,0 +1,426 @@
+{% extends "admin_base.html" %}
+{% block title %}{{ 'Editar' if product else 'Novo' }} Produto{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ '📦 Editar: ' ~ product.name if product else '➕ Novo Produto' }}</h1>
+  <p>{{ 'ID: #' ~ product.id if product else 'Preencha todos os campos obrigatórios' }}</p>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('basic')">📋 Básico</button>
+  <button class="tab" onclick="showTab('images')">🖼️ Imagens</button>
+  <button class="tab" onclick="showTab('pricing')">💰 Preços</button>
+  <button class="tab" onclick="showTab('inventory')">📊 Estoque</button>
+  <button class="tab" onclick="showTab('seo')">🔍 SEO</button>
+  <button class="tab" onclick="showTab('badges')">🏷️ Selos</button>
+</div>
+
+<form method="post" action="{{ url_for('admin_save_product') }}" class="admin-form" enctype="multipart/form-data">
+  {% if product %}
+    <input type="hidden" name="id" value="{{ product.id }}">
+  {% endif %}
+  
+  <!-- Basic Info Tab -->
+  <div id="tab-basic" class="tab-content" style="display: block;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>Informações Básicas</h2>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group" style="flex: 2;">
+          <label>Nome do Produto *</label>
+          <input type="text" name="name" value="{{ product.name if product else '' }}" required 
+                 placeholder="Ex: Oversized Premium Black">
+        </div>
+        <div class="form-group" style="flex: 1;">
+          <label>SKU *</label>
+          <input type="text" name="sku" value="{{ product.sku if product else '' }}" required 
+                 placeholder="NV-TEE-001-BK">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Slug (URL) *</label>
+          <input type="text" name="slug" value="{{ product.slug if product else '' }}" required 
+                 placeholder="oversized-premium-black">
+          <small style="color: var(--text-muted);">Usado na URL: novra.com/produto/<strong>seu-slug</strong></small>
+        </div>
+        <div class="form-group">
+          <label>Categoria *</label>
+          <select name="category" required>
+            <option value="">Selecione...</option>
+            <option value="camisetas" {% if product and product.category == 'camisetas' %}selected{% endif %}>👕 Camisetas</option>
+            <option value="moletons" {% if product and product.category == 'moletons' %}selected{% endif %}>🧥 Moletons</option>
+            <option value="calcas" {% if product and product.category == 'calcas' %}selected{% endif %}>👖 Calças</option>
+            <option value="tenis" {% if product and product.category == 'tenis' %}selected{% endif %}>👟 Tênis</option>
+            <option value="conjuntos" {% if product and product.category == 'conjuntos' %}selected{% endif %}>🎯 Conjuntos</option>
+            <option value="acessorios" {% if product and product.category == 'acessorios' %}selected{% endif %}>✨ Acessórios</option>
+            <option value="bones" {% if product and product.category == 'bones' %}selected{% endif %}>🧢 Bonés</option>
+            <option value="oculos" {% if product and product.category == 'oculos' %}selected{% endif %}>🕶️ Óculos</option>
+            <option value="bolsas" {% if product and product.category == 'bolsas' %}selected{% endif %}>👜 Bolsas</option>
+            <option value="drop-limitado" {% if product and product.category == 'drop-limitado' %}selected{% endif %}>💎 Drop Limitado</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Descrição Curta *</label>
+        <textarea name="description" rows="3" required 
+                  placeholder="Descreva o produto de forma persuasiva...">{{ product.description if product else '' }}</textarea>
+        <small style="color: var(--text-muted);">Máx. 300 caracteres recomendado</small>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tamanhos Disponíveis</label>
+          <input type="text" name="sizes" value="{{ product.sizes if product else 'P,M,L,XL,XXL' }}" 
+                 placeholder="P,M,L,XL,XXL">
+          <small style="color: var(--text-muted);">Separe por vírgulas</small>
+        </div>
+        <div class="form-group">
+          <label>Cores Disponíveis</label>
+          <input type="text" name="colors" value="{{ product.colors if product else 'Preto,Branco,Cinza' }}" 
+                 placeholder="Preto,Branco,Cinza">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Images Tab -->
+  <div id="tab-images" class="tab-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>🖼️ Imagens do Produto</h2>
+      </div>
+      
+      <!-- Main Image -->
+      <div class="form-group">
+        <label>Imagem Principal *</label>
+        <div style="display: grid; grid-template-columns: 300px 1fr; gap: var(--space-xl); align-items: start;">
+          <div class="image-upload" onclick="document.getElementById('mainImage').click()">
+            <input type="file" id="mainImage" name="image" accept="image/*" onchange="previewImage(this, 'previewMain')">
+            {% if product and product.image_url %}
+              <img id="previewMain" src="{{ product.image_url }}" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: var(--radius-lg);">
+            {% else %}
+              <div id="previewMain">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Clique para upload</div>
+                <div class="upload-hint">JPG, PNG ou WEBP (máx. 5MB)</div>
+              </div>
+            {% endif %}
+          </div>
+          <div>
+            <h4 style="margin-bottom: var(--space-md);">📋 Dicas para Fotos:</h4>
+            <ul style="color: var(--text-secondary); line-height: 1.8;">
+              <li>Use fundo branco ou transparente</li>
+              <li>Boa iluminação natural ou estúdio</li>
+              <li>Resolução mínima: 800x800px</li>
+              <li>Mostre detalhes do produto</li>
+              <li>Inclua fotos de modelo vestindo (opcional)</li>
+            </ul>
+            
+            <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+              <strong>🤖 Sugestão da IA:</strong>
+              <p style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--text-secondary);">
+                Produtos com fotos profissionais vendem <strong>3x mais</strong>. 
+                Recomendo adicionar múltiplos ângulos e uma foto de lifestyle.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Image URL Alternative -->
+      <div class="form-group" style="margin-top: var(--space-xl);">
+        <label>Ou use URL da imagem (Unsplash, CDN, etc)</label>
+        <input type="url" name="image_url" value="{{ product.image_url if product else '' }}" 
+               placeholder="https://images.unsplash.com/...">
+        <small style="color: var(--text-muted);">Cole a URL direta da imagem</small>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pricing Tab -->
+  <div id="tab-pricing" class="tab-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>💰 Preços e Promoções</h2>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Preço Regular *</label>
+          <input type="number" step="0.01" name="price" value="{{ product.price if product else '' }}" required 
+                 placeholder="199.90">
+        </div>
+        <div class="form-group">
+          <label>Preço Promocional</label>
+          <input type="number" step="0.01" name="promo_price" value="{{ product.promo_price if product else '' }}" 
+                 placeholder="149.90">
+          <small style="color: var(--text-muted);">Deixe em branco se não houver promoção</small>
+        </div>
+        <div class="form-group">
+          <label>Custo (seu custo)</label>
+          <input type="number" step="0.01" name="cost_price" value="{{ product.cost_price if product else '' }}" 
+                 placeholder="89.90">
+          <small style="color: var(--text-muted);">Para calcular margem de lucro</small>
+        </div>
+      </div>
+      
+      <!-- Price Preview -->
+      <div class="product-preview">
+        <h4 style="margin-bottom: var(--space-md);">👁️ Preview do Preço:</h4>
+        <div style="display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap;">
+          <div>
+            <span style="font-size: 1.5rem; font-weight: 800;">R$ 149,90</span>
+            <span style="text-decoration: line-through; color: var(--text-muted); margin-left: var(--space-sm);">R$ 199,90</span>
+          </div>
+          <span style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; padding: 0.35rem 0.75rem; border-radius: var(--radius-sm); font-weight: 600;">
+            -25% OFF
+          </span>
+        </div>
+        <p style="margin-top: var(--space-sm); color: var(--text-muted); font-size: 0.875rem;">
+          💳 12x de R$ 12,49 sem juros
+        </p>
+      </div>
+      
+      <!-- AI Price Suggestion -->
+      <div class="ai-card" style="margin-top: var(--space-lg);">
+        <div class="ai-card-header">
+          <span>🤖</span>
+          <h4>Sugestão de Preço</h4>
+        </div>
+        <p>Analisando produtos similares na categoria <strong>{{ product.category if product else 'Camisetas' }}</strong>, 
+           o preço ideal para máxima conversão seria entre <strong>R$ 179,90 - R$ 199,90</strong>.</p>
+        <div class="ai-card-actions">
+          <button type="button" class="btn-ai" onclick="applySuggestedPrice(189.90)">Aplicar R$ 189,90</button>
+          <button type="button" class="btn-ai" onclick="showPriceAnalysis()">Ver Análise Completa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Inventory Tab -->
+  <div id="tab-inventory" class="tab-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>📊 Estoque e Disponibilidade</h2>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Quantidade em Estoque *</label>
+          <input type="number" name="stock" value="{{ product.stock if product else '100' }}" required 
+                 min="0" placeholder="100">
+        </div>
+        <div class="form-group">
+          <label>Estoque Mínimo (alerta)</label>
+          <input type="number" name="min_stock" value="{{ product.min_stock if product else '10' }}" 
+                 placeholder="10">
+        </div>
+        <div class="form-group">
+          <label>Peso (kg)</label>
+          <input type="number" step="0.01" name="weight" value="{{ product.weight if product else '0.5' }}" 
+                 placeholder="0.5">
+        </div>
+      </div>
+      
+      <!-- Stock Alert Preview -->
+      <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+        <h4 style="margin-bottom: var(--space-sm);">⚠️ Configuração de Alertas:</h4>
+        <div style="display: flex; gap: var(--space-lg); flex-wrap: wrap;">
+          <label class="form-check">
+            <input type="checkbox" name="alert_low_stock" checked>
+            <span>Alertar estoque baixo</span>
+          </label>
+          <label class="form-check">
+            <input type="checkbox" name="alert_out_stock" checked>
+            <span>Alertar esgotado</span>
+          </label>
+          <label class="form-check">
+            <input type="checkbox" name="auto_hide_out" checked>
+            <span>Ocultar quando esgotar</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- SEO Tab -->
+  <div id="tab-seo" class="tab-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>🔍 SEO - Otimização para Google</h2>
+      </div>
+      
+      <div class="form-group">
+        <label>Meta Título (SEO)</label>
+        <input type="text" name="meta_title" value="{{ product.meta_title if product else '' }}" 
+               placeholder="{{ product.name if product else 'Nome do Produto' }} | NØVRA - Streetwear Premium"
+               maxlength="60">
+        <small style="color: var(--text-muted);">Máx. 60 caracteres. Aparece nos resultados do Google.</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Meta Descrição (SEO)</label>
+        <textarea name="meta_description" rows="2" maxlength="160" 
+                  placeholder="Descrição persuasiva para o Google...">{{ product.meta_description if product else '' }}</textarea>
+        <small style="color: var(--text-muted);">Máx. 160 caracteres. Resumo que aparece no Google.</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Palavras-chave (Tags)</label>
+        <input type="text" name="tags" value="{{ product.tags if product else '' }}" 
+               placeholder="streetwear, camiseta oversized, moda urbana, look masculino">
+        <small style="color: var(--text-muted);">Separe por vírgulas. Ajudam na busca interna e SEO.</small>
+      </div>
+      
+      <!-- AI SEO Suggestion -->
+      <div class="ai-card" style="margin-top: var(--space-lg);">
+        <div class="ai-card-header">
+          <span>🤖</span>
+          <h4>Otimização SEO Automática</h4>
+        </div>
+        <p>Posso gerar título e descrição SEO otimizados baseados nas palavras-chave mais buscadas do seu nicho.</p>
+        <div class="ai-card-actions">
+          <button type="button" class="btn-ai" onclick="generateSEO()">✨ Gerar SEO Automático</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Badges Tab -->
+  <div id="tab-badges" class="tab-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>🏷️ Selos e Destaques</h2>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-lg);">
+        <label class="form-check" style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <input type="checkbox" name="featured" {% if product and product.featured %}checked{% endif %}>
+          <div>
+            <strong>⭐ Produto em Destaque</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Aparece na home</p>
+          </div>
+        </label>
+        
+        <label class="form-check" style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <input type="checkbox" name="is_new" {% if product and product.is_new %}checked{% endif %}>
+          <div>
+            <strong>✨ Lançamento</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Selo "Novo"</p>
+          </div>
+        </label>
+        
+        <label class="form-check" style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <input type="checkbox" name="is_bestseller" {% if product and product.is_bestseller %}checked{% endif %}>
+          <div>
+            <strong>🔥 Mais Vendido</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Selo "Bestseller"</p>
+          </div>
+        </label>
+        
+        <label class="form-check" style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <input type="checkbox" name="free_shipping" {% if product and product.free_shipping %}checked{% endif %}>
+          <div>
+            <strong>🚚 Frete Grátis</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Frete grátis incluso</p>
+          </div>
+        </label>
+      </div>
+      
+      <div class="form-group" style="margin-top: var(--space-xl);">
+        <label>Badge Personalizado (opcional)</label>
+        <select name="badge">
+          <option value="">Nenhum</option>
+          <option value="Drop Limitado" {% if product and product.badge == 'Drop Limitado' %}selected{% endif %}>💎 Drop Limitado</option>
+          <option value="Edição Especial" {% if product and product.badge == 'Edição Especial' %}selected{% endif %}>👑 Edição Especial</option>
+          <option value="Colab" {% if product and product.badge == 'Colab' %}selected{% endif %}>🎤 Colab</option>
+          <option value="Exclusivo" {% if product and product.badge == 'Exclusivo' %}selected{% endif %}>🔒 Exclusivo</option>
+          <option value="Últimas Unidades" {% if product and product.badge == 'Últimas Unidades' %}selected{% endif %}>⚡ Últimas Unidades</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Submit Buttons -->
+  <div style="margin-top: var(--space-2xl); display: flex; gap: var(--space-md); justify-content: flex-end;">
+    <a href="{{ url_for('admin_products') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-buy btn-large">
+      💾 {{ 'Salvar Alterações' if product else 'Criar Produto' }}
+    </button>
+  </div>
+</form>
+
+<script>
+  function showTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.style.display = 'none';
+    });
+    
+    // Show selected tab
+    document.getElementById('tab-' + tabName).style.display = 'block';
+    
+    // Update active tab button
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+  }
+  
+  function previewImage(input, previewId) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById(previewId);
+        if (preview.tagName === 'IMG') {
+          preview.src = e.target.result;
+        } else {
+          preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: var(--radius-lg);">`;
+        }
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  
+  function applySuggestedPrice(price) {
+    document.querySelector('input[name="price"]').value = price.toFixed(2);
+    showNotification('Preço sugerido aplicado: R$ ' + price.toFixed(2));
+  }
+  
+  function showPriceAnalysis() {
+    alert('🤖 Análise de Preço:\n\n' +
+          '• Média categoria: R$ 185,00\n' +
+          '• Preço competitors: R$ 179,90 - R$ 219,90\n' +
+          '• Seu preço atual: R$ ' + (document.querySelector('input[name="price"]').value || '0') + '\n\n' +
+          'Recomendação: Preço competitivo entre R$ 189,90 - R$ 199,90');
+  }
+  
+  function generateSEO() {
+    const productName = document.querySelector('input[name="name"]').value || 'Produto';
+    const category = document.querySelector('select[name="category"] option:checked').text || 'Streetwear';
+    
+    document.querySelector('input[name="meta_title"]').value = productName + ' | NØVRA - ' + category + ' Premium';
+    document.querySelector('textarea[name="meta_description"]').value = 
+      'Compre ' + productName + ' na NØVRA. ' + category + ' de qualidade premium com entrega rápida. ' +
+      '12x sem juros e frete grátis em compras acima de R$ 399.';
+    
+    showNotification('✨ SEO otimizado gerado pela IA!');
+  }
+  
+  function showNotification(message) {
+    const notif = document.createElement('div');
+    notif.className = 'flash flash-success';
+    notif.innerHTML = `<span>${message}</span><button onclick="this.parentElement.remove()">×</button>`;
+    document.querySelector('.flash-container').appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+</script>
+
+{% endblock %}

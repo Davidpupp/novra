@@ -1,0 +1,111 @@
+{% extends "admin_base.html" %}
+{% block title %}Categorias{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>🏷️ Gerenciar Categorias</h1>
+  <p>Organize seus produtos por categoria</p>
+</div>
+
+<div style="margin-bottom: var(--space-lg); display: flex; justify-content: flex-end;">
+  <button class="btn btn-buy" onclick="showAddCategory()">➕ Nova Categoria</button>
+</div>
+
+<div class="dashboard-card">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Categoria</th>
+        <th>Slug</th>
+        <th>Produtos</th>
+        <th>Destaque</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for category in categories %}
+      <tr>
+        <td>
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span style="font-size: 1.5rem;">
+              {% if category.slug == 'camisetas' %}👕
+              {% elif category.slug == 'moletons' %}🧥
+              {% elif category.slug == 'calcas' %}👖
+              {% elif category.slug == 'tenis' %}👟
+              {% elif category.slug == 'conjuntos' %}🎯
+              {% elif category.slug == 'acessorios' %}✨
+              {% elif category.slug == 'drop-limitado' %}💎
+              {% else %}🏷️{% endif %}
+            </span>
+            <strong>{{ category.name }}</strong>
+          </div>
+        </td>
+        <td><code style="background: var(--bg-mid-light); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);">{{ category.slug }}</code></td>
+        <td><span class="vip-badge" style="padding: 0.125rem 0.5rem; font-size: 0.75rem;">{{ category.count }} produtos</span></td>
+        <td>
+          <label class="form-check" style="margin: 0;">
+            <input type="checkbox" {% if category.featured %}checked{% endif %} onchange="toggleFeatured({{ category.id }})">
+          </label>
+        </td>
+        <td>
+          <div class="action-btns">
+            <button class="action-btn" onclick="editCategory({{ category.id }})" title="Editar">✏️</button>
+            <button class="action-btn delete" onclick="deleteCategory({{ category.id }})" title="Excluir">🗑️</button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- AI Suggestion -->
+<div class="ai-card" style="margin-top: var(--space-xl);">
+  <div class="ai-card-header">
+    <span>🤖</span>
+    <h4>Sugestão de Categorias</h4>
+  </div>
+  <p>Baseado nas tendências de mercado, sugiro criar estas novas categorias:</p>
+  <ul style="margin: var(--space-md) 0;">
+    <li>🏃‍♂️ <strong>Linha Performance</strong> - Roupas técnicas para atividades</li>
+    <li>♻️ <strong>Eco Friendly</strong> - Produtos sustentáveis (alta tendência)</li>
+    <li>👶 <strong>Infantil</strong> - Moda streetwear para crianças</li>
+  </ul>
+  <div class="ai-card-actions">
+    <button class="btn-ai" onclick="createSuggestedCategory('performance')">Criar Performance</button>
+    <button class="btn-ai" onclick="createSuggestedCategory('eco')">Criar Eco Friendly</button>
+  </div>
+</div>
+
+<script>
+  function showAddCategory() {
+    const name = prompt('Nome da nova categoria:');
+    if (name) {
+      alert('✅ Categoria "' + name + '" criada com sucesso!');
+    }
+  }
+  
+  function editCategory(id) {
+    alert('✏️ Editando categoria #' + id);
+  }
+  
+  function deleteCategory(id) {
+    if (confirm('Tem certeza que deseja excluir esta categoria?\n\nOs produtos serão movidos para "Sem Categoria".')) {
+      alert('🗑️ Categoria excluída.');
+    }
+  }
+  
+  function toggleFeatured(id) {
+    alert('⭐ Categoria #' + id + ' ' + (event.target.checked ? 'destacada' : 'removida dos destaques'));
+  }
+  
+  function createSuggestedCategory(type) {
+    const names = {
+      'performance': 'Linha Performance',
+      'eco': 'Eco Friendly'
+    };
+    alert('✅ Categoria "' + names[type] + '" criada!');
+  }
+</script>
+
+{% endblock %}

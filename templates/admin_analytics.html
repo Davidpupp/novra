@@ -1,0 +1,117 @@
+{% extends "admin_base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>📈 Analytics & Relatórios</h1>
+  <p>Análise detalhada do desempenho da sua loja</p>
+</div>
+
+<!-- Date Range -->
+<div class="filter-bar" style="margin-bottom: var(--space-xl);">
+  <select class="filter-select">
+    <option>Últimos 7 dias</option>
+    <option>Últimos 30 dias</option>
+    <option>Este mês</option>
+    <option>Mês passado</option>
+    <option>Este ano</option>
+  </select>
+  <button class="btn btn-secondary">📥 Exportar Relatório</button>
+</div>
+
+<!-- Charts Grid -->
+<div class="dashboard-grid">
+  
+  <!-- Sales Chart -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>💰 Vendas</h2>
+      <span style="color: #22c55e; font-weight: 600;">↑ 15% vs período anterior</span>
+    </div>
+    <div class="chart-container" style="height: 250px;">
+      <div style="text-align: center;">
+        <span style="font-size: 4rem;">📊</span>
+        <p style="margin-top: var(--space-md); color: var(--text-muted);">Gráfico de vendas</p>
+        <p style="font-size: 1.5rem; font-weight: 700;">R$ 45.890,00</p>
+        <p style="color: var(--text-muted);">Total no período</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Conversion Chart -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>🎯 Conversão</h2>
+      <span style="color: var(--accent); font-weight: 600;">3.2% taxa</span>
+    </div>
+    <div class="chart-container" style="height: 250px;">
+      <div style="text-align: center;">
+        <span style="font-size: 4rem;">🎯</span>
+        <p style="margin-top: var(--space-md); color: var(--text-muted);">Funnel de conversão</p>
+        <div style="margin-top: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+            <span>Visitantes</span><span>15.420</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+            <span>Carrinho</span><span>1.240 (8%)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Compras</span><span>493 (3.2%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Top Products/Sources -->
+<div class="dashboard-grid" style="margin-top: var(--space-xl);">
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>🔥 Produtos Mais Vistos</h2>
+    </div>
+    <table class="admin-table">
+      <tr><td>Oversized Premium Black</td><td>2.450 views</td></tr>
+      <tr><td>Cargo Pants Urban</td><td>1.890 views</td></tr>
+      <tr><td>Street Hoodie Grey</td><td>1.560 views</td></tr>
+      <tr><td>Air Style Sneakers</td><td>1.230 views</td></tr>
+    </table>
+  </div>
+  
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>🌐 Fontes de Tráfego</h2>
+    </div>
+    <table class="admin-table">
+      <tr><td>🔍 Google Orgânico</td><td>45%</td></tr>
+      <tr><td>📱 Instagram</td><td>25%</td></tr>
+      <tr><td>📘 Facebook</td><td>15%</td></tr>
+      <tr><td>💬 Directo/Bookmark</td><td>10%</td></tr>
+      <tr><td>📧 Email Marketing</td><td>5%</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- AI Insights -->
+<div class="ai-card" style="margin-top: var(--space-xl);">
+  <div class="ai-card-header">
+    <span>🤖</span>
+    <h4>Insights da IA</h4>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md);">
+    <div style="padding: var(--space-md); background: rgba(34, 197, 94, 0.1); border-radius: var(--radius-lg);">
+      <h4 style="color: #22c55e; margin: 0 0 var(--space-sm);">📈 Oportunidade</h4>
+      <p style="margin: 0; font-size: 0.875rem;">Tráfego do Instagram cresceu 35%. Aumente posts para capitalizar.</p>
+    </div>
+    <div style="padding: var(--space-md); background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-lg);">
+      <h4 style="color: #f59e0b; margin: 0 0 var(--space-sm);">⚠️ Atenção</h4>
+      <p style="margin: 0; font-size: 0.875rem;">Taxa de abandono de carrinho em 92%. Considere remarketing.</p>
+    </div>
+    <div style="padding: var(--space-md); background: rgba(201, 169, 98, 0.1); border-radius: var(--radius-lg);">
+      <h4 style="color: var(--accent); margin: 0 0 var(--space-sm);">💡 Sugestão</h4>
+      <p style="margin: 0; font-size: 0.875rem;">Melhor horário para posts: 19h-21h (pico de conversão).</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

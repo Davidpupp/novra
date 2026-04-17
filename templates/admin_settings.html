@@ -1,0 +1,345 @@
+{% extends "admin_base.html" %}
+{% block title %}Configurações{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>⚙️ Configurações do Site</h1>
+  <p>Personalize todos os aspectos da sua loja</p>
+</div>
+
+<!-- Settings Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showSettingTab('general')">🏪 Loja</button>
+  <button class="tab" onclick="showSettingTab('payments')">💳 Pagamentos</button>
+  <button class="tab" onclick="showSettingTab('shipping')">🚚 Entrega</button>
+  <button class="tab" onclick="showSettingTab('seo')">🔍 SEO</button>
+  <button class="tab" onclick="showSettingTab('social')">📱 Redes Sociais</button>
+  <button class="tab" onclick="showSettingTab('advanced')">⚡ Avançado</button>
+</div>
+
+<form method="post" action="{{ url_for('admin_save_settings') }}">
+  
+  <!-- General Settings -->
+  <div id="setting-general" class="setting-content" style="display: block;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>🏪 Informações da Loja</h2>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome da Loja *</label>
+          <input type="text" name="store_name" value="{{ settings.store_name|default('NØVRA') }}" required>
+        </div>
+        <div class="form-group">
+          <label>Slogan</label>
+          <input type="text" name="store_slogan" value="{{ settings.store_slogan|default('Streetwear Premium') }}" 
+                 placeholder="Streetwear Premium Brasil">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Logo da Loja</label>
+        <div class="image-upload" onclick="document.getElementById('logoUpload').click()">
+          <input type="file" id="logoUpload" name="logo" accept="image/*" style="display: none;">
+          <div class="upload-icon">🏪</div>
+          <div class="upload-text">Clique para upload da logo</div>
+          <div class="upload-hint">PNG transparente recomendado (200x60px)</div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>E-mail de Contato *</label>
+          <input type="email" name="contact_email" value="{{ settings.contact_email|default('contato@novra.com') }}" required>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp *</label>
+          <input type="tel" name="whatsapp" value="{{ settings.whatsapp|default('5511999999999') }}" 
+                 placeholder="5511999999999">
+          <small>Formato: 55 + DDD + Número (sem espaços)</small>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Endereço da Loja</label>
+        <input type="text" name="store_address" value="{{ settings.store_address|default('') }}" 
+               placeholder="Rua Example, 123 - São Paulo, SP">
+      </div>
+      
+      <div class="form-group">
+        <label>CNPJ (opcional)</label>
+        <input type="text" name="cnpj" value="{{ settings.cnpj|default('') }}" placeholder="00.000.000/0000-00">
+      </div>
+    </div>
+    
+    <!-- Hero Settings -->
+    <div class="dashboard-card" style="margin-top: var(--space-xl);">
+      <div class="card-header">
+        <h2>🏠 Configurações do Hero</h2>
+      </div>
+      
+      <div class="form-group">
+        <label>Título Principal</label>
+        <input type="text" name="hero_title" value="{{ settings.hero_title|default('As peças mais desejadas do Brasil') }}" 
+               placeholder="As peças mais desejadas do Brasil">
+      </div>
+      
+      <div class="form-group">
+        <label>Subtítulo</label>
+        <textarea name="hero_subtitle" rows="2" 
+                  placeholder="Streetwear premium. Estilo dos MCs...">{{ settings.hero_subtitle|default('Streetwear premium. Estilo dos MCs. Qualidade internacional.') }}</textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Botão Principal</label>
+          <input type="text" name="hero_cta_primary" value="{{ settings.hero_cta_primary|default('COMPRAR AGORA') }}">
+        </div>
+        <div class="form-group">
+          <label>Botão Secundário</label>
+          <input type="text" name="hero_cta_secondary" value="{{ settings.hero_cta_secondary|default('VER LANÇAMENTOS') }}">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Payment Settings -->
+  <div id="setting-payments" class="setting-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>💳 Métodos de Pagamento</h2>
+      </div>
+      
+      <div style="display: grid; gap: var(--space-md);">
+        <label class="form-check" style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <input type="checkbox" name="payment_pix" checked>
+          <div>
+            <strong>⚡ Pix</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Pagamento instantâneo</p>
+          </div>
+        </label>
+        
+        <label class="form-check" style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <input type="checkbox" name="payment_credit" checked>
+          <div>
+            <strong>💳 Cartão de Crédito</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Até 12x sem juros</p>
+          </div>
+        </label>
+        
+        <label class="form-check" style="padding: var(--space-md); background: var(--bg-mid-light); border-radius: var(--radius-lg);">
+          <input type="checkbox" name="payment_boleto">
+          <div>
+            <strong>📄 Boleto Bancário</strong>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Aprovação em 1-2 dias</p>
+          </div>
+        </label>
+      </div>
+      
+      <div class="form-row" style="margin-top: var(--space-xl);">
+        <div class="form-group">
+          <label>Desconto Pix (%)</label>
+          <input type="number" name="pix_discount" value="{{ settings.pix_discount|default('5') }}" min="0" max="50">
+          <small>Desconto aplicado para pagamentos via Pix</small>
+        </div>
+        <div class="form-group">
+          <label>Parcelas Máximas</label>
+          <input type="number" name="max_installments" value="{{ settings.max_installments|default('12') }}" min="1" max="24">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Shipping Settings -->
+  <div id="setting-shipping" class="setting-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>🚚 Configurações de Entrega</h2>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Frete Grátis Acima De (R$)</label>
+          <input type="number" name="free_shipping_threshold" value="{{ settings.free_shipping_threshold|default('399') }}" 
+                 min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Valor do Frete Padrão (R$)</label>
+          <input type="number" name="default_shipping" value="{{ settings.default_shipping|default('19.90') }}" 
+                 min="0" step="0.01">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Prazo de Entrega (dias)</label>
+        <input type="text" name="delivery_time" value="{{ settings.delivery_time|default('5 a 10 dias úteis') }}" 
+               placeholder="5 a 10 dias úteis">
+      </div>
+      
+      <div class="form-group">
+        <label>Política de Trocas</label>
+        <textarea name="exchange_policy" rows="3">{{ settings.exchange_policy|default('Troca em até 7 dias após o recebimento. Produto deve estar com etiqueta e sem uso.') }}</textarea>
+      </div>
+    </div>
+  </div>
+  
+  <!-- SEO Settings -->
+  <div id="setting-seo" class="setting-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>🔍 SEO - Otimização Google</h2>
+      </div>
+      
+      <div class="form-group">
+        <label>Meta Título Padrão</label>
+        <input type="text" name="meta_title_default" value="{{ settings.meta_title_default|default('NØVRA | Streetwear Premium Brasil') }}" 
+               placeholder="NØVRA | Streetwear Premium Brasil">
+        <small>Aparece nos resultados do Google</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Meta Descrição Padrão</label>
+        <textarea name="meta_description_default" rows="2" maxlength="160">{{ settings.meta_description_default|default('Moda streetwear premium com design exclusivo. Camisetas, moletons, tênis e acessórios. Frete grátis e 12x sem juros.') }}</textarea>
+        <small>Máx. 160 caracteres</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Palavras-chave (Tags)</label>
+        <input type="text" name="meta_keywords" value="{{ settings.meta_keywords|default('streetwear, moda urbana, camisetas oversized, tênis premium, roupa masculina') }}" 
+               placeholder="streetwear, moda urbana, camisetas...">
+      </div>
+      
+      <div class="form-group">
+        <label>Google Analytics ID</label>
+        <input type="text" name="ga_id" value="{{ settings.ga_id|default('') }}" placeholder="G-XXXXXXXXXX">
+        <small>ID de rastreamento do Google Analytics 4</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Pixel Facebook</label>
+        <input type="text" name="fb_pixel" value="{{ settings.fb_pixel|default('') }}" placeholder="XXXXXXXXXXXXXXXXXX">
+        <small>Para rastreamento de conversões</small>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Social Settings -->
+  <div id="setting-social" class="setting-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>📱 Redes Sociais</h2>
+      </div>
+      
+      <div class="form-group">
+        <label>Instagram</label>
+        <input type="text" name="instagram" value="{{ settings.instagram|default('@novra') }}" placeholder="@novra">
+      </div>
+      
+      <div class="form-group">
+        <label>TikTok</label>
+        <input type="text" name="tiktok" value="{{ settings.tiktok|default('@novra') }}" placeholder="@novra">
+      </div>
+      
+      <div class="form-group">
+        <label>YouTube</label>
+        <input type="url" name="youtube" value="{{ settings.youtube|default('') }}" placeholder="https://youtube.com/@novra">
+      </div>
+      
+      <div class="form-group">
+        <label>Link do WhatsApp</label>
+        <input type="url" name="whatsapp_link" value="{{ settings.whatsapp_link|default('https://wa.me/5511999999999') }}" 
+               placeholder="https://wa.me/5511999999999">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Advanced Settings -->
+  <div id="setting-advanced" class="setting-content" style="display: none;">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h2>⚡ Configurações Avançadas</h2>
+      </div>
+      
+      <div class="form-group">
+        <label>Modo Manutenção</label>
+        <label class="form-check">
+          <input type="checkbox" name="maintenance_mode">
+          <span>Ativar modo manutenção (site fica fora do ar)</span>
+        </label>
+      </div>
+      
+      <div class="form-group">
+        <label>Mensagem de Manutenção</label>
+        <textarea name="maintenance_message" rows="2" placeholder="Voltamos em breve! Estamos atualizando a loja para você.">{{ settings.maintenance_message|default('') }}</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Cabeçalho HTML Personalizado</label>
+        <textarea name="custom_header" rows="4" placeholder="<!-- Código personalizado no <head> -->">{{ settings.custom_header|default('') }}</textarea>
+        <small>Código que será inserido no &lt;head&gt; de todas as páginas</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Rodapé HTML Personalizado</label>
+        <textarea name="custom_footer" rows="4" placeholder="<!-- Código antes do </body> -->">{{ settings.custom_footer|default('') }}</textarea>
+        <small>Código que será inserido antes do fechamento do &lt;/body&gt;</small>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Save Button -->
+  <div style="margin-top: var(--space-2xl); display: flex; gap: var(--space-md); justify-content: flex-end;">
+    <a href="{{ url_for('admin_dashboard_extreme') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-buy btn-large">💾 Salvar Configurações</button>
+  </div>
+</form>
+
+<!-- AI Settings Suggestion -->
+<div class="ai-card" style="margin-top: var(--space-xl);">
+  <div class="ai-card-header">
+    <span>🤖</span>
+    <h4>Otimização Recomendada</h4>
+  </div>
+  <p>Analisando dados de conversão de lojas similares:</p>
+  <ul style="margin: var(--space-md) 0; padding-left: var(--space-lg);">
+    <li>Reduzir frete grátis para R$ 299 aumenta conversão em 15%</li>
+    <li>Adicionar desconto Pix de 10% incentiva pagamento instantâneo</li>
+    <li>Ativar boleto para público que não usa cartão/digital</li>
+  </ul>
+  <div class="ai-card-actions">
+    <button class="btn-ai" onclick="applyAIOptimizations()">✨ Aplicar Otimizações</button>
+  </div>
+</div>
+
+<script>
+  function showSettingTab(tabName) {
+    document.querySelectorAll('.setting-content').forEach(el => {
+      el.style.display = 'none';
+    });
+    document.getElementById('setting-' + tabName).style.display = 'block';
+    
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
+  }
+  
+  function applyAIOptimizations() {
+    document.querySelector('input[name="free_shipping_threshold"]').value = '299';
+    document.querySelector('input[name="pix_discount"]').value = '10';
+    document.querySelector('input[name="payment_boleto"]').checked = true;
+    
+    showNotification('✨ Otimizações aplicadas! Salve as configurações.');
+  }
+  
+  function showNotification(message) {
+    const notif = document.createElement('div');
+    notif.className = 'flash flash-success';
+    notif.innerHTML = `<span>${message}</span><button onclick="this.parentElement.remove()">×</button>`;
+    document.querySelector('.flash-container').appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+</script>
+
+{% endblock %}

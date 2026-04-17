@@ -1,0 +1,287 @@
+{% extends "admin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <p>Visão geral da sua loja em tempo real</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon sales">💰</div>
+      <span class="stat-trend up">↑ 12% vs ontem</span>
+    </div>
+    <div class="stat-value" id="salesToday">R$ {{ stats.sales_today|default('0,00') }}</div>
+    <div class="stat-label">Vendas Hoje</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon orders">📦</div>
+      <span class="stat-trend up">↑ 5 novos</span>
+    </div>
+    <div class="stat-value" id="ordersToday">{{ stats.orders_today|default('0') }}</div>
+    <div class="stat-label">Pedidos Hoje</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon customers">👥</div>
+      <span class="stat-trend up">↑ 8% este mês</span>
+    </div>
+    <div class="stat-value" id="totalCustomers">{{ stats.total_customers|default('0') }}</div>
+    <div class="stat-label">Clientes Totais</div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-header">
+      <div class="stat-icon products">🏷️</div>
+      <span class="stat-trend">{{ stats.low_stock|default('0') }} em falta</span>
+    </div>
+    <div class="stat-value" id="totalProducts">{{ stats.total_products|default('0') }}</div>
+    <div class="stat-label">Produtos Ativos</div>
+  </div>
+</div>
+
+<!-- Dashboard Grid -->
+<div class="dashboard-grid">
+  
+  <!-- Recent Orders -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>📦 Pedidos Recentes</h2>
+      <a href="{{ url_for('admin_orders') }}" class="action-btn">Ver Todos →</a>
+    </div>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Pedido</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in recent_orders %}
+        <tr>
+          <td><strong>#{{ order.id }}</strong></td>
+          <td>{{ order.customer_name }}</td>
+          <td>{{ order.total|brl }}</td>
+          <td>
+            <span class="status-badge status-{{ order.status }}">
+              {% if order.status == 'paid' %}✓ Pago
+              {% elif order.status == 'pending' %}⏳ Pendente
+              {% elif order.status == 'shipped' %}🚚 Enviado
+              {% elif order.status == 'cancelled' %}✗ Cancelado
+              {% else %}{{ order.status }}
+              {% endif %}
+            </span>
+          </td>
+          <td>
+            <div class="action-btns">
+              <a href="{{ url_for('admin_order_detail', order_id=order.id) }}" class="action-btn" title="Ver">👁️</a>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" style="text-align: center; padding: var(--space-xl); color: var(--text-muted);">
+            Nenhum pedido recente
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- AI Assistant Widget -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>🤖 Assistente IA - Sugestões</h2>
+    </div>
+    <div class="ai-suggestions">
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span>📊</span>
+          <h4>Análise de Vendas</h4>
+        </div>
+        <p>Seus produtos de tênis estão vendendo 40% mais este mês. Considere aumentar o estoque.</p>
+        <div class="ai-card-actions">
+          <button class="btn-ai" onclick="aiAction('estoque')">Ver Estoque</button>
+        </div>
+      </div>
+      
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span>🎯</span>
+          <h4>Estratégia de Marketing</h4>
+        </div>
+        <p>Você tem 3 produtos com estoque baixo. Crie uma promoção "Últimas Unidades" para acelerar a venda.</p>
+        <div class="ai-card-actions">
+          <button class="btn-ai" onclick="aiAction('promocao')">Criar Promoção</button>
+        </div>
+      </div>
+      
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span>🖼️</span>
+          <h4>Banners do Site</h4>
+        </div>
+        <p>Seus banners estão desatualizados há 15 dias. Sugiro criar um novo banner para o Drop Limitado.</p>
+        <div class="ai-card-actions">
+          <button class="btn-ai" onclick="aiAction('banner')">Criar Banner</button>
+        </div>
+      </div>
+      
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span>📧</span>
+          <h4>Email Marketing</h4>
+        </div>
+        <p>156 clientes não compram há 30 dias. Envie um email com cupom de 10% OFF para reativá-los.</p>
+        <div class="ai-card-actions">
+          <button class="btn-ai" onclick="aiAction('email')">Gerar Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Second Row -->
+<div class="dashboard-grid">
+  
+  <!-- Top Products -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>🔥 Produtos Mais Vendidos</h2>
+      <a href="{{ url_for('admin_products') }}" class="action-btn">Ver Todos →</a>
+    </div>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Vendas</th>
+          <th>Receita</th>
+          <th>Estoque</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in top_products %}
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: var(--radius-md);">
+              {% else %}
+                <div style="width: 40px; height: 40px; background: var(--bg-mid-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">{{ product.name[:1] }}</div>
+              {% endif %}
+              <span>{{ product.name[:25] }}{% if product.name|length > 25 %}...{% endif %}</span>
+            </div>
+          </td>
+          <td>{{ product.sales_count }} unidades</td>
+          <td>{{ product.revenue|brl }}</td>
+          <td>
+            {% if product.stock <= 5 %}
+              <span style="color: #ef4444; font-weight: 600;">{{ product.stock }} ⚠️</span>
+            {% else %}
+              <span style="color: #22c55e;">{{ product.stock }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" style="text-align: center; padding: var(--space-xl); color: var(--text-muted);">
+            Nenhum produto vendido ainda
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Low Stock Alert -->
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>⚠️ Estoque Baixo</h2>
+      <a href="{{ url_for('admin_products') }}?filter=low_stock" class="action-btn">Gerenciar →</a>
+    </div>
+    {% if low_stock_products %}
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Estoque</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in low_stock_products %}
+        <tr>
+          <td>{{ product.name }}</td>
+          <td><span style="color: #ef4444; font-weight: 700;">{{ product.stock }} unidades</span></td>
+          <td>
+            <a href="{{ url_for('admin_edit_product', product_id=product.id) }}" class="action-btn">Repor →</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div style="text-align: center; padding: var(--space-2xl); color: var(--text-muted);">
+      <span style="font-size: 3rem;">✅</span>
+      <p style="margin-top: var(--space-md);">Todos os produtos com estoque OK!</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Quick Stats Row -->
+<div class="dashboard-card" style="margin-top: var(--space-xl);">
+  <div class="card-header">
+    <h2>📈 Desempenho do Mês</h2>
+  </div>
+  <div class="chart-container">
+    <div style="text-align: center;">
+      <span style="font-size: 4rem;">📊</span>
+      <p style="margin-top: var(--space-md); color: var(--text-muted);">Gráfico de vendas será implementado em breve</p>
+      <p style="font-size: 0.875rem; color: var(--text-secondary);">Vendas este mês: <strong>{{ stats.monthly_sales|brl }}</strong></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function aiAction(action) {
+    const messages = {
+      'estoque': 'Redirecionando para página de produtos com estoque baixo...',
+      'promocao': 'Abrindo criador de promoções...',
+      'banner': 'Abrindo gerenciador de banners...',
+      'email': 'Gerando template de email marketing...'
+    };
+    
+    // Show notification
+    const notif = document.createElement('div');
+    notif.className = 'flash flash-success';
+    notif.innerHTML = `<span>🤖 IA: ${messages[action]}</span><button onclick="this.parentElement.remove()">×</button>`;
+    document.querySelector('.flash-container').appendChild(notif);
+    
+    setTimeout(() => notif.remove(), 3000);
+    
+    // Redirect based on action
+    setTimeout(() => {
+      if (action === 'estoque') window.location.href = '{{ url_for('admin_products') }}?filter=low_stock';
+      if (action === 'banner') window.location.href = '{{ url_for('admin_banners') }}';
+    }, 1500);
+  }
+  
+  // Simulate real-time updates
+  setInterval(() => {
+    // In real implementation, this would fetch from API
+    console.log('Updating dashboard stats...');
+  }, 30000);
+</script>
+
+{% endblock %}

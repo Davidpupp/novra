@@ -1,0 +1,143 @@
+{% extends "admin_base.html" %}
+{% block title %}{{ 'Editar' if banner else 'Novo' }} Banner{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ '🖼️ Editar Banner' if banner else '🖼️ Novo Banner' }}</h1>
+  <p>Crie banners atraentes para aumentar conversão</p>
+</div>
+
+<form method="post" class="admin-form">
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h2>Configurações do Banner</h2>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome do Banner *</label>
+        <input type="text" name="name" value="{{ banner.name if banner else '' }}" required 
+               placeholder="Ex: Hero - Drop Limitado">
+      </div>
+      <div class="form-group">
+        <label>Posição *</label>
+        <select name="position" required>
+          <option value="hero" {% if banner and banner.position == 'hero' %}selected{% endif %}>🏠 Hero (Home)</option>
+          <option value="promo" {% if banner and banner.position == 'promo' %}selected{% endif %}>🎁 Promocional</option>
+          <option value="category" {% if banner and banner.position == 'category' %}selected{% endif %}>🏷️ Categoria</option>
+          <option value="popup" {% if banner and banner.position == 'popup' %}selected{% endif %}>💬 Popup</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Tag/Label (opcional)</label>
+      <input type="text" name="tag" value="{{ banner.tag if banner else '' }}" 
+             placeholder="Ex: DROP LIMITADO 2026">
+    </div>
+    
+    <div class="form-group">
+      <label>Título *</label>
+      <input type="text" name="title" value="{{ banner.title if banner else '' }}" required 
+             placeholder="Ex: As peças mais desejadas do Brasil">
+    </div>
+    
+    <div class="form-group">
+      <label>Subtítulo</label>
+      <textarea name="subtitle" rows="2" placeholder="Descrição curta do banner...">{{ banner.subtitle if banner else '' }}</textarea>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label>Texto do Botão</label>
+        <input type="text" name="button_text" value="{{ banner.button_text if banner else 'COMPRAR AGORA' }}">
+      </div>
+      <div class="form-group">
+        <label>Link do Botão</label>
+        <input type="url" name="button_link" value="{{ banner.button_link if banner else '/catalogo' }}" 
+               placeholder="https://... ou /caminho">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Imagem do Banner</label>
+      <div class="image-upload" onclick="document.getElementById('bannerImage').click()">
+        <input type="file" id="bannerImage" name="image" accept="image/*" style="display: none;">
+        <div class="upload-icon">🖼️</div>
+        <div class="upload-text">Clique para fazer upload</div>
+        <div class="upload-hint">1920x600px para Hero, 1200x400px para Promocional</div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Ou use URL da imagem</label>
+      <input type="url" name="image_url" value="{{ banner.image_url if banner else '' }}" 
+             placeholder="https://images.unsplash.com/...">
+    </div>
+    
+    <div style="margin-top: var(--space-lg);">
+      <label class="form-check" style="display: inline-flex;">
+        <input type="checkbox" name="active" {% if not banner or banner.active %}checked{% endif %}>
+        <span>Banner ativo (visível no site)</span>
+      </label>
+    </div>
+  </div>
+  
+  <!-- Preview -->
+  <div class="dashboard-card" style="margin-top: var(--space-xl);">
+    <div class="card-header">
+      <h2>👁️ Preview</h2>
+    </div>
+    <div style="height: 300px; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+      <div style="text-align: center; z-index: 2;">
+        <span class="vip-badge" style="margin-bottom: var(--space-md);">TAG AQUI</span>
+        <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: var(--space-sm);">Título do Banner</h3>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Subtítulo aparece aqui</p>
+        <span class="btn btn-buy">Texto do Botão</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- AI Suggestion -->
+  <div class="ai-card" style="margin-top: var(--space-xl);">
+    <div class="ai-card-header">
+      <span>🤖</span>
+      <h4>Sugestões da IA para Banners</h4>
+    </div>
+    <p>Headlines que convertem bem no seu nicho:</p>
+    <div style="display: grid; gap: var(--space-sm); margin: var(--space-md) 0;">
+      <button type="button" class="chip" onclick="applyHeadline('DROP LIMITADO - Apenas 100 unidades')" style="text-align: left;">
+        "DROP LIMITADO - Apenas 100 unidades"
+      </button>
+      <button type="button" class="chip" onclick="applyHeadline('FRETE GRÁTIS HOJE - Termina à meia-noite')" style="text-align: left;">
+        "FRETE GRÁTIS HOJE - Termina à meia-noite"
+      </button>
+      <button type="button" class="chip" onclick="applyHeadline('ÚLTIMAS UNIDADES - Não vai ter reposição')" style="text-align: left;">
+        "ÚLTIMAS UNIDADES - Não vai ter reposição"
+      </button>
+    </div>
+  </div>
+  
+  <!-- Submit -->
+  <div style="margin-top: var(--space-2xl); display: flex; gap: var(--space-md); justify-content: flex-end;">
+    <a href="{{ url_for('admin_banners') }}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-buy btn-large">💾 Salvar Banner</button>
+  </div>
+</form>
+
+<script>
+  function applyHeadline(text) {
+    document.querySelector('input[name="title"]').value = text;
+    showNotification('✨ Headline aplicado: ' + text);
+  }
+  
+  function showNotification(message) {
+    const notif = document.createElement('div');
+    notif.className = 'flash flash-success';
+    notif.innerHTML = '<span>' + message + '</span><button onclick="this.parentElement.remove()">×</button>';
+    document.querySelector('.flash-container').appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+</script>
+
+{% endblock %}
