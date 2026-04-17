@@ -63,32 +63,32 @@
     </main>
 
     <footer class="footer">
-      <div class="container" style="display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); text-align: left;">
-        <div>
-          <h4 style="color: #fff; margin-bottom: 1rem;">{{ store_name }}</h4>
-          <p style="color: #9ca3af; font-size: 0.875rem;">Moda streetwear premium com design exclusivo e qualidade excepcional.</p>
+      <div class="container footer-grid">
+        <div class="footer-col">
+          <h4 class="footer-title">{{ store_name }}</h4>
+          <p class="footer-desc">Moda streetwear premium com design exclusivo e qualidade excepcional.</p>
         </div>
-        <div>
-          <h4 style="color: #fff; margin-bottom: 1rem;">Navegação</h4>
-          <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <a href="{{ url_for('catalog') }}" style="color: #9ca3af; font-size: 0.875rem;">Catálogo Completo</a>
-            <a href="{{ url_for('category_camisetas') }}" style="color: #9ca3af; font-size: 0.875rem;">Camisetas</a>
-            <a href="{{ url_for('category_hoodies') }}" style="color: #9ca3af; font-size: 0.875rem;">Hoodies</a>
-            <a href="{{ url_for('category_calcas') }}" style="color: #9ca3af; font-size: 0.875rem;">Calças</a>
-            <a href="{{ url_for('category_tenis') }}" style="color: #9ca3af; font-size: 0.875rem;">Tênis</a>
-            <a href="{{ url_for('category_acessorios') }}" style="color: #9ca3af; font-size: 0.875rem;">Acessórios</a>
-            <a href="{{ url_for('category_drop_limitado') }}" style="color: var(--danger); font-size: 0.875rem;">Drop Limitado</a>
+        <div class="footer-col">
+          <h4 class="footer-title">Navegação</h4>
+          <nav class="footer-nav">
+            <a href="{{ url_for('catalog') }}">Catálogo Completo</a>
+            <a href="{{ url_for('category_camisetas') }}">Camisetas</a>
+            <a href="{{ url_for('category_hoodies') }}">Hoodies</a>
+            <a href="{{ url_for('category_calcas') }}">Calças</a>
+            <a href="{{ url_for('category_tenis') }}">Tênis</a>
+            <a href="{{ url_for('category_acessorios') }}">Acessórios</a>
+            <a href="{{ url_for('category_drop_limitado') }}" class="footer-highlight">Drop Limitado</a>
           </nav>
         </div>
-        <div>
-          <h4 style="color: #fff; margin-bottom: 1rem;">Suporte</h4>
-          <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <a href="{{ url_for('customer_login') }}" style="color: #9ca3af; font-size: 0.875rem;">Minha Conta</a>
-            <a href="{{ url_for('customer_forgot_password') }}" style="color: #9ca3af; font-size: 0.875rem;">Recuperar Senha</a>
+        <div class="footer-col">
+          <h4 class="footer-title">Suporte</h4>
+          <nav class="footer-nav">
+            <a href="{{ url_for('customer_login') }}">Minha Conta</a>
+            <a href="{{ url_for('customer_forgot_password') }}">Recuperar Senha</a>
           </nav>
         </div>
       </div>
-      <div style="border-top: 1px solid #2a2a2a; margin-top: 2rem; padding-top: 2rem; text-align: center;">
+      <div class="footer-bottom">
         <p>{{ store_name }} © 2026 - Todos os direitos reservados</p>
       </div>
     </footer>
