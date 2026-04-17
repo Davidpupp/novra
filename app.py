@@ -258,7 +258,7 @@ def customer_required(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
         if "customer_user_id" not in session:
-            flash("Fa?a login para acessar sua conta.", "warning")
+            flash("Faça login para acessar sua conta.", "warning")
             return redirect(url_for("customer_login", next=request.path))
         return view(*args, **kwargs)
 
@@ -408,7 +408,7 @@ def ai_reply(message):
     category = None
     if any(k in text for k in ["corrida", "correr", "maratona"]):
         category = "corrida"
-    elif any(k in text for k in ["treino", "academia", "musculacao", "muscula??o"]):
+    elif any(k in text for k in ["treino", "academia", "musculacao", "musculação"]):
         category = "treino"
     elif any(k in text for k in ["lifestyle", "casual", "dia a dia"]):
         category = "lifestyle"
@@ -416,10 +416,10 @@ def ai_reply(message):
     db = get_db()
     if category:
         recs = db.execute("SELECT name, slug, price FROM products WHERE category = ? ORDER BY featured DESC, id DESC LIMIT 4", (category,)).fetchall()
-        answer = f"Para {category}, eu recomendo estes produtos com melhor custo-benef?cio e alta procura."
+        answer = f"Para {category}, eu recomendo estes produtos com melhor custo-benefício e alta procura."
     else:
         recs = db.execute("SELECT name, slug, price FROM products ORDER BY featured DESC, id DESC LIMIT 4").fetchall()
-        answer = "Perfeito. Com base no seu estilo, selecionei pecas populares para comecar."
+        answer = "Perfeito. Com base no seu estilo, selecionei peças populares para começar."
 
     products = [{"name": r["name"], "slug": r["slug"], "price": r["price"]} for r in recs]
     return answer, products
@@ -561,7 +561,7 @@ def checkout():
     details = cart_details()
     customer = get_current_customer()
     if not details["items"]:
-        flash("Seu carrinho est? vazio.", "warning")
+        flash("Seu carrinho está vazio.", "warning")
         return redirect(url_for("catalog"))
 
     if request.method == "POST":
@@ -719,7 +719,7 @@ def admin_login():
         session["admin_login_attempts"] = attempts
         if attempts >= 5:
             session["admin_blocked_until"] = (datetime.utcnow() + timedelta(minutes=5)).isoformat()
-        flash("Credenciais inv?lidas.", "danger")
+        flash("Credenciais inválidas.", "danger")
 
     return render_template("admin_login.html")
 
@@ -749,7 +749,7 @@ def admin_create_product():
     db = get_db()
     existing = db.execute("SELECT id FROM products WHERE slug = ?", (slug,)).fetchone()
     if existing:
-        flash("Slug j? existe. Use um slug ?nico.", "warning")
+        flash("Slug já existe. Use um slug único.", "warning")
         return redirect(url_for("admin_dashboard"))
 
     db.execute(
@@ -806,7 +806,7 @@ def customer_register():
         confirm_password = request.form["confirm_password"]
 
         if password != confirm_password:
-            flash("As senhas nao conferem.", "warning")
+            flash("As senhas não conferem.", "warning")
             return render_template("customer_register.html")
 
         if len(password) < 8:
@@ -816,7 +816,7 @@ def customer_register():
         db = get_db()
         exists = db.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone()
         if exists:
-            flash("Este e-mail ja possui cadastro.", "warning")
+            flash("Este e-mail já possui cadastro.", "warning")
             return render_template("customer_register.html")
 
         db.execute(
@@ -824,7 +824,7 @@ def customer_register():
             (full_name, email, generate_password_hash(password), datetime.utcnow().isoformat()),
         )
         db.commit()
-        flash("Cadastro criado com sucesso. Fa?a login para continuar.", "success")
+        flash("Cadastro criado com sucesso. Faça login para continuar.", "success")
         return redirect(url_for("customer_login"))
 
     return render_template("customer_register.html")
@@ -838,7 +838,7 @@ def customer_login():
         user = get_db().execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
 
         if not user or not check_password_hash(user["password_hash"], password):
-            flash("Credenciais invalidas.", "danger")
+            flash("Credenciais inválidas.", "danger")
             return render_template("customer_login.html")
 
         session.clear()
@@ -872,9 +872,9 @@ def customer_forgot_password():
             db.execute("UPDATE users SET reset_token = ?, reset_expires_at = ? WHERE id = ?", (token, expires, user["id"]))
             db.commit()
             reset_link = url_for("customer_reset_password", token=token, _external=True)
-            flash(f"Link de redefinicao (sandbox): {reset_link}", "info")
+            flash(f"Link de redefinição (sandbox): {reset_link}", "info")
         else:
-            flash("Se o e-mail existir, o link de redefinicao foi gerado.", "info")
+            flash("Se o e-mail existir, o link de redefinição foi gerado.", "info")
         return redirect(url_for("customer_login"))
     return render_template("customer_forgot_password.html")
 
@@ -884,14 +884,14 @@ def customer_reset_password(token):
     db = get_db()
     user = db.execute("SELECT * FROM users WHERE reset_token = ?", (token,)).fetchone()
     if not user or not user["reset_expires_at"] or datetime.utcnow() > datetime.fromisoformat(user["reset_expires_at"]):
-        flash("Token invalido ou expirado.", "danger")
+        flash("Token inválido ou expirado.", "danger")
         return redirect(url_for("customer_forgot_password"))
 
     if request.method == "POST":
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
         if password != confirm_password or len(password) < 8:
-            flash("Senha invalida ou diferente da confirmacao.", "warning")
+            flash("Senha inválida ou diferente da confirmação.", "warning")
             return render_template("customer_reset_password.html", token=token)
 
         db.execute(
@@ -899,7 +899,7 @@ def customer_reset_password(token):
             (generate_password_hash(password), user["id"]),
         )
         db.commit()
-        flash("Senha atualizada. Fa?a login.", "success")
+        flash("Senha atualizada. Faça login.", "success")
         return redirect(url_for("customer_login"))
 
     return render_template("customer_reset_password.html", token=token)
@@ -960,12 +960,14 @@ def health():
 
 @app.get("/manifest.webmanifest")
 def manifest():
-    return send_from_directory(os.path.join(BASE_DIR, "static"), "manifest.webmanifest")
+    static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+    return send_from_directory(static_dir, "manifest.webmanifest")
 
 
 @app.get("/sw.js")
 def service_worker():
-    response = send_from_directory(os.path.join(BASE_DIR, "static"), "sw.js")
+    static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+    response = send_from_directory(static_dir, "sw.js")
     response.headers["Cache-Control"] = "no-cache"
     return response
 
