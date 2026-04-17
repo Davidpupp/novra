@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function CheckoutPendingPage() {
+function CheckoutPendingContent() {
   const searchParams = useSearchParams();
   const [orderId, setOrderId] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(300); // 5 minutes in seconds
@@ -118,5 +118,15 @@ export default function CheckoutPendingPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPendingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white flex items-center justify-center px-6">
+      <div className="text-center">Carregando...</div>
+    </div>}>
+      <CheckoutPendingContent />
+    </Suspense>
   );
 }
