@@ -6,9 +6,13 @@
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <!-- ============================================
-     HERO CINEMATOGRAPHIC - FULL SCREEN PREMIUM
+     HERO WITH AURORA EFFECT - WEBGL PREMIUM
      ============================================ -->
-<section class="hero-cinematic reveal">
+<section class="hero-cinematic hero-aurora reveal">
+  <!-- Aurora Background Effect -->
+  <div id="aurora-hero" class="aurora-container"></div>
+  <div class="aurora-overlay"></div>
+  
   <div class="hero-content stagger-children animate">
     <!-- Logo in Hero -->
     <div style="margin-bottom: var(--space-xl);">
@@ -49,12 +53,28 @@
   </div>
   
   <!-- Scroll indicator -->
-  <div style="position: absolute; bottom: var(--space-xl); left: 50%; transform: translateX(-50%); opacity: 0.5; animation: bounce 2s infinite;">
+  <div style="position: absolute; bottom: var(--space-xl); left: 50%; transform: translateX(-50%); opacity: 0.5; animation: bounce 2s infinite; z-index: 10;">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M12 5v14M19 12l-7 7-7-7"/>
     </svg>
   </div>
 </section>
+
+<!-- Aurora Effect Script -->
+<script type="module">
+  import Aurora from '/static/components/Aurora.js';
+  
+  // Initialize Aurora in hero section
+  const auroraContainer = document.getElementById('aurora-hero');
+  if (auroraContainer) {
+    new Aurora(auroraContainer, {
+      colorStops: ['#5227FF', '#7cff67', '#c9a962'],  // Purple → Green → Gold (brand colors)
+      amplitude: 1.2,
+      blend: 0.6,
+      speed: 0.8
+    });
+  }
+</script>
 
 <!-- ============================================
      TRUST BAR - SELos DE CONFIANÇA PREMIUM
