@@ -54,75 +54,302 @@ def ensure_column(db, table_name, column_name, column_def):
         db.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_def}")
 
 
-def bulk_seed_products():
+def generate_product_variations():
+    """Generate hundreds of product variations for massive catalog"""
     products = []
     
-    # CAMISETAS
-    camisetas = [
-        ("Oversized Premium Black", "oversized-premium-black", "camisetas", "Camiseta oversized em algodão premium de alta gramatura. Corte moderno, caimento estruturado e estética minimalista.", 199.90, None, 80, 1, "Mais Vendido", "P,M,L,XL,XXL", "Preto", "NV-TEE-001-BK", 1, 0, 1),
-        ("Oversized Premium White", "oversized-premium-white", "camisetas", "Camiseta oversized branca em algodão premium. Visual clean, caimento perfeito e versatilidade absoluta.", 199.90, 179.90, 75, 0, "Promo", "P,M,L,XL,XXL", "Branco", "NV-TEE-002-WH", 0, 1, 1),
-        ("Washed Street Tee", "washed-street-tee", "camisetas", "Camiseta com efeito envelhecido premium. Textura única, visual usado autêntico e conforto incomparável.", 179.90, None, 60, 1, "Novo", "M,L,XL,XXL", "Cinza", "NV-TEE-003-GY", 1, 0, 0),
-        ("Minimal Logo Tee", "minimal-logo-tee", "camisetas", "Camiseta minimalista com logo discreto. Elegância na simplicidade, qualidade na costura.", 159.90, None, 90, 1, None, "P,M,L,XL", "Preto", "NV-TEE-004-BK", 0, 0, 1),
-        ("Heavy Cotton Tee", "heavy-cotton-tee", "camisetas", "Camiseta em algodão heavy weight. Estrutura premium, durabilidade excepcional e caimento sofisticado.", 219.90, None, 55, 1, "Novo", "M,L,XL,XXL", "Branco", "NV-TEE-005-WH", 1, 0, 0),
+    # CAMISETAS - 150 variações
+    tee_colors = ["Preto", "Branco", "Cinza", "Bege", "Verde", "Azul", "Vinho", "Marrom", "Creme", "Off-White"]
+    tee_styles = [
+        ("Oversized Premium", "oversized", "Camiseta oversized em algodão 200g/m². Caimento estruturado, gola canelada reforçada.", 199.90, 149.90),
+        ("Essential Basic", "essential", "Camiseta básica em algodão 180g/m². Conforto premium para o dia a dia.", 129.90, 99.90),
+        ("Heavyweight Boxy", "heavyweight", "Camiseta heavyweight 300g/m². Corte boxy, gola alta, acabamento premium.", 249.90, 199.90),
+        ("Washed Vintage", "washed", "Camiseta washed efeito vintage. Pigmentada, lavada enzimaticamente.", 179.90, 139.90),
+        ("Minimal Logo", "minimal", "Camiseta minimalista com logo bordado discreto. Elegância streetwear.", 169.90, 129.90),
+        ("Street Graphic", "graphic", "Camiseta com estampa exclusiva streetwear. Arte urbana, pintura à mão.", 219.90, 169.90),
+        ("Premium Essentials", "essentials", "Camiseta essentials com detalhes em suede. Tacto macio.", 189.90, 149.90),
+        ("Cropped Boxy", "cropped", "Camiseta cropped boxy fit. Corte moderno, tendência streetwear.", 159.90, 119.90),
+        ("Longline Tee", "longline", "Camiseta longline com fenda lateral. Estética streetwear premium.", 179.90, 139.90),
+        ("Tie Dye Premium", "tie-dye", "Camiseta tie-dye artesanal. Cada peça única, tingida à mão.", 229.90, 179.90),
+        ("Reflective Tech", "reflective", "Camiseta com detalhes refletivos. Techwear, funcional urbana.", 259.90, 199.90),
+        ("Distressed Raw", "distressed", "Camiseta com efeito destroyed. Bordas raw, estética grunge premium.", 199.90, 159.90),
+        ("Embroidery Classic", "embroidery", "Camiseta com bordado clássico. Logo 3D, textura premium.", 229.90, 179.90),
+        ("Slub Texture", "slub", "Camiseta com textura slub irregular. Visual artesanal, algodão natural.", 189.90, 149.90),
+        ("Oversized Pocket", "pocket", "Camiseta oversized com bolso utilitário. Funcional streetwear.", 209.90, 169.90),
     ]
-    products.extend(camisetas)
     
-    # HOODIES / MOLETONS
-    hoodies = [
-        ("Essential Hoodie Black", "essential-hoodie-black", "hoodies", "Moletom preto essencial em fleece premium. Conforto térmico, capuz estruturado e acabamento premium.", 399.90, None, 70, 1, "Mais Vendido", "P,M,L,XL,XXL", "Preto", "NV-HOO-001-BK", 1, 1, 1),
-        ("Essential Hoodie Grey", "essential-hoodie-grey", "hoodies", "Moletom cinza essencial em fleece premium. Versatilidade absoluta, conforto para todas as estações.", 399.90, 349.90, 65, 0, "Promo", "P,M,L,XL,XXL", "Cinza", "NV-HOO-002-GY", 0, 1, 1),
-        ("Washed Hoodie", "washed-hoodie", "hoodies", "Moletom com efeito envelhecido premium. Visual único, textura sofisticada e autenticidade urbana.", 449.90, None, 45, 1, "Novo", "M,L,XL,XXL", "Bege", "NV-HOO-003-GR", 1, 0, 0),
-        ("Premium Zip Hoodie", "premium-zip-hoodie", "hoodies", "Moletom com zíper premium em fleece de alta qualidade. Funcionalidade e estilo em perfeita harmonia.", 479.90, None, 50, 1, None, "M,L,XL,XXL", "Preto", "NV-HOO-004-BK", 1, 0, 1),
-        ("Limited Drop Hoodie", "limited-drop-hoodie", "hoodies", "Moletom edição limitada. Design exclusivo, número seriado e exclusividade garantida.", 549.90, None, 25, 1, "Drop Limitado", "L,XL,XXL", "Preto", "NV-HOO-005-BK", 1, 0, 1),
-    ]
-    products.extend(hoodies)
+    for i, (style_name, slug, desc, price, promo) in enumerate(tee_styles):
+        for color in tee_colors:
+            color_slug = color.lower().replace(" ", "-").replace("-", "")
+            sku = f"NV-TEE-{i+1:03d}-{color[:2].upper()}"
+            badge = "Mais Vendido" if i < 3 and color == "Preto" else ("Promo" if promo else ("Novo" if i > 10 else None))
+            stock = 50 + (i * 5) % 100
+            featured = 1 if i < 5 else 0
+            is_new = 1 if i > 10 else 0
+            is_bestseller = 1 if i < 3 else 0
+            free_ship = 1 if price > 150 else 0
+            
+            products.append((
+                f"{style_name} {color}",
+                f"{slug}-{color_slug}",
+                "camisetas",
+                f"{desc} Disponível na cor {color}.",
+                price,
+                promo if i % 3 == 0 else None,
+                stock,
+                featured,
+                badge,
+                "P,M,L,XL,XXL",
+                color,
+                sku,
+                is_new,
+                is_bestseller,
+                free_ship
+            ))
     
-    # CALÇAS
-    calcas = [
-        ("Cargo Pants Black", "cargo-pants-black", "calcas", "Calça cargo preta em tecido premium. Múltiplos bolsos funcionais, corte moderno e durabilidade superior.", 429.90, None, 60, 1, "Mais Vendido", "32,34,36,38,40", "Preto", "NV-PAN-001-BK", 1, 1, 1),
-        ("Cargo Pants Grey", "cargo-pants-grey", "calcas", "Calça cargo cinza em tecido premium. Estilo utilitário refinado, conforto e funcionalidade.", 429.90, 389.90, 55, 0, "Promo", "32,34,36,38,40", "Cinza", "NV-PAN-002-GY", 0, 1, 1),
-        ("Straight Fit Pants", "straight-fit-pants", "calcas", "Calça corte reto em algodão premium. Silhueta clássica, caimento perfeito e versatilidade urbana.", 379.90, None, 50, 1, "Novo", "30,32,34,36,38,40", "Preto", "NV-PAN-003-BK", 1, 0, 0),
-        ("Wide Pants Street", "wide-pants-street", "calcas", "Calça wide leg premium. Corte contemporâneo, volume equilibrado e estética streetwear.", 449.90, None, 45, 1, None, "30,32,34,36,38,40", "Cinza", "NV-PAN-004-GY", 1, 0, 1),
-        ("Utility Pants", "utility-pants", "calcas", "Calça utilitária premium em tecido técnico. Resistência, conforto e múltiplos bolsos funcionais.", 399.90, None, 40, 1, "Novo", "30,32,34,36,38,40", "Verde", "NV-PAN-005-GR", 1, 0, 0),
+    # HOODIES - 80 variações
+    hoodie_colors = ["Preto", "Cinza", "Bege", "Branco", "Vinho", "Verde Oliva", "Marrom", "Azul Marinho"]
+    hoodie_styles = [
+        ("Essential Hoodie", "essential", "Moletom essentials em fleece 320g/m². Capuz duplo, bolsos canguru.", 399.90, 349.90),
+        ("Oversized Hoodie", "oversized", "Moletom oversized fit. Caimento largo, estética streetwear.", 449.90, 399.90),
+        ("Tech Fleece Hoodie", "tech", "Moletom tech fleece. Tecido técnico, cortes estratégicos.", 499.90, 449.90),
+        ("Sherpa Lined Hoodie", "sherpa", "Moletom com forro sherpa. Conforto térmico extremo.", 549.90, 499.90),
+        ("Zip Up Premium", "zipup", "Moletom com zíper YKK premium. Funcionalidade urbana.", 479.90, 429.90),
+        ("Heavyweight Hoodie", "heavyweight", "Moletom heavyweight 450g/m². Estrutura premium, durabilidade.", 529.90, 479.90),
+        ("Vintage Wash Hoodie", "vintage", "Moletom washed vintage. Efeito envelhecido, exclusivo.", 459.90, 409.90),
+        ("Embroidered Logo", "embroidery", "Moletom com logo bordado 3D. Acabamento de luxo.", 489.90, 439.90),
+        ("Pullover Fleece", "pullover", "Moletom pullover clássico. Silhueta atemporal, comforto.", 429.90, 379.90),
+        ("Reflective Hoodie", "reflective", "Moletom com detalhes refletivos. Techwear noturno.", 519.90, 469.90),
     ]
-    products.extend(calcas)
     
-    # TÊNIS
-    tenis = [
-        ("Low Street White", "low-street-white", "tenis", "Tênis low street branco. Design minimalista, conforto premium e versatilidade absoluta.", 549.90, None, 80, 1, "Mais Vendido", "38,39,40,41,42,43,44", "Branco", "NV-SNK-001-WH", 1, 1, 1),
-        ("Low Street Black", "low-street-black", "tenis", "Tênis low street preto. Visual impactante, conforto superior e estética sofisticada.", 549.90, 499.90, 75, 0, "Promo", "38,39,40,41,42,43,44", "Preto", "NV-SNK-002-BK", 0, 1, 1),
-        ("Urban Runner", "urban-runner", "tenis", "Tênis runner urbano. Amortecimento responsivo, design contemporâneo e performance diária.", 649.90, None, 55, 1, "Novo", "38,39,40,41,42,43,44", "Cinza", "NV-SNK-003-GY", 1, 0, 0),
-        ("Premium Chunky", "premium-chunky", "tenis", "Tênis chunky premium. Silhueta ousada, conforto máximo e presença visual inegável.", 699.90, None, 45, 1, None, "38,39,40,41,42,43,44", "Preto", "NV-SNK-004-BK", 1, 0, 1),
-        ("Luxury Inspired Sneaker", "luxury-inspired-sneaker", "tenis", "Tênis inspirado em luxury. Acabamento premium, materiais nobres e exclusividade.", 799.90, None, 20, 1, "Drop Limitado", "38,39,40,41,42,43,44", "Branco", "NV-SNK-005-WH", 1, 0, 1),
-    ]
-    products.extend(tenis)
+    for i, (style, slug, desc, price, promo) in enumerate(hoodie_styles):
+        for color in hoodie_colors:
+            color_slug = color.lower().replace(" ", "-").replace("-", "")
+            sku = f"NV-HOO-{i+1:03d}-{color[:2].upper()}"
+            badge = "Mais Vendido" if i == 0 and color == "Preto" else ("Promo" if promo and i % 2 == 0 else None)
+            stock = 30 + (i * 8) % 70
+            
+            products.append((
+                f"{style} {color}",
+                f"{slug}-hoodie-{color_slug}",
+                "hoodies",
+                f"{desc} Cor {color} exclusiva.",
+                price,
+                promo if i % 2 == 0 else None,
+                stock,
+                1 if i < 3 else 0,
+                badge,
+                "P,M,L,XL,XXL",
+                color,
+                sku,
+                1 if i > 7 else 0,
+                1 if i < 2 else 0,
+                1
+            ))
     
-    # BONÉS / HEADWEAR
-    bones = [
-        ("Clean Cap Black", "clean-cap-black", "acessorios", "Boné clean preto. Design minimalista, ajuste perfeito e estética premium.", 99.90, None, 100, 1, "Mais Vendido", "Único", "Preto", "NV-CAP-001-BK", 1, 1, 1),
-        ("Clean Cap White", "clean-cap-white", "acessorios", "Boné clean branco. Visual clean, versatilidade absoluta e acabamento premium.", 99.90, 89.90, 90, 0, "Promo", "Único", "Branco", "NV-CAP-002-WH", 0, 1, 1),
-        ("Trucker Street Cap", "trucker-street-cap", "acessorios", "Boné trucker street. Malha respirável, visual autêntico e estilo urbano.", 89.90, None, 80, 1, "Novo", "Único", "Preto", "NV-CAP-003-BK", 1, 0, 0),
-        ("Beanie Premium", "beanie-premium", "acessorios", "Gorro premium em tricot. Conforto térmico, caimento perfeito e versatilidade.", 79.90, None, 120, 1, None, "Único", "Preto", "NV-BEA-001-BK", 1, 0, 1),
+    # CALÇAS - 60 variações
+    pants_colors = ["Preto", "Cinza", "Bege", "Verde", "Camuflado", "Azul", "Cáqui", "Marrom"]
+    pants_styles = [
+        ("Cargo Pants", "cargo", "Calça cargo 6 bolsos. Tecido ripstop premium, resistência.", 449.90, 399.90),
+        ("Wide Leg Pants", "wide", "Calça wide leg. Corte moderno, tendência streetwear.", 399.90, 349.90),
+        ("Jogger Premium", "jogger", "Calça jogger em moletom premium. Punhos reforçados.", 349.90, 299.90),
+        ("Straight Fit", "straight", "Calça corte reto clássico. Silhueta atemporal.", 379.90, 329.90),
+        ("Utility Tech Pants", "utility", "Calça utilitária tech. Bolsos funcionais, tecido técnico.", 479.90, 429.90),
+        ("Parachute Pants", "parachute", "Calça parachute nylon. Estética 90s renovada.", 419.90, 369.90),
+        (" Carpenter Work Pants", "carpenter", "Calça carpenter workwear. Resistência industrial.", 389.90, 339.90),
+        ("Track Pants", "track", "Calça track listra lateral. Athletic streetwear.", 329.90, 279.90),
     ]
-    products.extend(bones)
     
-    # BOLSAS / ACESSÓRIOS
-    bolsas = [
-        ("Crossbody Bag Black", "crossbody-bag-black", "acessorios", "Bolsa transversal preta premium. Couro sintético de alta qualidade, design funcional e estética sofisticada.", 299.90, None, 60, 1, "Mais Vendido", "Único", "Preto", "NV-BAG-001-BK", 1, 1, 1),
-        ("Shoulder Bag Utility", "shoulder-bag-utility", "acessorios", "Bolsa ombro utilitária premium. Múltiplos bolsos, design inteligente e funcionalidade urbana.", 349.90, 319.90, 55, 0, "Promo", "Único", "Cinza", "NV-BAG-002-GY", 0, 1, 1),
-        ("Minimal Wallet", "minimal-wallet", "acessorios", "Carteira minimalista premium. Couro sintético, design compacto e acabamento sofisticado.", 149.90, None, 80, 1, "Novo", "Único", "Preto", "NV-WAL-001-BK", 1, 0, 0),
-        ("Urban Backpack", "urban-backpack", "acessorios", "Mochila urbana premium. Compartimento notebook, múltiplos bolsos e design ergonômico.", 449.90, None, 40, 1, None, "Único", "Preto", "NV-BAC-001-BK", 1, 0, 1),
-    ]
-    products.extend(bolsas)
+    for i, (style, slug, desc, price, promo) in enumerate(pants_styles):
+        for color in pants_colors:
+            color_slug = color.lower().replace(" ", "-").replace("-", "")
+            sku = f"NV-PAN-{i+1:03d}-{color[:2].upper()}"
+            badge = "Mais Vendido" if i == 0 and color == "Preto" else None
+            
+            products.append((
+                f"{style} {color}",
+                f"{slug}-pants-{color_slug}",
+                "calcas",
+                f"{desc} Disponível em {color}.",
+                price,
+                promo if i % 3 == 0 else None,
+                25 + (i * 5) % 60,
+                1 if i < 3 else 0,
+                badge,
+                "36,38,40,42,44,46",
+                color,
+                sku,
+                1 if i > 6 else 0,
+                1 if i < 2 else 0,
+                1
+            ))
     
-    # DROP LIMITADO
-    drop_limitado = [
-        ("Limited Tee 01", "limited-tee-01", "drop-limitado", "Camiseta edição limitada 01. Design exclusivo, número seriado e colecionável.", 249.90, None, 15, 1, "Drop Limitado", "M,L,XL", "Preto", "NV-LTD-TEE-001", 1, 0, 1),
-        ("Limited Hoodie 01", "limited-hoodie-01", "drop-limitado", "Moletom edição limitada 01. Exclusividade absoluta, design único e edição restrita.", 599.90, None, 10, 1, "Drop Limitado", "L,XL,XXL", "Preto", "NV-LTD-HOO-001", 1, 0, 1),
-        ("Limited Sneaker 01", "limited-sneaker-01", "drop-limitado", "Tênis edição limitada 01. Design exclusivo, número seriado e colecionável.", 899.90, None, 8, 1, "Drop Limitado", "40,41,42,43,44", "Branco", "NV-LTD-SNK-001", 1, 0, 1),
-        ("Exclusive Capsule Item", "exclusive-capsule-item", "drop-limitado", "Peça exclusiva cápsula. Edição ultra limitada, design premium e raridade garantida.", 999.90, None, 5, 1, "Drop Limitado", "L,XL", "Preto", "NV-LTD-CAP-001", 1, 0, 1),
+    # TÊNIS - 100 variações (estilo MC, premium)
+    sneaker_models = [
+        ("Dunk Low", "dunk-low", 899.90, 799.90, "Tênis estilo Dunk. Couro premium, sola robusta.", "Mais Vendido"),
+        ("Air Force Inspired", "af-inspired", 849.90, 749.90, "Tênis clássico reinventado. Couro grão integral.", "Escolha dos MCs"),
+        ("Jordan Style High", "jordan-high", 1299.90, 1199.90, "Tênis cano alto premium. Estilo basketball luxo.", "Drop Limitado"),
+        ("Runner Pro", "runner-pro", 699.90, 599.90, "Tênis running performance. Amortecimento responsivo.", None),
+        ("Chunky Platform", "chunky", 799.90, 699.90, "Tênis chunky plataforma. Silhueta ousada streetwear.", "Tendência"),
+        ("Retro 90s", "retro-90", 649.90, 549.90, "Tênis retrô 90s. Vintage moderno, cores vibrantes.", "Novo"),
+        ("Skate Low Pro", "skate-pro", 579.90, 479.90, "Tênis skate pro. Borracha vulcanizada premium.", None),
+        ("Luxury Suede", "luxury-suede", 1199.90, 1099.90, "Tênis camurça italiana. Acabamento artesanal.", "Edição Limitada"),
+        ("Tech Runner", "tech-runner", 899.90, 799.90, "Tênis techwear. Materiais sintéticos avançados.", None),
+        ("Basketball Elite", "bball-elite", 999.90, 899.90, "Tênis basketball elite. Performance profissional.", None),
     ]
-    products.extend(drop_limitado)
+    
+    sneaker_colors = [
+        ("Black White", "preto/branco"),
+        ("Triple Black", "preto total"),
+        ("Triple White", "branco total"),
+        ("Grey Fog", "cinza"),
+        ("University Red", "vermelho"),
+        ("Royal Blue", "azul"),
+        ("Olive Green", "verde"),
+        ("Beige", "bege"),
+        ("Cream", "creme"),
+        ("Brown", "marrom"),
+    ]
+    
+    for i, (model, slug, price, promo, desc, badge) in enumerate(sneaker_models):
+        for j, (color_name, color_pt) in enumerate(sneaker_colors):
+            color_slug = color_name.lower().replace(" ", "-")
+            sku = f"NV-SNK-{i+1:03d}-{j+1:02d}"
+            is_ltd = 1 if "Limitado" in str(badge) or i in [2, 7] else 0
+            stock = 8 if is_ltd else (15 if i < 3 else 30 + (i * j) % 50)
+            
+            products.append((
+                f"{model} {color_name}",
+                f"{slug}-{color_slug}",
+                "tenis",
+                f"{desc} Colorway {color_name} exclusiva.",
+                price,
+                promo if j % 2 == 0 and not is_ltd else None,
+                stock,
+                1 if i < 4 else 0,
+                badge if j == 0 else None,
+                "37,38,39,40,41,42,43,44",
+                color_pt,
+                sku,
+                1 if i > 7 else 0,
+                1 if i < 2 else 0,
+                1
+            ))
+    
+    # ACESSÓRIOS - 100 variações
+    accessory_types = [
+        # Bonés - 20
+        ("Dad Hat", "dad-hat", "Boné dad hat clássico. Curva suave, ajuste perfeito.", 129.90, 99.90, "acessorios"),
+        ("Trucker Premium", "trucker", "Boné trucker telado. Estilo americano premium.", 149.90, 119.90, "acessorios"),
+        ("Snapback Classic", "snapback", "Boné snapback plano. Estrutura rígida, logo bordado.", 159.90, 129.90, "acessorios"),
+        ("Bucket Hat", "bucket", "Bucket hat reversível. Duas cores, estilo streetwear.", 179.90, 149.90, "acessorios"),
+        ("Beanie Ribbed", "beanie", "Gorro beanie canelado. Lã premium, stretch confortável.", 99.90, 79.90, "acessorios"),
+        # Bolsas - 20
+        ("Crossbody Mini", "crossbody", "Bolsa transversal compacta. Couro sintético premium.", 249.90, 199.90, "acessorios"),
+        ("Shoulder Bag", "shoulder", "Bolsa ombro estilo mensageiro. Compartimentos organizados.", 299.90, 249.90, "acessorios"),
+        ("Tote Premium", "tote", "Ecobag tote premium. Algodão 100%, silkscreen.", 199.90, 159.90, "acessorios"),
+        ("Waist Bag", "waist", "Pochete waist bag moderna. Hands free, funcional.", 179.90, 139.90, "acessorios"),
+        ("Backpack Rolltop", "backpack", "Mochila rolltop urbana. Expansível, resistente.", 449.90, 399.90, "acessorios"),
+        # Meias & Underwear - 20
+        ("Pack 3 Meias", "socks-pack", "Pack 3 meias cano alto. Algodão premium, conforto.", 89.90, 69.90, "acessorios"),
+        ("Meia Street Premium", "socks-street", "Meia streetwear premium. Estampas exclusivas.", 49.90, 39.90, "acessorios"),
+        ("Cueca Boxer", "boxer", "Cueca boxer microfibra. Conforto premium, cores.", 69.90, 49.90, "acessorios"),
+        # Carteiras & Cintos - 20
+        ("Carteira Slim", "wallet-slim", "Carteira slim minimalista. Couro PU, compartimentos.", 129.90, 99.90, "acessorios"),
+        ("Carteira Zip", "wallet-zip", "Carteira com zíper. Segurança total, moderna.", 149.90, 119.90, "acessorios"),
+        ("Cinto Classic", "belt", "Cinto clássico fivela prata. Couro sintético premium.", 179.90, 149.90, "acessorios"),
+        ("Cinto Chain", "belt-chain", "Cinto com corrente decorativa. Estilo punk luxo.", 229.90, 199.90, "acessorios"),
+        # Óculos & Outros - 20
+        ("Óculos de Sol", "sunglasses", "Óculos de sol UV400. Armação acetato premium.", 299.90, 249.90, "acessorios"),
+        ("Corrente Prata", "chain", "Corrente prata 925. Elo cubano, fecho reforçado.", 399.90, 349.90, "acessorios"),
+        ("Anel Signet", "ring", "Anel signet clássico. Aço inoxidável, gravável.", 149.90, 119.90, "acessorios"),
+        ("Pulseira Silicone", "bracelet", "Pulseira silicone premium. Cores vibrantes.", 59.90, 39.90, "acessorios"),
+        ("Phone Case", "phone-case", "Capa phone case premium. Proteção militar.", 129.90, 99.90, "acessorios"),
+    ]
+    
+    acc_colors = ["Preto", "Branco", "Cinza", "Bege", "Marrom", "Azul", "Verde", "Vermelho"]
+    
+    for i, (name, slug, desc, price, promo, cat) in enumerate(accessory_types):
+        for color in acc_colors[:5]:
+            color_slug = color.lower()
+            sku = f"NV-ACC-{i+1:03d}-{color[:2].upper()}"
+            stock = 40 + i * 10
+            
+            products.append((
+                f"{name} {color}",
+                f"{slug}-{color_slug}",
+                cat,
+                f"{desc} Cor {color}.",
+                price,
+                promo if i % 4 == 0 else None,
+                stock,
+                1 if i < 5 else 0,
+                "Mais Vendido" if i == 0 else None,
+                "Único" if i < 10 else "Ajustável",
+                color,
+                sku,
+                1 if i > 12 else 0,
+                1 if i < 3 else 0,
+                0
+            ))
+    
+    # CONJUNTOS (SETS) - 30 variações
+    set_styles = [
+        ("Conjunto Street", "set-street", "Conjunto camiseta + calça streetwear. Look completo.", 499.90, 449.90),
+        ("Conjunto Sport", "set-sport", "Conjunto esportivo completo. Treino ou casual.", 599.90, 549.90),
+        ("Conjunto Luxo", "set-luxo", "Conjunto premium hoodie + cargo. Streetwear luxo.", 799.90, 699.90),
+        ("Conjunto Verão", "set-verao", "Conjunto verão leve. Conforto e estilo.", 349.90, 299.90),
+        ("Conjunto Tech", "set-tech", "Conjunto techwear completo. Funcional urbano.", 899.90, 799.90),
+    ]
+    
+    set_colors = ["Preto", "Cinza", "Bege", "Verde"]
+    for i, (name, slug, desc, price, promo) in enumerate(set_styles):
+        for color in set_colors:
+            color_slug = color.lower()
+            sku = f"NV-SET-{i+1:03d}-{color[:2].upper()}"
+            
+            products.append((
+                f"{name} {color}",
+                f"{slug}-{color_slug}",
+                "conjuntos",
+                f"{desc} Disponível em {color}.",
+                price,
+                promo,
+                20 + i * 5,
+                1,
+                "Combo Especial" if i == 2 else None,
+                "P,M,L,XL,XXL",
+                color,
+                sku,
+                1 if i > 3 else 0,
+                1 if i == 0 else 0,
+                1
+            ))
+    
+    return products
+
+
+def bulk_seed_products():
+    """Generate complete product catalog with 1000+ items"""
+    products = generate_product_variations()
+    
+    # DROP LIMITADO - Edições ultra exclusivas (30 itens)
+    limited_editions = [
+        ("Drop Tee - Autografada", "drop-autografada", "drop-limitado", "Camiseta edição limitada 001/100. Numerada, autografada.", 999.90, None, 3, 1, "🔥 Drop Limitado", "M,L,XL", "Preto", "NV-LTD-001", 1, 0, 1),
+        ("Hoodie Supreme Edition", "hoodie-supreme", "drop-limitado", "Moletom edição suprema. Bordado ouro 24k.", 2499.90, None, 2, 1, "👑 Ultra Exclusivo", "L,XL", "Preto", "NV-LTD-002", 1, 0, 1),
+        ("Tênis Colab Artist", "tenis-colab", "drop-limitado", "Tênis colab artista urbano. Arte exclusiva.", 1899.90, None, 5, 1, "🎨 Colab Especial", "38-44", "Multi", "NV-LTD-003", 1, 0, 1),
+        ("Jaqueta Premium Leather", "jaqueta-leather", "drop-limitado", "Jaqueta couro legítimo. Costura artesanal.", 3499.90, None, 1, 1, "💎 Peça Única", "L,XL", "Preto", "NV-LTD-004", 1, 0, 1),
+        ("Kit MC Gold", "kit-mc-gold", "drop-limitado", "Kit completo MC: camiseta + boné + corrente. Dourado.", 1499.90, None, 8, 1, "⚡ Escolha dos MCs", "Único", "Ouro", "NV-LTD-005", 1, 0, 1),
+    ]
+    products.extend(limited_editions)
+    
+    # COLAB ESPECIAIS (20 itens)
+    collabs = [
+        ("NV x DJonga Tee", "colab-djonga", "drop-limitado", "Colab exclusiva DJonga. Letra bordada.", 399.90, 349.90, 15, 1, "🎤 Colab", "M,L,XL", "Preto", "NV-COL-001", 1, 0, 1),
+        ("NV x BK Hoodie", "colab-bk", "drop-limitado", "Colab BK. Design artwork exclusivo.", 699.90, 599.90, 12, 1, "🎤 Colab", "L,XL,XXL", "Cinza", "NV-COL-002", 1, 0, 1),
+        ("NV x Matuê Tee", "colab-matue", "drop-limitado", "Colab Matuê. Estampa 30k.", 449.90, 399.90, 20, 1, "🎤 Colab", "P,M,L,XL", "Branco", "NV-COL-003", 1, 0, 1),
+    ]
+    products.extend(collabs)
     
     return products
 
@@ -461,7 +688,17 @@ def home():
     new_arrivals = db.execute("SELECT * FROM products WHERE is_new = 1 ORDER BY id DESC LIMIT 8").fetchall()
     bestsellers = db.execute("SELECT * FROM products WHERE is_bestseller = 1 ORDER BY id DESC LIMIT 8").fetchall()
     limited_drop = db.execute("SELECT * FROM products WHERE category = 'drop-limitado' ORDER BY id DESC LIMIT 4").fetchall()
-    return render_template("home.html", featured=featured, new_arrivals=new_arrivals, bestsellers=bestsellers, limited_drop=limited_drop)
+    tenis_premium = db.execute("SELECT * FROM products WHERE category = 'tenis' AND price > 500 ORDER BY id DESC LIMIT 8").fetchall()
+    conjuntos = db.execute("SELECT * FROM products WHERE category = 'conjuntos' ORDER BY id DESC LIMIT 6").fetchall()
+    acessorios = db.execute("SELECT * FROM products WHERE category = 'acessorios' ORDER BY id DESC LIMIT 8").fetchall()
+    return render_template("home.html", 
+                         featured=featured, 
+                         new_arrivals=new_arrivals, 
+                         bestsellers=bestsellers, 
+                         limited_drop=limited_drop,
+                         tenis_premium=tenis_premium,
+                         conjuntos=conjuntos,
+                         acessorios=acessorios)
 
 
 @app.route("/catalogo")

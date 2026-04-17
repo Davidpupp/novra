@@ -1,0 +1,61 @@
+<article class="card reveal-card product-card">
+  <div class="thumb">
+    {{ product['name'].split(' ')[0] }}
+    <button class="wishlist-btn" type="button" onclick="toggleWishlist(this)">♡</button>
+    
+    {% if product['badge'] %}
+      <span class="badge-{{ product['badge']|lower|replace(' ', '-')|replace('í', 'i')|replace('ã', 'a') }}">
+        {% if 'mais vendido' in product['badge']|lower %}🔥 
+        {% elif 'promo' in product['badge']|lower %}💰 
+        {% elif 'novo' in product['badge']|lower %}✨ 
+        {% elif 'drop' in product['badge']|lower %}💎 
+        {% endif %}
+        {{ product['badge'] }}
+      </span>
+    {% endif %}
+    
+    {% if product['stock'] <= 5 and product['stock'] > 0 %}
+      <span class="badge-scarcity">⚡ ÚLTIMAS {{ product['stock'] }}</span>
+    {% endif %}
+    
+    {% if product['free_shipping'] == 1 %}
+      <span class="badge-shipping">🚚 FRETE GRÁTIS</span>
+    {% endif %}
+  </div>
+  
+  <div class="product-meta">
+    <span class="category">{{ product['category']|upper }}</span>
+    {% if product['is_bestseller'] == 1 %}
+      <span class="bestseller-tag">⭐ BESTSELLER</span>
+    {% endif %}
+  </div>
+  
+  <h3 class="product-name">{{ product['name'] }}</h3>
+  <p class="product-desc muted">{{ product['description'][:60] }}...</p>
+  
+  <div class="product-price-section">
+    <div class="price-container">
+      {% if product['promo_price'] %}
+        <p class="price-sale">{{ product['promo_price']|brl }}</p>
+        <p class="price-original">{{ product['price']|brl }}</p>
+        <p class="discount-tag">-{{ ((product['price'] - product['promo_price']) / product['price'] * 100)|int }}%</p>
+      {% else %}
+        <p class="price">{{ product['price']|brl }}</p>
+      {% endif %}
+      <p class="installments">12x de R$ {{ "%.2f"|format(product['price']/12) }}</p>
+    </div>
+  </div>
+  
+  <div class="product-actions">
+    <a class="btn btn-buy" href="{{ url_for('product_detail', slug=product['slug']) }}">COMPRAR</a>
+    <form method="post" action="{{ url_for('add_to_cart', product_id=product['id']) }}" style="display: none;">
+      <input type="hidden" name="quantity" value="1">
+      <button type="submit" class="btn btn-cart">🛒</button>
+    </form>
+  </div>
+  
+  <div class="trust-mini">
+    <span>✓ Entrega rápida</span>
+    <span>✓ Troca fácil</span>
+  </div>
+</article>

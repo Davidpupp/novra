@@ -1,18 +1,23 @@
 {% extends "base.html" %}
-{% block title %}{{ store_name }} | Home{% endblock %}
+{% block title %}{{ store_name }} | Streetwear Premium Brasil{% endblock %}
 {% block content %}
-<!-- LUXURY HERO SECTION - Nike/Farfetch Style -->
+
+<!-- HERO SECTION - Banner Principal Milionário -->
 <section class="hero reveal">
   <div class="hero-content">
-    <p class="tag">NOVA COLEÇÃO 2026</p>
+    <p class="tag">🔥 DROP EXCLUSIVO 2026</p>
     <h1>VESTE<br/>POSICIONAMENTO</h1>
-    <p>Streetwear premium. Design exclusivo. Qualidade que você sente.</p>
-    <div class="inline-actions">
-      <a class="btn btn-large btn-buy" href="{{ url_for('catalog') }}">COMPRAR AGORA</a>
-      <a class="btn btn-secondary" href="{{ url_for('catalog') }}">EXPLORAR</a>
+    <p style="font-size: 1.25rem; max-width: 500px;">O streetwear mais desejado do Brasil. Qualidade premium, estilo dos MCs, entrega rápida.</p>
+    <div class="inline-actions" style="margin-top: var(--space-xl);">
+      <a class="btn btn-large btn-buy" href="{{ url_for('catalog') }}">⚡ COMPRAR AGORA</a>
+      <a class="btn btn-secondary" href="{{ url_for('catalog') }}">EXPLORAR COLEÇÃO</a>
+    </div>
+    <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-2xl); font-size: 0.875rem; color: var(--text-muted);">
+      <span>✓ 12x Sem Juros</span>
+      <span>✓ Frete Grátis +R$399</span>
+      <span>✓ Entrega em 24h</span>
     </div>
   </div>
-  <!-- Scroll indicator -->
   <div style="position: absolute; bottom: var(--space-xl); left: 50%; transform: translateX(-50%); opacity: 0.5; animation: bounce 2s infinite;">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M12 5v14M19 12l-7 7-7-7"/>
@@ -27,317 +32,376 @@
   }
 </style>
 
-<!-- Benefits Section -->
-<section class="container reveal">
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-xl); margin-bottom: var(--space-4xl);">
-    <div class="card" style="text-align: center; padding: var(--space-2xl);">
-      <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">🚀</div>
-      <h3 style="margin-bottom: var(--space-sm);">Frete Seguro</h3>
-      <p class="muted">Entrega garantida em todo o Brasil com rastreamento completo.</p>
+<!-- TRUST BAR - Selos de Confiança Premium -->
+<section class="container reveal" style="padding: var(--space-xl) 0;">
+  <div class="trust-bar">
+    <div class="trust-item">
+      <div class="trust-icon">🔒</div>
+      <div>
+        <p class="trust-title">COMPRA 100% SEGURA</p>
+        <p class="trust-desc">SSL 256-bit</p>
+      </div>
     </div>
-    <div class="card" style="text-align: center; padding: var(--space-2xl);">
-      <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">✨</div>
-      <h3 style="margin-bottom: var(--space-sm);">Qualidade Premium</h3>
-      <p class="muted">Materiais selecionados e acabamento impecável em cada peça.</p>
+    <div class="trust-item">
+      <div class="trust-icon">🚚</div>
+      <div>
+        <p class="trust-title">FRETE GRÁTIS</p>
+        <p class="trust-desc">Acima de R$ 399</p>
+      </div>
     </div>
-    <div class="card" style="text-align: center; padding: var(--space-2xl);">
-      <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">🔒</div>
-      <h3 style="margin-bottom: var(--space-sm);">Compra Protegida</h3>
-      <p class="muted">Pagamento seguro e garantia de satisfação total.</p>
+    <div class="trust-item">
+      <div class="trust-icon">⚡</div>
+      <div>
+        <p class="trust-title">ENTREGA RÁPIDA</p>
+        <p class="trust-desc">24h Capitais</p>
+      </div>
     </div>
-    <div class="card" style="text-align: center; padding: var(--space-2xl);">
-      <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">💬</div>
-      <h3 style="margin-bottom: var(--space-sm);">Atendimento Premium</h3>
-      <p class="muted">Suporte especializado para te ajudar em cada compra.</p>
+    <div class="trust-item">
+      <div class="trust-icon">💳</div>
+      <div>
+        <p class="trust-title">12X SEM JUROS</p>
+        <p class="trust-desc">Parcela mínima</p>
+      </div>
     </div>
-  </div>
-</section>
-
-<!-- LUXURY TRUST BAR - Premium Guarantees -->
-<section class="container reveal" style="padding-top: var(--space-2xl); padding-bottom: var(--space-2xl);">
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-xl); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: var(--space-xl) 0;">
-    <div style="text-align: center; padding: var(--space-md);">
-      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">🔒</div>
-      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">COMPRA 100% SEGURA</p>
-      <p class="muted" style="font-size: 0.75rem;">SSL 256-bit</p>
-    </div>
-    <div style="text-align: center; padding: var(--space-md); border-left: 1px solid var(--border);">
-      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">🚚</div>
-      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">FRETE GRÁTIS</p>
-      <p class="muted" style="font-size: 0.75rem;">Acima de R$ 399</p>
-    </div>
-    <div style="text-align: center; padding: var(--space-md); border-left: 1px solid var(--border);">
-      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">↩️</div>
-      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">TROCA GARANTIDA</p>
-      <p class="muted" style="font-size: 0.75rem;">7 dias grátis</p>
-    </div>
-    <div style="text-align: center; padding: var(--space-md); border-left: 1px solid var(--border);">
-      <div style="font-size: 2rem; margin-bottom: var(--space-sm); color: var(--accent);">⭐</div>
-      <p style="font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem;">5 ESTRELAS</p>
-      <p class="muted" style="font-size: 0.75rem;">+10k clientes satisfeitos</p>
+    <div class="trust-item">
+      <div class="trust-icon">↩️</div>
+      <div>
+        <p class="trust-title">TROCA GARANTIDA</p>
+        <p class="trust-desc">7 dias grátis</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- LUXURY FEATURED PRODUCTS - Premium Showcase -->
+<!-- BANNER 1: DROP LIMITADO 2026 -->
 <section class="container reveal">
-  <div style="text-align: center; margin-bottom: var(--space-3xl);">
-    <p class="tag" style="color: var(--accent); border-color: var(--border-gold);">DESTAQUES</p>
-    <h2 style="margin-bottom: var(--space-md); font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.02em;">COLEÇÃO PREMIUM</h2>
-    <p class="muted" style="max-width: 600px; margin: 0 auto; font-size: 1.125rem;">Peças selecionadas com design exclusivo e qualidade excepcional.</p>
+  <div class="promo-banner" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); border: 2px solid var(--accent);">
+    <div class="banner-content">
+      <p class="banner-tag">🔥 EDIÇÃO ULTRA LIMITADA</p>
+      <h2 class="banner-title">DROP LIMITADO 2026</h2>
+      <p class="banner-desc">Peças numeradas, autografadas e exclusivas. Estoque: 001/100 unidades.</p>
+      <a href="{{ url_for('category_drop_limitado') }}" class="btn btn-buy">GARANTIR MINHA PEÇA →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO: MAIS VENDIDOS -->
+<section class="container reveal">
+  <div class="section-header">
+    <p class="tag" style="color: var(--danger);">🔥 TOP 10</p>
+    <h2>OS MAIS VENDIDOS</h2>
+    <p class="muted">Os queridinhos da galera. Peças que vendem todo dia.</p>
   </div>
   <div class="product-grid">
-    {% for product in featured %}
-      <article class="card reveal-card">
-        <div class="thumb">
-          {{ product['name'].split(' ')[0] }}
-          <button class="wishlist-btn" type="button" onclick="toggleWishlist(this)">♡</button>
-          {% if product['free_shipping'] == 1 %}
-            <span class="free-shipping-badge">🚚 Frete Grátis</span>
-          {% endif %}
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
-          <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">{{ product['category'] }}</span>
-          {% if product['badge'] %}
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--bg-mid-light); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);">{{ product['badge'] }}</span>
-          {% endif %}
-        </div>
-        <h3>{{ product['name'] }}</h3>
-        <p class="muted">{{ product['description'] }}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: var(--space-md) 0;">
-          <div style="display: flex; flex-direction: column;">
-            {% if product['promo_price'] %}
-              <p class="price" style="margin: 0; color: var(--danger);">{{ product['promo_price']|brl }}</p>
-              <p style="font-size: 0.875rem; color: var(--text-muted); text-decoration: line-through; margin: 0;">{{ product['price']|brl }}</p>
-            {% else %}
-              <p class="price" style="margin: 0;">{{ product['price']|brl }}</p>
-            {% endif %}
-          </div>
-          {% if product['stock'] <= 5 and product['stock'] > 0 %}
-            <span class="scarcity-badge">Últimas {{ product['stock'] }}</span>
-          {% elif product['stock'] > 0 %}
-            <span style="font-size: 0.875rem; color: var(--text-muted);">{{ product['stock'] }} un.</span>
-          {% endif %}
-        </div>
-        <a class="btn" href="{{ url_for('product_detail', slug=product['slug']) }}" style="width: 100%;">Ver Produto</a>
-      </article>
+    {% for product in bestsellers[:8] %}
+      {% include 'product_card.html' %}
     {% endfor %}
   </div>
-  <div style="text-align: center; margin-top: var(--space-3xl);">
-    <a class="btn btn-secondary" href="{{ url_for('catalog') }}">Ver Todo o Catálogo</a>
+  <div class="text-center" style="margin-top: var(--space-2xl);">
+    <a class="btn btn-secondary" href="{{ url_for('catalog') }}?filtro=bestsellers">VER TODOS OS MAIS VENDIDOS</a>
   </div>
 </section>
 
-<!-- Novidades -->
+<!-- BANNER 2: ESTILO DOS MCs -->
 <section class="container reveal">
-  <div style="text-align: center; margin-bottom: var(--space-3xl);">
-    <p class="tag">Novidades</p>
-    <h2 style="margin-bottom: var(--space-md);">Recém Chegados</h2>
-    <p class="muted" style="max-width: 600px; margin: 0 auto;">As últimas adições à nossa coleção. Peças frescas para renovar seu estilo.</p>
+  <div class="promo-banner" style="background: linear-gradient(90deg, #000 0%, #1a1a1a 50%, #000 100%);">
+    <div class="banner-content">
+      <p class="banner-tag">🎤 USADO PELAS FAMOSOS</p>
+      <h2 class="banner-title">ESTILO DOS MCs</h2>
+      <p class="banner-desc">As mesmas peças que DJonga, BK', Matuê e os maiores MCs usam no palco.</p>
+      <a href="{{ url_for('catalog') }}" class="btn btn-buy">QUERO ESSE ESTILO →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO: NOVIDADES -->
+<section class="container reveal">
+  <div class="section-header">
+    <p class="tag" style="color: var(--success);">⚡ ACABOU DE CHEGAR</p>
+    <h2>NOVIDADES</h2>
+    <p class="muted">As últimas peças que chegaram. Seja o primeiro a usar.</p>
   </div>
   <div class="product-grid">
-    {% for product in new_arrivals %}
-      <article class="card reveal-card">
-        <div class="thumb">
-          {{ product['name'].split(' ')[0] }}
-          <button class="wishlist-btn" type="button" onclick="toggleWishlist(this)">♡</button>
-          {% if product['free_shipping'] == 1 %}
-            <span class="free-shipping-badge">🚚 Frete Grátis</span>
-          {% endif %}
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
-          <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">{{ product['category'] }}</span>
-          {% if product['badge'] %}
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--bg-mid-light); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);">{{ product['badge'] }}</span>
-          {% endif %}
-        </div>
-        <h3>{{ product['name'] }}</h3>
-        <p class="muted">{{ product['description'] }}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: var(--space-md) 0;">
-          <div style="display: flex; flex-direction: column;">
-            {% if product['promo_price'] %}
-              <p class="price" style="margin: 0; color: var(--danger);">{{ product['promo_price']|brl }}</p>
-              <p style="font-size: 0.875rem; color: var(--text-muted); text-decoration: line-through; margin: 0;">{{ product['price']|brl }}</p>
-            {% else %}
-              <p class="price" style="margin: 0;">{{ product['price']|brl }}</p>
-            {% endif %}
-          </div>
-          {% if product['stock'] <= 5 and product['stock'] > 0 %}
-            <span class="scarcity-badge">Últimas {{ product['stock'] }}</span>
-          {% elif product['stock'] > 0 %}
-            <span style="font-size: 0.875rem; color: var(--text-muted);">{{ product['stock'] }} un.</span>
-          {% endif %}
-        </div>
-        <a class="btn" href="{{ url_for('product_detail', slug=product['slug']) }}" style="width: 100%;">Ver Produto</a>
-      </article>
+    {% for product in new_arrivals[:8] %}
+      {% include 'product_card.html' %}
     {% endfor %}
   </div>
 </section>
 
-<!-- Mais Vendidos -->
+<!-- BANNER 3: FRETE GRÁTIS HOJE -->
 <section class="container reveal">
-  <div style="text-align: center; margin-bottom: var(--space-3xl);">
-    <p class="tag">Popular</p>
-    <h2 style="margin-bottom: var(--space-md);">Mais Vendidos</h2>
-    <p class="muted" style="max-width: 600px; margin: 0 auto;">As peças mais escolhidas pela nossa comunidade. Validadas por quem veste posicionamento.</p>
+  <div class="promo-banner" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+    <div class="banner-content">
+      <p class="banner-tag">🚚 PROMOÇÃO POR TEMPO LIMITADO</p>
+      <h2 class="banner-title">FRETE GRÁTIS HOJE</h2>
+      <p class="banner-desc">Aproveite! Frete grátis para TODO o Brasil em qualquer compra. Termina em 24h.</p>
+      <a href="{{ url_for('catalog') }}" class="btn btn-buy" style="background: white; color: #000;">APROVEITAR AGORA →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO: COLEÇÃO PREMIUM (DESTAQUES) -->
+<section class="container reveal">
+  <div class="section-header">
+    <p class="tag" style="color: var(--accent);">👑 SELEÇÃO ESPECIAL</p>
+    <h2>COLEÇÃO PREMIUM</h2>
+    <p class="muted">As peças mais desejadas, com acabamento de luxo.</p>
   </div>
   <div class="product-grid">
-    {% for product in bestsellers %}
-      <article class="card reveal-card">
-        <div class="thumb">
-          {{ product['name'].split(' ')[0] }}
-          <button class="wishlist-btn" type="button" onclick="toggleWishlist(this)">♡</button>
-          {% if product['free_shipping'] == 1 %}
-            <span class="free-shipping-badge">🚚 Frete Grátis</span>
-          {% endif %}
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
-          <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">{{ product['category'] }}</span>
-          {% if product['badge'] %}
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--bg-mid-light); padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);">{{ product['badge'] }}</span>
-          {% endif %}
-        </div>
-        <h3>{{ product['name'] }}</h3>
-        <p class="muted">{{ product['description'] }}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: var(--space-md) 0;">
-          <div style="display: flex; flex-direction: column;">
-            {% if product['promo_price'] %}
-              <p class="price" style="margin: 0; color: var(--danger);">{{ product['promo_price']|brl }}</p>
-              <p style="font-size: 0.875rem; color: var(--text-muted); text-decoration: line-through; margin: 0;">{{ product['price']|brl }}</p>
-            {% else %}
-              <p class="price" style="margin: 0;">{{ product['price']|brl }}</p>
-            {% endif %}
-          </div>
-          {% if product['stock'] <= 5 and product['stock'] > 0 %}
-            <span class="scarcity-badge">Últimas {{ product['stock'] }}</span>
-          {% elif product['stock'] > 0 %}
-            <span style="font-size: 0.875rem; color: var(--text-muted);">{{ product['stock'] }} un.</span>
-          {% endif %}
-        </div>
-        <a class="btn" href="{{ url_for('product_detail', slug=product['slug']) }}" style="width: 100%;">Ver Produto</a>
-      </article>
+    {% for product in featured[:8] %}
+      {% include 'product_card.html' %}
     {% endfor %}
   </div>
 </section>
 
-<!-- Drop Limitado -->
+<!-- BANNER 4: AS PEÇAS MAIS DESEJADAS -->
+<section class="container reveal">
+  <div class="promo-banner" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);">
+    <div class="banner-content">
+      <p class="banner-tag">💎 ESGOTANDO RÁPIDO</p>
+      <h2 class="banner-title">AS PEÇAS MAIS DESEJADAS</h2>
+      <p class="banner-desc">Estoque baixo! Últimas unidades das peças mais vendidas do mês.</p>
+      <a href="{{ url_for('catalog') }}" class="btn btn-buy">VER PEÇAS →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO: TÊNIS PREMIUM -->
+<section class="container reveal">
+  <div class="section-header">
+    <p class="tag">👟 COLEÇÃO ESPECIAL</p>
+    <h2>TÊNIS PREMIUM</h2>
+    <p class="muted">Estilo Dunk, Air Force, Jordan. Qualidade dos grandes.</p>
+  </div>
+  <div class="product-grid">
+    {% for product in tenis_premium[:8] if tenis_premium %}
+      {% include 'product_card.html' %}
+    {% else %}
+      {% for product in featured[:4] %}
+        {% include 'product_card.html' %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+  <div class="text-center" style="margin-top: var(--space-2xl);">
+    <a class="btn btn-secondary" href="{{ url_for('category_tenis') }}">VER TODOS OS TÊNIS</a>
+  </div>
+</section>
+
+<!-- SEÇÃO: CONJUNTOS -->
+<section class="container reveal">
+  <div class="section-header">
+    <p class="tag" style="color: var(--info);">🎯 LOOK COMPLETO</p>
+    <h2>CONJUNTOS PREMIUM</h2>
+    <p class="muted">Monte seu look completo. Camiseta + Calça + Acessórios.</p>
+  </div>
+  <div class="product-grid">
+    {% for product in conjuntos[:6] if conjuntos %}
+      {% include 'product_card.html' %}
+    {% else %}
+      {% for product in featured[:4] %}
+        {% include 'product_card.html' %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+<!-- SEÇÃO: ACESSÓRIOS -->
+<section class="container reveal">
+  <div class="section-header">
+    <p class="tag">✨ DETALHES QUE FAZEM DIFERENÇA</p>
+    <h2>ACESSÓRIOS</h2>
+    <p class="muted">Bonés, bolsas, correntes, meias. Complete seu visual.</p>
+  </div>
+  <div class="product-grid">
+    {% for product in acessorios[:8] if acessorios %}
+      {% include 'product_card.html' %}
+    {% else %}
+      {% for product in featured[:4] %}
+        {% include 'product_card.html' %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+  <div class="text-center" style="margin-top: var(--space-2xl);">
+    <a class="btn btn-secondary" href="{{ url_for('category_acessorios') }}">VER TODOS OS ACESSÓRIOS</a>
+  </div>
+</section>
+
+<!-- BANNER 5: ÚLTIMAS UNIDADES -->
+<section class="container reveal">
+  <div class="promo-banner" style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);">
+    <div class="banner-content">
+      <p class="banner-tag">⏰ ÚLTIMA CHANCE</p>
+      <h2 class="banner-title">ÚLTIMAS UNIDADES</h2>
+      <p class="banner-desc">Apenas 3, 5 ou 8 peças disponíveis. Não vai ter reposição!</p>
+      <a href="{{ url_for('catalog') }}" class="btn btn-buy">COMPRAR ANTES QUE ACABE →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DROP LIMITADO -->
 {% if limited_drop %}
 <section class="container reveal">
-  <div style="text-align: center; margin-bottom: var(--space-3xl);">
-    <p class="tag" style="color: var(--danger);">Edição Limitada</p>
-    <h2 style="margin-bottom: var(--space-md);">Drop Limitado</h2>
-    <p class="muted" style="max-width: 600px; margin: 0 auto;">Peças exclusivas com produção limitada. Uma vez, nunca mais.</p>
+  <div class="section-header">
+    <p class="tag" style="color: var(--danger);">💎 SUPER EXCLUSIVO</p>
+    <h2>DROP LIMITADO</h2>
+    <p class="muted">Edições numeradas, colabs especiais, peças únicas.</p>
   </div>
   <div class="product-grid">
-    {% for product in limited_drop %}
-      <article class="card reveal-card" style="border-color: var(--danger);">
+    {% for product in limited_drop[:4] %}
+      <article class="card reveal-card limited-card">
         <div class="thumb">
           {{ product['name'].split(' ')[0] }}
-          <button class="wishlist-btn" type="button" onclick="toggleWishlist(this)">♡</button>
-          {% if product['free_shipping'] == 1 %}
-            <span class="free-shipping-badge">🚚 Frete Grátis</span>
-          {% endif %}
+          <span class="badge-limited">💎 DROP LIMITADO</span>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
-          <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">{{ product['category'] }}</span>
-          <span class="scarcity-badge">{{ product['badge'] }}</span>
+        <div class="product-meta">
+          <span class="category">{{ product['category'] }}</span>
+          <span class="badge-scarcity">🔥 {{ product['stock'] }} UNIDADES</span>
         </div>
         <h3>{{ product['name'] }}</h3>
-        <p class="muted">{{ product['description'] }}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: var(--space-md) 0;">
-          <div style="display: flex; flex-direction: column;">
-            {% if product['promo_price'] %}
-              <p class="price" style="margin: 0; color: var(--danger);">{{ product['promo_price']|brl }}</p>
-              <p style="font-size: 0.875rem; color: var(--text-muted); text-decoration: line-through; margin: 0;">{{ product['price']|brl }}</p>
-            {% else %}
-              <p class="price" style="margin: 0;">{{ product['price']|brl }}</p>
-            {% endif %}
+        <p class="muted">{{ product['description'][:80] }}...</p>
+        <div class="product-footer">
+          <div class="price-container">
+            <p class="price">{{ product['price']|brl }}</p>
+            <p class="installments">12x de R$ {{ "%.2f"|format(product['price']/12) }}</p>
           </div>
-          {% if product['stock'] <= 5 and product['stock'] > 0 %}
-            <span class="scarcity-badge">Últimas {{ product['stock'] }}</span>
-          {% elif product['stock'] > 0 %}
-            <span style="font-size: 0.875rem; color: var(--text-muted);">{{ product['stock'] }} un.</span>
-          {% endif %}
         </div>
-        <a class="btn" href="{{ url_for('product_detail', slug=product['slug']) }}" style="width: 100%;">Ver Produto</a>
+        <a class="btn btn-buy" href="{{ url_for('product_detail', slug=product['slug']) }}" style="width: 100%;">GARANTIR AGORA</a>
       </article>
     {% endfor %}
-  </div>
-  <div style="text-align: center; margin-top: var(--space-3xl);">
-    <a class="btn" href="{{ url_for('category_drop_limitado') }}" style="background: var(--danger);">Ver Drop Limitado</a>
   </div>
 </section>
 {% endif %}
 
-<!-- Reviews Section -->
+<!-- SEÇÃO: DEPOIMENTOS -->
 <section class="container reveal">
-  <div style="text-align: center; margin-bottom: var(--space-3xl);">
-    <p class="tag">Depoimentos</p>
-    <h2 style="margin-bottom: var(--space-md);">O Que Nossos Clientes Dizem</h2>
+  <div class="section-header">
+    <p class="tag">⭐ APROVADO PELA GALERA</p>
+    <h2>O QUE OS CLIENTES DIZEM</h2>
   </div>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-xl);">
-    <div class="card" style="padding: var(--space-xl);">
-      <div style="margin-bottom: var(--space-md); color: #fbbf24; font-size: 1.25rem;">★★★★★</div>
-      <p style="margin-bottom: var(--space-md); font-style: italic;">"Qualidade impressionante! O material é top e o caimento perfeito. Com certeza voltarei a comprar."</p>
-      <div style="display: flex; align-items: center; gap: var(--space-sm);">
-        <div style="width: 40px; height: 40px; background: var(--bg-mid-light); border-radius: var(--radius-full); display: grid; place-content: center; font-weight: 700;">M</div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Qualidade absurda! Melhor camiseta que já comprei. Tecido grosso, costura perfeita. Já pedi mais 3!"</p>
+      <div class="review-author">
+        <div class="avatar">G</div>
         <div>
-          <p style="font-weight: 600; margin: 0;">Marina S.</p>
-          <p class="muted" style="font-size: 0.875rem; margin: 0;">São Paulo, SP</p>
+          <p class="name">Gabriel M.</p>
+          <p class="location">São Paulo, SP</p>
         </div>
       </div>
     </div>
-    <div class="card" style="padding: var(--space-xl);">
-      <div style="margin-bottom: var(--space-md); color: #fbbf24; font-size: 1.25rem;">★★★★★</div>
-      <p style="margin-bottom: var(--space-md); font-style: italic;">"Entrega super rápida e a peça ficou exatamente como nas fotos. Recomendo demais!"</p>
-      <div style="display: flex; align-items: center; gap: var(--space-sm);">
-        <div style="width: 40px; height: 40px; background: var(--bg-mid-light); border-radius: var(--radius-full); display: grid; place-content: center; font-weight: 700;">R</div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Entrega super rápida! Chegou em 2 dias no RJ. A calça cargo é exatamente igual das fotos. Top demais!"</p>
+      <div class="review-author">
+        <div class="avatar">R</div>
         <div>
-          <p style="font-weight: 600; margin: 0;">Rafael L.</p>
-          <p class="muted" style="font-size: 0.875rem; margin: 0;">Rio de Janeiro, RJ</p>
+          <p class="name">Rafael L.</p>
+          <p class="location">Rio de Janeiro, RJ</p>
         </div>
       </div>
     </div>
-    <div class="card" style="padding: var(--space-xl);">
-      <div style="margin-bottom: var(--space-md); color: #fbbf24; font-size: 1.25rem;">★★★★★</div>
-      <p style="margin-bottom: var(--space-md); font-style: italic;">"O atendimento foi excepcional. Me ajudaram a escolher o tamanho certo e ficou perfeito."</p>
-      <div style="display: flex; align-items: center; gap: var(--space-sm);">
-        <div style="width: 40px; height: 40px; background: var(--bg-mid-light); border-radius: var(--radius-full); display: grid; place-content: center; font-weight: 700;">J</div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Atendimento nota 1000! Me ajudaram a escolher o tamanho certo pelo WhatsApp. Ficou perfeito!"</p>
+      <div class="review-author">
+        <div class="avatar">J</div>
         <div>
-          <p style="font-weight: 600; margin: 0;">Julia M.</p>
-          <p class="muted" style="font-size: 0.875rem; margin: 0;">Belo Horizonte, MG</p>
+          <p class="name">Julia M.</p>
+          <p class="location">Belo Horizonte, MG</p>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Sou MC e uso NØVRA em todos os shows. As peças aguentam o tranco e ficam lindas nas fotos. Recomendo!"</p>
+      <div class="review-author">
+        <div class="avatar">K</div>
+        <div>
+          <p class="name">Kevin O.</p>
+          <p class="location">Salvador, BA</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Newsletter Section -->
+<!-- SEÇÃO: NOVIDADES INSTAGRAM -->
 <section class="container reveal">
-  <div class="card" style="padding: var(--space-3xl); text-align: center; background: linear-gradient(135deg, var(--bg-mid-light) 0%, var(--border-subtle) 100%);">
-    <h2 style="margin-bottom: var(--space-md);">Fique por Dentro</h2>
-    <p class="muted" style="margin-bottom: var(--space-xl); max-width: 500px; margin-left: auto; margin-right: auto;">Receba novidades exclusivas, drops limitados e ofertas especiais diretamente no seu e-mail.</p>
-    <form style="display: flex; gap: var(--space-md); max-width: 400px; margin: 0 auto;">
-      <input type="email" placeholder="Seu melhor e-mail" required style="flex: 1;" />
-      <button class="btn" type="submit">Inscrever</button>
-    </form>
+  <div class="section-header">
+    <p class="tag">📸 SIGA @NOVRA</p>
+    <h2>NOVIDADES NO INSTAGRAM</h2>
+    <p class="muted">Acompanhe os looks, drops e bastidores.</p>
+  </div>
+  <div class="instagram-grid">
+    <div class="insta-item">
+      <div class="insta-placeholder">
+        <span>📸</span>
+        <p>@novra</p>
+      </div>
+    </div>
+    <div class="insta-item">
+      <div class="insta-placeholder">
+        <span>📸</span>
+        <p>@novra</p>
+      </div>
+    </div>
+    <div class="insta-item">
+      <div class="insta-placeholder">
+        <span>📸</span>
+        <p>@novra</p>
+      </div>
+    </div>
+    <div class="insta-item">
+      <div class="insta-placeholder">
+        <span>📸</span>
+        <p>@novra</p>
+      </div>
+    </div>
+    <div class="insta-item">
+      <div class="insta-placeholder">
+        <span>📸</span>
+        <p>@novra</p>
+      </div>
+    </div>
+    <div class="insta-item">
+      <div class="insta-placeholder">
+        <span>📸</span>
+        <p>@novra</p>
+      </div>
+    </div>
+  </div>
+  <div class="text-center" style="margin-top: var(--space-xl);">
+    <a href="https://instagram.com/novra" target="_blank" class="btn btn-secondary">SEGUIR NO INSTAGRAM</a>
   </div>
 </section>
 
-<!-- Brand Story -->
+<!-- NEWSLETTER -->
+<section class="container reveal">
+  <div class="newsletter-section">
+    <div class="newsletter-content">
+      <h2>FIQUE POR DENTRO</h2>
+      <p>Receba primeiro os drops limitados, promoções exclusivas e novidades.</p>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Seu melhor e-mail" required />
+        <button type="submit" class="btn btn-buy">QUERO RECEBER</button>
+      </form>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-md);">🔒 Prometemos não enviar spam. Você pode cancelar quando quiser.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MARCA STORY -->
 <section class="container reveal">
   <div class="brand-story">
-    <p class="tag">Nossa História</p>
+    <p class="tag">🏆 NOSSA HISTÓRIA</p>
     <h2>A NØVRA</h2>
-    <p>
-      Nascida da obsessão pelo streetwear autêntico e pela busca implacável pela excelência. Cada peça é curada meticulosamente, fundindo design urbano de vanguarda com materiais de qualidade excepcional.
-    </p>
-    <p style="margin-top: var(--space-md);">
-      Não vendemos apenas roupas. Entregamos identidade. Trabalhamos com edições limitadas e peças importadas, garantindo exclusividade absoluta para quem ousa se diferenciar. Seja parte do movimento.
-    </p>
+    <p>Nascida da obsessão pelo streetwear autêntico. Cada peça é curada meticulosamente, fundindo design urbano com materiais de qualidade excepcional.</p>
+    <p style="margin-top: var(--space-md);">Não vendemos apenas roupas. Entregamos identidade. Trabalhamos com edições limitadas garantindo exclusividade absoluta.</p>
     <div style="margin-top: var(--space-xl);">
-      <a class="btn" href="{{ url_for('catalog') }}">Descubra a Coleção</a>
+      <a class="btn btn-secondary" href="{{ url_for('catalog') }}">EXPLORAR COLEÇÃO</a>
     </div>
   </div>
 </section>
+
 {% endblock %}
