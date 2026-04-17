@@ -43,24 +43,27 @@
     </div>
     
     <header class="topbar" id="topbar">
-      <nav style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 var(--space-md);">
+      <nav style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0.5rem var(--space-md);">
         <!-- Mobile Menu Toggle -->
-        <button class="mobile-toggle" onclick="openMobileMenu()" style="display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">
+        <button class="mobile-toggle" onclick="openMobileMenu()" style="display: none; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); color: white; font-size: 1.25rem; cursor: pointer; padding: 0.625rem; backdrop-filter: blur(8px); transition: all 0.3s ease;">
           ☰
         </button>
         
-        <!-- Logo -->
-        <a href="{{ url_for('home') }}" class="logo-link" style="text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
-          <span style="font-size: 1.75rem;">👑</span>
-          <span>NØVRA</span>
+        <!-- Logo - Mais elegante -->
+        <a href="{{ url_for('home') }}" class="logo-link" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: var(--radius-full); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease;">
+          <span style="font-size: 1.5rem; filter: drop-shadow(0 0 8px rgba(201,169,98,0.5));">👑</span>
+          <span style="font-size: 1.25rem; letter-spacing: 0.1em;">NØVRA</span>
         </a>
         
-        <!-- Main Nav - Desktop -->
-        <div class="desktop-nav" style="display: flex; align-items: center; gap: var(--space-xl);">
-          <a href="{{ url_for('home') }}" style="color: rgba(255,255,255,0.85); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem; border-radius: var(--radius-full); transition: var(--transition-glass);">Home</a>
-          <div class="mega-menu">
-            <a href="{{ url_for('catalog') }}" class="menu-trigger" style="color: rgba(255,255,255,0.85); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem; border-radius: var(--radius-full); transition: var(--transition-glass);">Shop</a>
-            <div class="mega-menu-content">
+        <!-- Main Nav - Desktop - Pills estilo Apple -->
+        <div class="desktop-nav" style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-full); padding: 0.375rem; backdrop-filter: blur(12px);">
+          <a href="{{ url_for('home') }}" style="color: rgba(255,255,255,0.9); font-weight: 500; text-decoration: none; padding: 0.625rem 1.25rem; border-radius: var(--radius-full); transition: all 0.3s ease; font-size: 0.875rem;">Home</a>
+          <div class="mega-menu" style="position: relative;">
+            <a href="{{ url_for('catalog') }}" class="menu-trigger" style="color: rgba(255,255,255,0.9); font-weight: 500; text-decoration: none; padding: 0.625rem 1.25rem; border-radius: var(--radius-full); transition: all 0.3s ease; font-size: 0.875rem; display: flex; align-items: center; gap: 0.375rem;">
+              Shop
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity: 0.7;"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <div class="mega-menu-content" style="top: calc(100% + 0.75rem); border-radius: var(--radius-xl);">
               <a href="{{ url_for('category_camisetas') }}">👕 Camisetas</a>
               <a href="{{ url_for('category_hoodies') }}">🧥 Hoodies</a>
               <a href="{{ url_for('category_calcas') }}">👖 Calças</a>
@@ -69,28 +72,31 @@
               <a href="{{ url_for('category_drop_limitado') }}" style="color: var(--accent);">💎 Drop Limitado</a>
             </div>
           </div>
-          <a href="{{ url_for('customer_login') }}" style="color: rgba(255,255,255,0.85); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem; border-radius: var(--radius-full); transition: var(--transition-glass);">Login</a>
+          <a href="{{ url_for('customer_login') }}" style="color: rgba(255,255,255,0.9); font-weight: 500; text-decoration: none; padding: 0.625rem 1.25rem; border-radius: var(--radius-full); transition: all 0.3s ease; font-size: 0.875rem;">Login</a>
         </div>
         
-        <!-- Right Side -->
-        <div style="display: flex; align-items: center; gap: var(--space-md);">
-          <!-- Search -->
-          <div class="search-liquid" style="max-width: 200px;">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Buscar..." id="globalSearch" onkeyup="globalSearch(this.value)">
+        <!-- Right Side - Mais compacto e elegante -->
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <!-- Search - Estilo Apple -->
+          <div class="search-liquid" style="max-width: 220px; border-radius: var(--radius-full); padding: 0.625rem 1rem;">
+            <span class="search-icon" style="font-size: 1rem;">🔍</span>
+            <input type="text" placeholder="Buscar..." id="globalSearch" onkeyup="globalSearch(this.value)" style="font-size: 0.875rem;">
           </div>
           
-          <a href="{{ url_for('cart') }}" class="header-action" style="text-decoration: none;">
-            <span>🛒</span>
-            {% if cart_count > 0 %}<span style="background: var(--accent); color: var(--surface-dark); padding: 0.125rem 0.5rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; margin-left: 0.25rem;">{{ cart_count }}</span>{% endif %}
+          <!-- Cart - Botão circular -->
+          <a href="{{ url_for('cart') }}" class="header-action" style="text-decoration: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; position: relative;">
+            <span style="font-size: 1.125rem;">🛒</span>
+            {% if cart_count > 0 %}<span style="position: absolute; top: -2px; right: -2px; background: var(--accent); color: var(--surface-dark); padding: 0.125rem 0.375rem; border-radius: var(--radius-full); font-size: 0.6875rem; font-weight: 700; min-width: 18px; text-align: center;">{{ cart_count }}</span>{% endif %}
           </a>
           
           {% if current_customer %}
-            <a href="{{ url_for('customer_account') }}" class="header-action" style="text-decoration: none;">
-              <span>👤</span>
+            <!-- Account - Botão circular -->
+            <a href="{{ url_for('customer_account') }}" class="header-action" style="text-decoration: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease;">
+              <span style="font-size: 1.125rem;">👤</span>
             </a>
           {% else %}
-            <a href="{{ url_for('customer_login') }}" class="btn-liquid btn-liquid-primary" style="text-decoration: none;">Entrar</a>
+            <!-- Login Button - Mais elegante -->
+            <a href="{{ url_for('customer_login') }}" class="btn-liquid btn-liquid-primary" style="text-decoration: none; padding: 0.625rem 1.5rem; font-size: 0.875rem; border-radius: var(--radius-full);">Entrar</a>
           {% endif %}
         </div>
       </nav>
