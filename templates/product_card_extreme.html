@@ -1,0 +1,277 @@
+<article class="card reveal-card product-card card-glass img-zoom micro-lift">
+  <div class="thumb" style="position: relative; overflow: hidden;">
+    {% if product['image_url'] %}
+      <img src="{{ product['image_url'] }}" alt="{{ product['name'] }}" loading="lazy" 
+           style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);">
+    {% else %}
+      <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--bg-mid-light), var(--surface));">
+        <span style="font-size: 2rem; color: var(--text-muted);">{{ product['name'].split(' ')[0][:2] }}</span>
+      </div>
+    {% endif %}
+    
+    <!-- Wishlist Button -->
+    <button class="wishlist-btn tooltip micro-bounce" type="button" onclick="toggleWishlist(this)" 
+            data-tooltip="Adicionar aos favoritos"
+            style="position: absolute; top: var(--space-sm); right: var(--space-sm); z-index: 10;">
+      ♡
+    </button>
+    
+    <!-- Badges -->
+    {% if product['badge'] %}
+      <span class="badge-premium badge-{{ product['badge']|lower|replace(' ', '-')|replace('í', 'i')|replace('ã', 'a') }}">
+        {% if 'mais vendido' in product['badge']|lower %}🔥 
+        {% elif 'promo' in product['badge']|lower %}💰 
+        {% elif 'novo' in product['badge']|lower %}✨ 
+        {% elif 'drop' in product['badge']|lower %}💎 
+        {% elif 'colab' in product['badge']|lower %}🎤 
+        {% endif %}
+        {{ product['badge'] }}
+      </span>
+    {% endif %}
+    
+    {% if product['stock'] <= 5 and product['stock'] > 0 %}
+      <span class="badge-scarcity-premium" style="position: absolute; top: var(--space-sm); left: var(--space-sm); z-index: 5;">
+        ⚡ ÚLTIMAS {{ product['stock'] }}
+      </span>
+    {% endif %}
+    
+    {% if product['free_shipping'] == 1 %}
+      <span class="badge-shipping-premium" style="position: absolute; bottom: var(--space-sm); left: var(--space-sm); z-index: 5;">
+        🚚 FRETE GRÁTIS
+      </span>
+    {% endif %}
+    
+    <!-- Quick View Overlay -->
+    <div class="quick-view-overlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;">
+      <span style="color: white; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.875rem;">Ver Detalhes</span>
+    </div>
+  </div>
+  
+  <div class="product-meta" style="display: flex; justify-content: space-between; align-items: center; margin: var(--space-sm) 0;">
+    <span class="category" style="font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);">
+      {{ product['category']|upper }}
+    </span>
+    {% if product['is_bestseller'] == 1 %}
+      <span class="bestseller-tag" style="font-size: 0.625rem; font-weight: 700; color: var(--accent); background: rgba(201, 169, 98, 0.1); padding: 0.125rem 0.5rem; border-radius: var(--radius-sm);">
+        ⭐ BESTSELLER
+      </span>
+    {% endif %}
+  </div>
+  
+  <h3 class="product-name" style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-xs); line-height: 1.3; min-height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+    {{ product['name'] }}
+  </h3>
+  
+  <p class="product-desc muted" style="font-size: 0.8125rem; margin-bottom: var(--space-sm); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.8em;">
+    {{ product['description'][:100] }}{% if product['description']|length > 100 %}...{% endif %}
+  </p>
+  
+  <!-- Rating Stars -->
+  <div style="display: flex; align-items: center; gap: 0.25rem; margin-bottom: var(--space-sm);">
+    <span style="color: #fbbf24; font-size: 0.875rem;">★★★★★</span>
+    <span style="font-size: 0.75rem; color: var(--text-muted);">(4.9)</span>
+  </div>
+  
+  <div class="product-price-section" style="margin-top: auto; margin-bottom: var(--space-sm);">
+    <div class="price-container">
+      {% if product['promo_price'] %}
+        <div style="display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap;">
+          <p class="price-sale" style="font-size: 1.5rem; font-weight: 800; color: #ef4444; margin: 0;">
+            {{ product['promo_price']|brl }}
+          </p>
+          <p class="price-original" style="font-size: 0.875rem; color: var(--text-muted); text-decoration: line-through; margin: 0;">
+            {{ product['price']|brl }}
+          </p>
+          <span class="discount-tag" style="font-size: 0.75rem; font-weight: 700; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 0.125rem 0.5rem; border-radius: var(--radius-sm);">
+            -{{ ((product['price'] - product['promo_price']) / product['price'] * 100)|int }}%
+          </span>
+        </div>
+      {% else %}
+        <p class="price" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+          {{ product['price']|brl }}
+        </p>
+      {% endif %}
+      <p class="installments" style="font-size: 0.8125rem; color: var(--accent); font-weight: 500; margin-top: 0.25rem;">
+        💳 12x de R$ {{ "%.2f"|format(product['price']/12) }} sem juros
+      </p>
+    </div>
+  </div>
+  
+  <div class="product-actions" style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+    <a class="btn btn-buy btn-magnetic micro-bounce" href="{{ url_for('product_detail', slug=product['slug']) }}" style="flex: 1; text-align: center;">
+      COMPRAR
+    </a>
+    <button type="button" class="btn btn-secondary micro-bounce tooltip" data-tooltip="Adicionar ao carrinho"
+            onclick="addToCart('{{ product['id'] }}', '1')" style="padding: var(--space-md); min-width: auto;">
+      🛒
+    </button>
+  </div>
+  
+  <div class="trust-mini" style="display: flex; gap: var(--space-md); font-size: 0.6875rem; color: var(--text-muted); flex-wrap: wrap;">
+    <span style="display: flex; align-items: center; gap: 0.25rem;">✓ Entrega rápida</span>
+    <span style="display: flex; align-items: center; gap: 0.25rem;">✓ Troca fácil</span>
+    <span style="display: flex; align-items: center; gap: 0.25rem;">✓ Garantia</span>
+  </div>
+</article>
+
+<style>
+  .badge-premium {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  
+  .badge-mais-vendido, .badge-escolha-dos-mcs {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: white;
+  }
+  
+  .badge-novo, .badge-lancamento {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+  }
+  
+  .badge-promo {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+  }
+  
+  .badge-drop, .badge-limitado {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: white;
+  }
+  
+  .badge-colab {
+    background: linear-gradient(135deg, #c9a962 0%, #b8944f 100%);
+    color: var(--surface-dark);
+  }
+  
+  .badge-scarcity-premium {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: white;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    animation: pulse 2s infinite;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  
+  .badge-shipping-premium {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  
+  .product-card:hover .quick-view-overlay {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+  
+  .wishlist-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    cursor: pointer;
+    font-size: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: var(--text-muted);
+  }
+  
+  .wishlist-btn:hover {
+    background: white;
+    color: #ef4444;
+    transform: scale(1.1);
+  }
+  
+  .wishlist-btn.active {
+    color: #ef4444;
+    background: white;
+  }
+</style>
+
+<script>
+  function toggleWishlist(btn) {
+    btn.classList.toggle('active');
+    btn.textContent = btn.classList.contains('active') ? '♥' : '♡';
+  }
+  
+  function addToCart(productId, quantity) {
+    // AJAX call to add to cart
+    fetch(`/adicionar-carrinho/${productId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `quantity=${quantity}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Show success notification
+        showNotification('Produto adicionado ao carrinho! 🛒');
+        updateCartCount(data.cart_count);
+      }
+    });
+  }
+  
+  function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface);
+      color: var(--text-primary);
+      padding: 1rem 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      font-weight: 500;
+      animation: slideUp 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideDown 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+  
+  function updateCartCount(count) {
+    const cartBadge = document.querySelector('.cart-badge');
+    if (cartBadge) {
+      cartBadge.textContent = count;
+      cartBadge.style.animation = 'bounce 0.5s ease';
+    }
+  }
+</script>
