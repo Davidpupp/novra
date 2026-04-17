@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
 interface WebhookPayload {
   reference: string;
@@ -16,6 +17,13 @@ interface WebhookPayload {
 
 // Environment variables
 const SILLIENT_PAY_WEBHOOK_SECRET = process.env.SILLIENT_PAY_WEBHOOK_SECRET || '';
+const SUPABASE_URL = process.env.SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
+
+// Initialize Supabase client
+const supabase = SUPABASE_URL && SUPABASE_ANON_KEY 
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
 
 // Log function for secure logging
 function secureLog(message: string, data?: any) {
@@ -96,22 +104,38 @@ export async function POST(request: NextRequest) {
 
     const internalStatus = statusMapping[webhookData.status] || webhookData.status;
 
-    // TODO: Update order in database
-    // This would typically update a database record
-    // For now, we'll log the update
-    secureLog('Order status update', {
-      reference: webhookData.reference,
-      newStatus: internalStatus,
-      paymentMethod: webhookData.payment_method,
-      paidAt: webhookData.paid_at
-    });
+    // Update order in database
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from('orders')
+          .update({
+            status: internalStatus,
+            paid_at: webhookData.paid_at,
+            payment_method: webhookData.payment_method,
+            updated_at: new Date().toISOString()
+          })
+          .eq('payment_reference', webhookData.reference);
 
-    // Here you would typically:
-    // 1. Find order by reference
-    // 2. Update order status
-    // 3. Send confirmation email to customer
-    // 4. Update inventory
-    // 5. Trigger fulfillment
+        if (error) {
+          secureLog('Database update failed', { error: error.message });
+          // Don't fail the webhook response for DB errors
+          // Log and continue to ensure webhook is acknowledged
+        } else {
+          secureLog('Order status updated in database', {
+            reference: webhookData.reference,
+            newStatus: internalStatus
+          });
+        }
+      } catch (dbError) {
+        secureLog('Database error', { 
+          error: dbError instanceof Error ? dbError.message : 'Unknown DB error'
+        });
+        // Don't fail webhook response for DB errors
+      }
+    } else {
+      secureLog('Supabase not configured, skipping database update');
+    }
 
     return NextResponse.json({ success: true });
 
