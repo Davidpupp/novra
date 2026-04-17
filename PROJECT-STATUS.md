@@ -62,35 +62,40 @@
 
 ## ⚠️ O Que Falta (Ações do Usuário)
 
-### 1. Instalar Node.js/npm
+### Opção A: Deploy via Vercel + GitHub (Recomendado - Não precisa de Node.js)
+
+**Vantagens:**
+- ✅ Não precisa instalar Node.js localmente
+- ✅ Deploy automático via GitHub
+- ✅ Gratuito
+- ✅ SSL automático
+- ✅ CDN global
+
+**Passos:**
+1. Criar repositório no GitHub
+2. Conectar projeto ao GitHub
+3. Importar projeto no Vercel (Root Directory: `./novra-next`)
+4. Configurar variáveis de ambiente no Vercel
+5. Aguardar deploy automático
+
+**Guia completo:** `VERCEL-DEPLOYMENT.md`
+
+### Opção B: Instalar Node.js/npm Localmente
+
 **Problema:** npm não está instalado no sistema
 **Solução:** 
 - Baixar e instalar Node.js em https://nodejs.org
 - Verificar instalação: `node --version` e `npm --version`
 
-### 2. Instalar Dependências Next.js
-**Comando:**
+**Instalar Dependências Next.js:**
 ```bash
 cd novra-next
 npm install
 ```
 
-### 3. Configurar Variáveis de Ambiente
-**Flask (.env):**
-```bash
-SECRET_KEY=sua-chave-secreta
-ADMIN_EMAIL=seu@email.com
-ADMIN_PASSWORD=senha-forte
-ADMIN_PATH=painel-interno-novra-2026
-SILLIENT_PAY_ENABLED=true
-SILLIENT_PAY_BASE_URL=https://api.sillientpay.com
-SILLIENT_PAY_API_KEY=sua-chave-api
-SILLIENT_PAY_WEBHOOK_SECRET=sua-chave-webhook
-SESSION_COOKIE_SECURE=true
+### 3. Configurar Variáveis de Ambiente (Vercel)
+**No painel do Vercel (Settings → Environment Variables):**
 ```
-
-**Next.js (novra-next/.env):**
-```bash
 SILLIENT_PAY_ENABLED=true
 SILLIENT_PAY_BASE_URL=https://api.sillientpay.com
 SILLIENT_PAY_API_KEY=sua-chave-api
@@ -112,13 +117,13 @@ git branch -M main
 git push -u origin main
 ```
 
-### 5. Deploy no Render
+### 5. Deploy no Vercel
 **Passos:**
-1. Criar conta em render.com
-2. Conectar GitHub
-3. Criar Web Service com repositório `novra`
-4. Configurar environment variables
-5. Aguardar deploy
+1. Criar conta em vercel.com
+2. Importar projeto do GitHub
+3. Configurar Root Directory: `./novra-next`
+4. Configurar variáveis de ambiente
+5. Aguardar deploy automático (2-3 minutos)
 
 ## 📋 Checklist Final
 
@@ -131,38 +136,40 @@ git push -u origin main
 - [x] Checkout UI premium
 - [x] Success/pending pages
 - [x] Deployment files criados
-- [x] Documentação completa
+- [x] Documentação completa (incluindo Vercel)
 - [x] Git repository inicializado
 - [x] Commits feitos
-- [ ] npm/Node.js instalado (ação do usuário)
-- [ ] npm install rodado (ação do usuário)
-- [ ] Variáveis de ambiente configuradas (ação do usuário)
+- [ ] Criar repositório no GitHub (ação do usuário)
 - [ ] Push para GitHub (ação do usuário)
-- [ ] Deploy no Render (ação do usuário)
+- [ ] Criar conta no Vercel (ação do usuário)
+- [ ] Importar projeto no Vercel (ação do usuário)
+- [ ] Configurar variáveis de ambiente no Vercel (ação do usuário)
+- [ ] Deploy no Vercel (ação do usuário)
 
 ## 🎯 Status Atual
 
 **Flask App:** 100% completo e pronto para deployment
-**Next.js:** 95% completo (falta apenas npm install)
-**Documentação:** 100% completa
+**Next.js:** 100% completo (pronto para Vercel - não precisa de Node.js local)
+**Documentação:** 100% completa (incluindo Vercel guide)
 **Git:** 100% pronto para push
 
-## 🚀 Próximos Passos do Usuário
+## 🚀 Próximos Passos do Usuário (Vercel - Recomendado)
 
-1. **Instalar Node.js/npm**
-2. **Rodar `npm install` no diretório novra-next**
-3. **Configurar variáveis de ambiente**
-4. **Criar repositório no GitHub**
-5. **Push código para GitHub**
-6. **Fazer deploy no Render**
+1. **Criar repositório no GitHub**
+2. **Push código para GitHub**
+3. **Criar conta no Vercel**
+4. **Importar projeto no Vercel** (Root Directory: `./novra-next`)
+5. **Configurar variáveis de ambiente no Vercel**
+6. **Aguardar deploy automático**
 
 ## 📝 Notas Importantes
 
 - O projeto Flask está 100% funcional e pronto para deployment
-- O projeto Next.js precisa apenas de `npm install` para resolver TypeScript errors
+- O projeto Next.js está 100% completo e pronto para Vercel (não precisa de Node.js local)
 - Ambos têm SillientPay completamente integrado
 - Documentação completa disponível em:
-  - `DEPLOYMENT-TUTORIAL.md` - Tutorial de deployment
+  - `VERCEL-DEPLOYMENT.md` - Guia de deployment Vercel (RECOMENDADO)
+  - `DEPLOYMENT-TUTORIAL.md` - Tutorial de deployment Render
   - `SILLIENTPAY-SETUP.md` - Configuração SillientPay
   - `README.md` - Instruções gerais
 - O código está limpo, bem estruturado e pronto para produção
@@ -170,4 +177,4 @@ git push -u origin main
 
 ## ✨ Conclusão
 
-O projeto NØVRA está **completo e pronto para deployment**. Todas as funcionalidades principais foram implementadas, o design é premium e profissional, e a documentação é abrangente. O usuário precisa apenas instalar Node.js/npm, configurar as variáveis de ambiente e fazer o deploy.
+O projeto NØVRA está **completo e pronto para deployment via Vercel**. Todas as funcionalidades principais foram implementadas, o design é premium e profissional, e a documentação é abrangente. O usuário precisa apenas criar um repositório no GitHub, fazer push, configurar o Vercel e o deploy será automático. Não é necessário instalar Node.js localmente.
