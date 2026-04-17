@@ -21,30 +21,47 @@
   </head>
   <body>
     <header class="topbar">
-      <nav>
-        <a href="{{ url_for('home') }}">Home</a>
-        <div class="mega-menu">
-          <a href="{{ url_for('catalog') }}" class="menu-trigger">Shop</a>
-          <div class="mega-menu-content">
-            <a href="{{ url_for('category_camisetas') }}">Camisetas</a>
-            <a href="{{ url_for('category_hoodies') }}">Hoodies</a>
-            <a href="{{ url_for('category_calcas') }}">Calças</a>
-            <a href="{{ url_for('category_tenis') }}">Tênis</a>
-            <a href="{{ url_for('category_acessorios') }}">Acessórios</a>
-            <a href="{{ url_for('category_drop_limitado') }}" style="color: var(--danger);">Drop Limitado</a>
-          </div>
-        </div>
-        <a href="{{ url_for('customer_login') }}">Login</a>
-        <a href="{{ url_for('cart') }}">
-          Carrinho
-          {% if cart_count > 0 %}<span style="background: var(--primary); color: var(--text-light); padding: 0.125rem 0.375rem; border-radius: var(--radius-full); font-size: 0.75rem; margin-left: var(--space-xs);">{{ cart_count }}</span>{% endif %}
+      <nav style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 var(--space-md);">
+        <!-- Logo -->
+        <a href="{{ url_for('home') }}" style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
+          <span style="font-size: 1.75rem;">👑</span>
+          <span>NØVRA</span>
         </a>
-        {% if current_customer %}
-          <a href="{{ url_for('customer_account') }}">Conta</a>
-          <a href="{{ url_for('customer_logout') }}">Sair</a>
-        {% else %}
-          <a href="{{ url_for('customer_login') }}">Entrar</a>
-        {% endif %}
+        
+        <!-- Main Nav -->
+        <div style="display: flex; align-items: center; gap: var(--space-xl);">
+          <a href="{{ url_for('home') }}" style="color: var(--text-primary); font-weight: 500; text-decoration: none;">Home</a>
+          <div class="mega-menu">
+            <a href="{{ url_for('catalog') }}" class="menu-trigger" style="color: var(--text-primary); font-weight: 500; text-decoration: none;">Shop</a>
+            <div class="mega-menu-content">
+              <a href="{{ url_for('category_camisetas') }}" style="color: var(--text-primary);">Camisetas</a>
+              <a href="{{ url_for('category_hoodies') }}" style="color: var(--text-primary);">Hoodies</a>
+              <a href="{{ url_for('category_calcas') }}" style="color: var(--text-primary);">Calças</a>
+              <a href="{{ url_for('category_tenis') }}" style="color: var(--text-primary);">Tênis</a>
+              <a href="{{ url_for('category_acessorios') }}" style="color: var(--text-primary);">Acessórios</a>
+              <a href="{{ url_for('category_drop_limitado') }}" style="color: var(--danger);">Drop Limitado</a>
+            </div>
+          </div>
+          <a href="{{ url_for('customer_login') }}" style="color: var(--text-primary); font-weight: 500; text-decoration: none;">Login</a>
+        </div>
+        
+        <!-- Right Side -->
+        <div style="display: flex; align-items: center; gap: var(--space-lg);">
+          <a href="{{ url_for('cart') }}" style="color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
+            <span>🛒</span>
+            <span>Carrinho</span>
+            {% if cart_count > 0 %}<span style="background: var(--accent); color: var(--surface-dark); padding: 0.125rem 0.5rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700;">{{ cart_count }}</span>{% endif %}
+          </a>
+          {% if current_customer %}
+            <a href="{{ url_for('customer_account') }}" style="color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: var(--space-xs);">
+              <span>👤</span>
+              <span>Conta</span>
+            </a>
+            <a href="{{ url_for('customer_logout') }}" style="color: var(--text-muted); text-decoration: none;">Sair</a>
+          {% else %}
+            <a href="{{ url_for('customer_login') }}" class="btn btn-small" style="background: var(--accent); color: var(--surface-dark);">Entrar</a>
+          {% endif %}
+        </div>
       </nav>
     </header>
 
@@ -65,31 +82,50 @@
     <footer class="footer">
       <div class="container footer-grid">
         <div class="footer-col">
-          <h4 class="footer-title">{{ store_name }}</h4>
-          <p class="footer-desc">Moda streetwear premium com design exclusivo e qualidade excepcional.</p>
+          <!-- Logo in Footer -->
+          <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <span style="font-size: 2rem;">👑</span>
+            <span style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">NØVRA</span>
+          </div>
+          <p class="footer-desc" style="color: var(--text-secondary);">Moda streetwear premium com design exclusivo e qualidade excepcional. Edições limitadas, identidade única.</p>
+          <div style="margin-top: var(--space-md); display: flex; gap: var(--space-md);">
+            <a href="https://instagram.com/novra" target="_blank" style="font-size: 1.5rem; text-decoration: none; opacity: 0.8; transition: opacity 0.3s;">📸</a>
+            <a href="https://tiktok.com/@novra" target="_blank" style="font-size: 1.5rem; text-decoration: none; opacity: 0.8; transition: opacity 0.3s;">🎵</a>
+            <a href="https://youtube.com/@novra" target="_blank" style="font-size: 1.5rem; text-decoration: none; opacity: 0.8; transition: opacity 0.3s;">▶️</a>
+          </div>
         </div>
         <div class="footer-col">
-          <h4 class="footer-title">Navegação</h4>
+          <h4 class="footer-title" style="color: var(--text-primary);">Navegação</h4>
           <nav class="footer-nav">
-            <a href="{{ url_for('catalog') }}">Catálogo Completo</a>
-            <a href="{{ url_for('category_camisetas') }}">Camisetas</a>
-            <a href="{{ url_for('category_hoodies') }}">Hoodies</a>
-            <a href="{{ url_for('category_calcas') }}">Calças</a>
-            <a href="{{ url_for('category_tenis') }}">Tênis</a>
-            <a href="{{ url_for('category_acessorios') }}">Acessórios</a>
-            <a href="{{ url_for('category_drop_limitado') }}" class="footer-highlight">Drop Limitado</a>
+            <a href="{{ url_for('catalog') }}" style="color: var(--text-secondary);">Catálogo Completo</a>
+            <a href="{{ url_for('category_camisetas') }}" style="color: var(--text-secondary);">Camisetas</a>
+            <a href="{{ url_for('category_hoodies') }}" style="color: var(--text-secondary);">Hoodies</a>
+            <a href="{{ url_for('category_calcas') }}" style="color: var(--text-secondary);">Calças</a>
+            <a href="{{ url_for('category_tenis') }}" style="color: var(--text-secondary);">Tênis</a>
+            <a href="{{ url_for('category_acessorios') }}" style="color: var(--text-secondary);">Acessórios</a>
+            <a href="{{ url_for('category_drop_limitado') }}" style="color: var(--accent);">💎 Drop Limitado</a>
           </nav>
         </div>
         <div class="footer-col">
-          <h4 class="footer-title">Suporte</h4>
+          <h4 class="footer-title" style="color: var(--text-primary);">Suporte</h4>
           <nav class="footer-nav">
-            <a href="{{ url_for('customer_login') }}">Minha Conta</a>
-            <a href="{{ url_for('customer_forgot_password') }}">Recuperar Senha</a>
+            <a href="{{ url_for('customer_login') }}" style="color: var(--text-secondary);">Minha Conta</a>
+            <a href="{{ url_for('customer_forgot_password') }}" style="color: var(--text-secondary);">Recuperar Senha</a>
+            <a href="https://wa.me/5511999999999" target="_blank" style="color: var(--text-secondary);">💬 WhatsApp</a>
           </nav>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-title" style="color: var(--text-primary);">Contato</h4>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-sm);">📧 contato@novra.com</p>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-sm);">📱 (11) 99999-9999</p>
+          <p style="color: var(--text-muted); font-size: 0.875rem;">São Paulo, SP - Brasil</p>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>{{ store_name }} © 2026 - Todos os direitos reservados</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+          <p style="color: var(--text-muted);">👑 NØVRA © 2026 - Todos os direitos reservados</p>
+          <p style="color: var(--text-muted); font-size: 0.75rem;">Streetwear Premium Brasil 🇧🇷</p>
+        </div>
       </div>
     </footer>
     

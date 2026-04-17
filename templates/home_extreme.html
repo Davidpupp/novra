@@ -10,6 +10,10 @@
      ============================================ -->
 <section class="hero-cinematic reveal">
   <div class="hero-content stagger-children animate">
+    <!-- Logo in Hero -->
+    <div style="margin-bottom: var(--space-xl);">
+      <span style="font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, #fff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 60px rgba(201, 169, 98, 0.3);">👑 NØVRA</span>
+    </div>
     <p class="vip-badge float-subtle">🔥 DROP LIMITADO 2026</p>
     <h1 class="text-reveal">
       <span>As peças</span><br>
@@ -56,31 +60,36 @@
      TRUST BAR - SELos DE CONFIANÇA PREMIUM
      ============================================ -->
 <section class="container reveal" style="padding: var(--space-xl) 0;">
+  <!-- Logo in Trust Section -->
+  <div style="text-align: center; margin-bottom: var(--space-xl);">
+    <span style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--accent);">👑 NØVRA</span>
+    <p style="color: var(--text-muted); margin-top: var(--space-sm); font-size: 0.875rem;">A marca mais desejada do streetwear brasileiro</p>
+  </div>
   <div class="trust-bar">
     <div class="trust-item">
       <div class="trust-icon">🔒</div>
-      <p class="trust-title">COMPRA SEGURA</p>
-      <p class="trust-desc">SSL 256-bit</p>
+      <p class="trust-title" style="color: var(--text-primary);">COMPRA SEGURA</p>
+      <p class="trust-desc" style="color: var(--text-secondary);">SSL 256-bit</p>
     </div>
     <div class="trust-item">
       <div class="trust-icon">🚚</div>
-      <p class="trust-title">FRETE GRÁTIS</p>
-      <p class="trust-desc">Acima de R$ 399</p>
+      <p class="trust-title" style="color: var(--text-primary);">FRETE GRÁTIS</p>
+      <p class="trust-desc" style="color: var(--text-secondary);">Acima de R$ 399</p>
     </div>
     <div class="trust-item">
       <div class="trust-icon">⚡</div>
-      <p class="trust-title">ENTREGA RÁPIDA</p>
-      <p class="trust-desc">24h Capitais</p>
+      <p class="trust-title" style="color: var(--text-primary);">ENTREGA RÁPIDA</p>
+      <p class="trust-desc" style="color: var(--text-secondary);">24h Capitais</p>
     </div>
     <div class="trust-item">
       <div class="trust-icon">💳</div>
-      <p class="trust-title">12X SEM JUROS</p>
-      <p class="trust-desc">Parcela mínima</p>
+      <p class="trust-title" style="color: var(--text-primary);">12X SEM JUROS</p>
+      <p class="trust-desc" style="color: var(--text-secondary);">Parcela mínima</p>
     </div>
     <div class="trust-item">
       <div class="trust-icon">↩️</div>
-      <p class="trust-title">TROCA GARANTIDA</p>
-      <p class="trust-desc">7 dias grátis</p>
+      <p class="trust-title" style="color: var(--text-primary);">TROCA GARANTIDA</p>
+      <p class="trust-desc" style="color: var(--text-secondary);">7 dias grátis</p>
     </div>
   </div>
 </section>
@@ -90,10 +99,10 @@
      ============================================ -->
 <section class="container reveal">
   <div class="promo-banner gradient-border" style="background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);">
-    <div class="banner-content">
-      <p class="banner-tag">💎 EDIÇÃO ULTRA LIMITADA</p>
-      <h2 class="banner-title">DROP LIMITADO 2026</h2>
-      <p class="banner-desc">Peças numeradas 001/100. Autografadas pelos artistas. Nunca mais serão reproduzidas.</p>
+    <div class="banner-content" style="color: white;">
+      <p class="banner-tag" style="color: var(--accent);">💎 EDIÇÃO ULTRA LIMITADA</p>
+      <h2 class="banner-title" style="color: white;">DROP LIMITADO 2026</h2>
+      <p class="banner-desc" style="color: rgba(255,255,255,0.9);">Peças numeradas 001/100. Autografadas pelos artistas. Nunca mais serão reproduzidas.</p>
       <div class="countdown-timer" style="margin: var(--space-lg) 0;">
         <div class="countdown-item">
           <span class="number">02</span>
@@ -125,8 +134,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag" style="color: var(--danger);">🔥 TOP 10</p>
-    <h2>OS MAIS VENDIDOS</h2>
-    <p class="muted">Os queridinhos da galera. Peças que vendem todo santo dia.</p>
+    <h2 style="color: var(--text-primary);">OS MAIS VENDIDOS</h2>
+    <p style="color: var(--text-secondary);">Os queridinhos da galera. Peças que vendem todo santo dia.</p>
   </div>
   <div class="product-grid stagger-children">
     {% for product in bestsellers[:8] %}
@@ -146,10 +155,10 @@
 <section class="container reveal">
   <div class="promo-banner" style="background: linear-gradient(90deg, #000 0%, #1a1a1a 50%, #000 100%); position: relative; overflow: hidden;">
     <div style="position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200') center/cover; opacity: 0.3;"></div>
-    <div class="banner-content" style="position: relative; z-index: 2;">
-      <p class="banner-tag">🎤 USADO PELAS FAMOSOS</p>
-      <h2 class="banner-title">ESTILO DOS MCs</h2>
-      <p class="banner-desc">As mesmas peças que DJonga, BK', Matuê, Tz da Coronel e os maiores MCs usam nos shows.</p>
+    <div class="banner-content" style="position: relative; z-index: 2; color: white;">
+      <p class="banner-tag" style="color: var(--accent);">🎤 USADO PELAS FAMOSOS</p>
+      <h2 class="banner-title" style="color: white;">ESTILO DOS MCs</h2>
+      <p class="banner-desc" style="color: rgba(255,255,255,0.9);">As mesmas peças que DJonga, BK', Matuê, Tz da Coronel e os maiores MCs usam nos shows.</p>
       <a href="{{ url_for('catalog') }}" class="btn btn-buy btn-magnetic" style="font-size: 1.125rem; padding: var(--space-md) var(--space-2xl);">
         QUERO ESSE ESTILO →
       </a>
@@ -163,8 +172,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag" style="color: var(--success);">⚡ ACABOU DE CHEGAR</p>
-    <h2>LANÇAMENTOS</h2>
-    <p class="muted">As últimas peças que chegaram. Seja o primeiro a usar.</p>
+    <h2 style="color: var(--text-primary);">LANÇAMENTOS</h2>
+    <p style="color: var(--text-secondary);">As últimas peças que chegaram. Seja o primeiro a usar.</p>
   </div>
   <div class="product-grid stagger-children">
     {% for product in new_arrivals[:8] %}
@@ -178,10 +187,10 @@
      ============================================ -->
 <section class="container reveal">
   <div class="promo-banner" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
-    <div class="banner-content">
-      <p class="banner-tag">🚚 PROMOÇÃO POR TEMPO LIMITADO</p>
-      <h2 class="banner-title">FRETE GRÁTIS HOJE</h2>
-      <p class="banner-desc">Aproveite! Frete grátis para TODO o Brasil em qualquer compra. Termina em 24h.</p>
+    <div class="banner-content" style="color: white;">
+      <p class="banner-tag" style="color: rgba(255,255,255,0.9);">🚚 PROMOÇÃO POR TEMPO LIMITADO</p>
+      <h2 class="banner-title" style="color: white;">FRETE GRÁTIS HOJE</h2>
+      <p class="banner-desc" style="color: rgba(255,255,255,0.9);">Aproveite! Frete grátis para TODO o Brasil em qualquer compra. Termina em 24h.</p>
       <a href="{{ url_for('catalog') }}" class="btn btn-buy btn-magnetic" style="background: white; color: #000; font-size: 1.125rem; padding: var(--space-md) var(--space-2xl);">
         APROVEITAR AGORA →
       </a>
@@ -195,8 +204,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag" style="color: var(--accent);">👑 SELEÇÃO ESPECIAL</p>
-    <h2>COLEÇÃO PREMIUM</h2>
-    <p class="muted">As peças mais desejadas, com acabamento de luxo.</p>
+    <h2 style="color: var(--text-primary);">COLEÇÃO PREMIUM</h2>
+    <p style="color: var(--text-secondary);">As peças mais desejadas, com acabamento de luxo.</p>
   </div>
   <div class="product-grid stagger-children">
     {% for product in featured[:8] %}
@@ -210,10 +219,10 @@
      ============================================ -->
 <section class="container reveal">
   <div class="promo-banner" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);">
-    <div class="banner-content">
-      <p class="banner-tag">💎 ESGOTANDO RÁPIDO</p>
-      <h2 class="banner-title">AS PEÇAS MAIS DESEJADAS</h2>
-      <p class="banner-desc">Estoque baixo! Últimas unidades das peças mais vendidas do mês.</p>
+    <div class="banner-content" style="color: white;">
+      <p class="banner-tag" style="color: rgba(255,255,255,0.9);">💎 ESGOTANDO RÁPIDO</p>
+      <h2 class="banner-title" style="color: white;">AS PEÇAS MAIS DESEJADAS</h2>
+      <p class="banner-desc" style="color: rgba(255,255,255,0.9);">Estoque baixo! Últimas unidades das peças mais vendidas do mês.</p>
       <a href="{{ url_for('catalog') }}" class="btn btn-buy btn-magnetic" style="font-size: 1.125rem; padding: var(--space-md) var(--space-2xl);">
         VER PEÇAS →
       </a>
@@ -227,8 +236,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag">👟 COLEÇÃO ESPECIAL</p>
-    <h2>TÊNIS PREMIUM</h2>
-    <p class="muted">Estilo Dunk, Air Force, Jordan. Qualidade dos grandes.</p>
+    <h2 style="color: var(--text-primary);">TÊNIS PREMIUM</h2>
+    <p style="color: var(--text-secondary);">Estilo Dunk, Air Force, Jordan. Qualidade dos grandes.</p>
   </div>
   <div class="product-grid stagger-children">
     {% for product in tenis_premium[:8] %}
@@ -246,8 +255,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag" style="color: var(--info);">⭐ ESCOLHA DOS INFLUENCERS</p>
-    <h2>QUEM USA NØVRA</h2>
-    <p class="muted">Os criadores de conteúdo mais estilosos do Brasil usam nossas peças.</p>
+    <h2 style="color: var(--text-primary);">QUEM USA NØVRA</h2>
+    <p style="color: var(--text-secondary);">Os criadores de conteúdo mais estilosos do Brasil usam nossas peças.</p>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg);">
     {% for i in range(6) %}
@@ -270,8 +279,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag" style="color: var(--warning);">🎯 LOOK COMPLETO</p>
-    <h2>CONJUNTOS PREMIUM</h2>
-    <p class="muted">Monte seu look completo. Camiseta + Calça + Acessórios.</p>
+    <h2 style="color: var(--text-primary);">CONJUNTOS PREMIUM</h2>
+    <p style="color: var(--text-secondary);">Monte seu look completo. Camiseta + Calça + Acessórios.</p>
   </div>
   <div class="product-grid stagger-children">
     {% for product in conjuntos[:6] %}
@@ -286,8 +295,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag">✨ DETALHES QUE FAZEM DIFERENÇA</p>
-    <h2>ACESSÓRIOS</h2>
-    <p class="muted">Bonés, bolsas, correntes, meias. Complete seu visual.</p>
+    <h2 style="color: var(--text-primary);">ACESSÓRIOS</h2>
+    <p style="color: var(--text-secondary);">Bonés, bolsas, correntes, meias. Complete seu visual.</p>
   </div>
   <div class="product-grid stagger-children">
     {% for product in acessorios[:8] %}
@@ -304,10 +313,10 @@
      ============================================ -->
 <section class="container reveal">
   <div class="promo-banner" style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);">
-    <div class="banner-content">
-      <p class="banner-tag">⏰ ÚLTIMA CHANCE</p>
-      <h2 class="banner-title">ÚLTIMAS UNIDADES</h2>
-      <p class="banner-desc">Apenas 3, 5 ou 8 peças disponíveis. Não vai ter reposição!</p>
+    <div class="banner-content" style="color: white;">
+      <p class="banner-tag" style="color: rgba(255,255,255,0.9);">⏰ ÚLTIMA CHANCE</p>
+      <h2 class="banner-title" style="color: white;">ÚLTIMAS UNIDADES</h2>
+      <p class="banner-desc" style="color: rgba(255,255,255,0.9);">Apenas 3, 5 ou 8 peças disponíveis. Não vai ter reposição!</p>
       <a href="{{ url_for('catalog') }}" class="btn btn-buy btn-magnetic" style="font-size: 1.125rem; padding: var(--space-md) var(--space-2xl);">
         COMPRAR ANTES QUE ACABE →
       </a>
@@ -322,8 +331,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag" style="color: var(--danger);">💎 SUPER EXCLUSIVO</p>
-    <h2>DROP LIMITADO</h2>
-    <p class="muted">Edições numeradas, colabs especiais, peças únicas.</p>
+    <h2 style="color: var(--text-primary);">DROP LIMITADO</h2>
+    <p style="color: var(--text-secondary);">Edições numeradas, colabs especiais, peças únicas.</p>
   </div>
   <div class="product-grid stagger-children">
     {% for product in limited_drop[:4] %}
@@ -363,7 +372,7 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag">⭐ APROVADO PELA GALERA</p>
-    <h2>O QUE OS CLIENTES DIZEM</h2>
+    <h2 style="color: var(--text-primary);">O QUE OS CLIENTES DIZEM</h2>
   </div>
   <div class="reviews-grid stagger-children">
     <div class="review-card card-glass">
@@ -419,8 +428,8 @@
 <section class="container reveal">
   <div class="section-header">
     <p class="tag">📸 SIGA @NOVRA</p>
-    <h2>NOVIDADES NO INSTAGRAM</h2>
-    <p class="muted">Acompanhe os looks, drops e bastidores.</p>
+    <h2 style="color: var(--text-primary);">NOVIDADES NO INSTAGRAM</h2>
+    <p style="color: var(--text-secondary);">Acompanhe os looks, drops e bastidores.</p>
   </div>
   <div class="instagram-grid">
     {% for i in range(6) %}
@@ -443,11 +452,15 @@
 <section class="container reveal">
   <div class="newsletter-section card-glass">
     <div class="newsletter-content">
+      <!-- Logo in Newsletter -->
+      <div style="margin-bottom: var(--space-lg);">
+        <span style="font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">👑 NØVRA</span>
+      </div>
       <p class="vip-badge" style="margin-bottom: var(--space-md);">💎 LISTA VIP</p>
-      <h2>SEJA O PRIMEIRO A SABER</h2>
-      <p>Receba em primeira mão: drops limitados, promoções exclusivas e lançamentos.</p>
+      <h2 style="color: var(--text-primary);">SEJA O PRIMEIRO A SABER</h2>
+      <p style="color: var(--text-secondary);">Receba em primeira mão: drops limitados, promoções exclusivas e lançamentos.</p>
       <form class="newsletter-form">
-        <input type="email" placeholder="Seu melhor e-mail" required />
+        <input type="email" placeholder="Seu melhor e-mail" required style="background: var(--bg-mid-light); color: var(--text-primary); border: 1px solid var(--border);" />
         <button type="submit" class="btn btn-buy btn-magnetic">ENTRAR NA LISTA VIP</button>
       </form>
       <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-md);">
@@ -461,12 +474,17 @@
      MARCA STORY
      ============================================ -->
 <section class="container reveal">
-  <div class="brand-story">
+  <div class="brand-story" style="text-align: center; max-width: 800px; margin: 0 auto;">
+    <!-- Big Logo -->
+    <div style="margin-bottom: var(--space-xl);">
+      <span style="font-size: 5rem;">👑</span>
+      <div style="font-size: 4rem; font-weight: 800; letter-spacing: -0.04em; background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, #fff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-top: var(--space-md);">NØVRA</div>
+    </div>
     <p class="vip-badge" style="margin-bottom: var(--space-md);">🏆 NOSSA HISTÓRIA</p>
-    <h2>A NØVRA</h2>
-    <p>Nascida da obsessão pelo streetwear autêntico. Cada peça é curada meticulosamente, fundindo design urbano com materiais de qualidade excepcional.</p>
-    <p style="margin-top: var(--space-md);">Não vendemos apenas roupas. Entregamos identidade. Edições limitadas garantindo exclusividade absoluta.</p>
-    <div style="margin-top: var(--space-xl);">
+    <h2 style="color: var(--text-primary);">A NØVRA</h2>
+    <p style="color: var(--text-secondary); font-size: 1.125rem; line-height: 1.8;">Nascida da obsessão pelo streetwear autêntico. Cada peça é curada meticulosamente, fundindo design urbano com materiais de qualidade excepcional.</p>
+    <p style="margin-top: var(--space-md); color: var(--text-secondary); font-size: 1.125rem; line-height: 1.8;">Não vendemos apenas roupas. Entregamos identidade. Edições limitadas garantindo exclusividade absoluta.</p>
+    <div style="margin-top: var(--space-2xl);">
       <a class="btn btn-secondary btn-magnetic" href="{{ url_for('catalog') }}">EXPLORAR COLEÇÃO →</a>
     </div>
   </div>
