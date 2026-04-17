@@ -2,16 +2,18 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NØVRA",
-  description: "NØVRA - status, exclusividade e streetwear premium em drops limitados"
+  title: "NÃ˜VRA - Premium Streetwear",
+  description: "Fashion minimalista e premium",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="pt-BR">
-      <body>
-        {children}
-      </body>
+      <body className="bg-black text-white">{children}</body>
     </html>
   );
 }
