@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+{% block title %}{{ product['name'] }} | {{ store_name }}{% endblock %}
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container" style="padding-top: var(--space-lg); padding-bottom: var(--space-md);">
+  <nav style="font-size: 0.875rem; color: var(--text-muted);">
+    <a href="{{ url_for('home') }}" style="color: var(--text-muted);">Home</a>
+    <span style="margin: 0 0.5rem;">/</span>
+    <a href="{{ url_for('catalog') }}?categoria={{ product['category'] }}" style="color: var(--text-muted);">{{ product['category']|title }}</a>
+    <span style="margin: 0 0.5rem;">/</span>
+    <span style="color: var(--text-primary);">{{ product['name'] }}</span>
+  </nav>
+</div>
+
+<!-- Product Detail Extreme -->
+<section class="container" style="padding-bottom: var(--space-3xl);">
+  <div class="product-detail" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3xl); align-items: start;">
+    
+    <!-- Left: Product Gallery -->
+    <div class="product-gallery">
+      <div class="main-image img-zoom card-glass" style="aspect-ratio: 1; border-radius: var(--radius-xl); overflow: hidden; margin-bottom: var(--space-md);">
+        {% if product['image_url'] %}
+          <img src="{{ product['image_url'] }}" alt="{{ product['name'] }}" 
+               style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);"
+               id="mainProductImage">
+        {% else %}
+          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--bg-mid-light), var(--surface));">
+            <span style="font-size: 4rem; color: var(--text-muted);">{{ product['name'].split(' ')[0][:2] }}</span>
+          </div>
+        {% endif %}
+      </div>
+      
+      <!-- Thumbnail Gallery -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-sm);">
+        {% for i in range(4) %}
+        <div class="thumbnail {% if loop.first %}active{% endif %}" 
+             style="aspect-ratio: 1; border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; border: 2px solid {% if loop.first %}var(--accent){% else %}transparent{% endif %}; transition: all 0.3s ease;"
+             onclick="changeImage(this)">
+          {% if product['image_url'] %}
+            <img src="{{ product['image_url'] }}" alt="Thumbnail {{ i+1 }}" style="width: 100%; height: 100%; object-fit: cover; opacity: {% if loop.first %}1{% else %}0.7{% endif %};">
+          {% else %}
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-mid-light);">
+              <span style="font-size: 1.5rem; color: var(--text-muted);">{{ i+1 }}</span>
+            </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <!-- Right: Product Info -->
+    <div class="product-info" style="position: sticky; top: var(--space-xl);">
+      
+      <!-- Badges -->
+      <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); flex-wrap: wrap;">
+        <span class="vip-badge">{{ product['category']|upper }}</span>
+        {% if product['is_bestseller'] == 1 %}
+          <span class="vip-badge" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white;">🔥 BESTSELLER</span>
+        {% endif %}
+        {% if product['is_new'] == 1 %}
+          <span class="vip-badge" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white;">✨ NOVO</span>
+        {% endif %}
+        {% if product['free_shipping'] == 1 %}
+          <span class="vip-badge" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white;">🚚 FRETE GRÁTIS</span>
+        {% endif %}
+      </div>
+      
+      <!-- Title -->
+      <h1 style="font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; line-height: 1.2; margin-bottom: var(--space-md); letter-spacing: -0.02em;">
+        {{ product['name'] }}
+      </h1>
+      
+      <!-- Rating -->
+      <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+        <div style="display: flex; align-items: center; gap: 0.25rem;">
+          <span style="color: #fbbf24; font-size: 1.125rem;">★★★★★</span>
+          <span style="font-weight: 600;">4.9</span>
+        </div>
+        <span style="color: var(--text-muted); font-size: 0.875rem;">(128 avaliações)</span>
+        <span style="color: var(--success); font-size: 0.875rem;">✓ 98% recomendam</span>
+      </div>
+      
+      <!-- Price Section -->
+      <div style="margin-bottom: var(--space-lg); padding: var(--space-lg); background: var(--surface); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+        {% if product['promo_price'] %}
+          <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+            <p style="font-size: 2.5rem; font-weight: 800; color: #ef4444; margin: 0;">{{ product['promo_price']|brl }}</p>
+            <p style="font-size: 1.25rem; color: var(--text-muted); text-decoration: line-through; margin: 0;">{{ product['price']|brl }}</p>
+            <span style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; padding: 0.35rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 700;">
+              -{{ ((product['price'] - product['promo_price']) / product['price'] * 100)|int }}%
+            </span>
+          </div>
+        {% else %}
+          <p style="font-size: 2.5rem; font-weight: 800; margin: 0; margin-bottom: var(--space-sm);">{{ product['price']|brl }}</p>
+        {% endif %}
+        <p style="font-size: 1rem; color: var(--accent); font-weight: 500; margin: 0;">
+          💳 12x de R$ {{ "%.2f"|format((product['promo_price'] or product['price'])/12) }} sem juros
+        </p>
+      </div>
+      
+      <!-- Stock Urgency -->
+      {% if product['stock'] <= 10 and product['stock'] > 0 %}
+        <div style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(153, 27, 27, 0.1) 100%); border: 1px solid rgba(220, 38, 38, 0.3); border-radius: var(--radius-lg); padding: var(--space-md); margin-bottom: var(--space-lg);">
+          <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+            <span style="font-size: 1.25rem;">⚡</span>
+            <span style="font-weight: 700; color: #ef4444;">CORRE! ESTOQUE BAIXO</span>
+          </div>
+          <div class="free-shipping-progress" style="margin-bottom: var(--space-sm);">
+            <div class="progress-fill" style="width: {{ (product['stock'] / 20) * 100 }}%;"></div>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">Apenas {{ product['stock'] }} unidades disponíveis. {{ 15 + product['stock'] }} pessoas estão vendo agora.</p>
+        </div>
+      {% endif %}
+      
+      <!-- Description -->
+      <div style="margin-bottom: var(--space-xl);">
+        <p style="font-size: 1rem; line-height: 1.8; color: var(--text-secondary);">{{ product['description'] }}</p>
+      </div>
+      
+      <!-- Size Selector -->
+      {% if product['sizes'] %}
+        <div style="margin-bottom: var(--space-lg);">
+          <label style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-sm); text-transform: uppercase; letter-spacing: 0.05em;">
+            TAMANHO <span style="color: var(--danger);">*</span>
+          </label>
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+            {% for size in product['sizes'].split(',') %}
+              <button type="button" class="size-btn {% if loop.first %}selected{% endif %}" 
+                      style="width: 50px; height: 50px; border: 2px solid {% if loop.first %}var(--accent){% else %}var(--border){% endif %}; background: {% if loop.first %}var(--accent){% else %}transparent{% endif %}; color: {% if loop.first %}var(--surface-dark){% else %}var(--text-primary){% endif %}; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                      onclick="selectSize(this)">
+                {{ size.strip() }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      
+      <!-- Color -->
+      {% if product['colors'] %}
+        <div style="margin-bottom: var(--space-xl);">
+          <label style="display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-sm); text-transform: uppercase; letter-spacing: 0.05em;">
+            COR
+          </label>
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span style="width: 32px; height: 32px; border-radius: 50%; background: {% if 'preto' in product['colors']|lower %}#000{% elif 'branco' in product['colors']|lower %}#fff{% elif 'cinza' in product['colors']|lower %}#666{% else %}var(--accent){% endif %}; border: 2px solid var(--border); box-shadow: 0 0 0 2px var(--accent);"></span>
+            <span style="font-weight: 500;">{{ product['colors'] }}</span>
+          </div>
+        </div>
+      {% endif %}
+      
+      <!-- Add to Cart Section -->
+      {% if product['stock'] > 0 %}
+        <form method="post" action="{{ url_for('add_to_cart', product_id=product['id']) }}" id="addToCartForm">
+          <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <!-- Quantity -->
+            <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;">
+              <button type="button" onclick="updateQuantity(-1)" style="width: 48px; height: 56px; background: transparent; border: none; color: var(--text-primary); font-size: 1.25rem; cursor: pointer; hover:background: var(--bg-mid-light);">-</button>
+              <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product['stock'] }}" 
+                     style="width: 60px; height: 56px; text-align: center; background: transparent; border: none; color: var(--text-primary); font-size: 1.125rem; font-weight: 600; -moz-appearance: textfield;"
+                     readonly>
+              <button type="button" onclick="updateQuantity(1)" style="width: 48px; height: 56px; background: transparent; border: none; color: var(--text-primary); font-size: 1.25rem; cursor: pointer;">+</button>
+            </div>
+            
+            <!-- Add to Cart Button -->
+            <button type="submit" class="btn btn-buy btn-magnetic pulse-glow micro-bounce" 
+                    style="flex: 1; font-size: 1.125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+              🛒 ADICIONAR AO CARRINHO
+            </button>
+          </div>
+        </form>
+        
+        <!-- Buy Now Button -->
+        <a href="{{ url_for('checkout') }}" class="btn btn-magnetic micro-bounce" 
+           style="width: 100%; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; font-size: 1.125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-lg);">
+          ⚡ COMPRAR AGORA
+        </a>
+      {% else %}
+        <button class="btn btn-large" disabled style="width: 100%; opacity: 0.5; cursor: not-allowed; margin-bottom: var(--space-lg);">
+          ESGOTADO
+        </button>
+      {% endif %}
+      
+      <!-- Trust Badges -->
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); margin-bottom: var(--space-xl);">
+        <div style="display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: var(--surface); border-radius: var(--radius-md);">
+          <span style="font-size: 1.25rem;">🚚</span>
+          <span style="font-size: 0.8125rem; font-weight: 500;">Entrega em 24h</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: var(--surface); border-radius: var(--radius-md);">
+          <span style="font-size: 1.25rem;">↩️</span>
+          <span style="font-size: 0.8125rem; font-weight: 500;">Troca fácil 7 dias</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: var(--surface); border-radius: var(--radius-md);">
+          <span style="font-size: 1.25rem;">🔒</span>
+          <span style="font-size: 0.8125rem; font-weight: 500;">Compra 100% segura</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: var(--surface); border-radius: var(--radius-md);">
+          <span style="font-size: 1.25rem;">💎</span>
+          <span style="font-size: 0.8125rem; font-weight: 500;">Qualidade premium</span>
+        </div>
+      </div>
+      
+      <!-- SKU -->
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">SKU: {{ product['sku'] }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- Related Products -->
+{% if related_products %}
+<section class="container" style="padding-bottom: var(--space-3xl);">
+  <div class="section-header">
+    <p class="tag">👑 COMPLETE SEU LOOK</p>
+    <h2>PRODUTOS RELACIONADOS</h2>
+  </div>
+  <div class="product-grid">
+    {% for related in related_products[:4] %}
+      {% include 'product_card_extreme.html' %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- Recently Viewed -->
+<section class="container" style="padding-bottom: var(--space-3xl);">
+  <div class="section-header">
+    <p class="tag">👁️ VISTOS RECENTEMENTE</p>
+    <h2>VOCÊ TAMBÉM PODE GOSTAR</h2>
+  </div>
+  <div class="product-grid">
+    {% for recent in featured[:4] %}
+      {% include 'product_card_extreme.html' %}
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .product-detail {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  @media (max-width: 968px) {
+    .product-detail {
+      grid-template-columns: 1fr;
+    }
+    
+    .product-info {
+      position: static;
+    }
+  }
+  
+  .thumbnail.active {
+    border-color: var(--accent) !important;
+  }
+  
+  .thumbnail.active img {
+    opacity: 1 !important;
+  }
+  
+  .size-btn.selected {
+    background: var(--accent) !important;
+    color: var(--surface-dark) !important;
+    border-color: var(--accent) !important;
+  }
+  
+  .size-btn:hover {
+    border-color: var(--accent);
+  }
+  
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+</style>
+
+<script>
+  function changeImage(thumbnail) {
+    // Remove active class from all thumbnails
+    document.querySelectorAll('.thumbnail').forEach(t => {
+      t.classList.remove('active');
+      t.style.borderColor = 'transparent';
+      t.querySelector('img').style.opacity = '0.7';
+    });
+    
+    // Add active class to clicked thumbnail
+    thumbnail.classList.add('active');
+    thumbnail.style.borderColor = 'var(--accent)';
+    thumbnail.querySelector('img').style.opacity = '1';
+    
+    // Update main image (in real scenario, would change to different image)
+    const mainImg = document.getElementById('mainProductImage');
+    if (mainImg) {
+      mainImg.style.transform = 'scale(1.05)';
+      setTimeout(() => {
+        mainImg.style.transform = 'scale(1)';
+      }, 300);
+    }
+  }
+  
+  function selectSize(btn) {
+    document.querySelectorAll('.size-btn').forEach(b => {
+      b.classList.remove('selected');
+      b.style.background = 'transparent';
+      b.style.color = 'var(--text-primary)';
+      b.style.borderColor = 'var(--border)';
+    });
+    
+    btn.classList.add('selected');
+    btn.style.background = 'var(--accent)';
+    btn.style.color = 'var(--surface-dark)';
+    btn.style.borderColor = 'var(--accent)';
+  }
+  
+  function updateQuantity(change) {
+    const input = document.getElementById('quantity');
+    const currentValue = parseInt(input.value);
+    const maxValue = parseInt(input.max);
+    const newValue = currentValue + change;
+    
+    if (newValue >= 1 && newValue <= maxValue) {
+      input.value = newValue;
+    }
+  }
+  
+  // Image zoom effect
+  const mainImage = document.querySelector('.main-image');
+  if (mainImage) {
+    mainImage.addEventListener('mousemove', (e) => {
+      const rect = mainImage.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width * 100;
+      const y = (e.clientY - rect.top) / rect.height * 100;
+      const img = mainImage.querySelector('img');
+      if (img) {
+        img.style.transformOrigin = `${x}% ${y}%`;
+        img.style.transform = 'scale(1.5)';
+      }
+    });
+    
+    mainImage.addEventListener('mouseleave', () => {
+      const img = mainImage.querySelector('img');
+      if (img) {
+        img.style.transform = 'scale(1)';
+        img.style.transformOrigin = 'center center';
+      }
+    });
+  }
+</script>
+
+{% endblock %}
